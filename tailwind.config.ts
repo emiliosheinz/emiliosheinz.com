@@ -9,15 +9,11 @@ const config: Config = {
   theme: {
     colors: {
       dodgerBlue: '#38B6FF',
-      codGray: '#121212',
-      white: '#FFFFFF',
-    },
-    extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      codGray: {
+        500: '#121212',
+        400: '#1A1A1A',
       },
+      white: '#FFFFFF',
     },
   },
   plugins: [],

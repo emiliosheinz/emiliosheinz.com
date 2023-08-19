@@ -23,7 +23,7 @@ export function Header() {
   return (
     <header className='flex flex-row items-center'>
       <Image
-        src='/profile.png'
+        src='/images/profile.png'
         width={62}
         height={62}
         alt="Black and white picture of the website's owner on a sky blue background"

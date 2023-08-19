@@ -17,14 +17,15 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang='en'>
+    <html lang='en' className='bg-codGray-500'>
       <body
         className={classNames(
           font.className,
-          'bg-codGray text-white py-10 px-16'
+          'text-white py-10 px-16 max-w-6xl m-auto'
         )}
       >
         <Header />
+        {children}
       </body>
     </html>
   )
