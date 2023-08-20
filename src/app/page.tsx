@@ -1,3 +1,4 @@
+import { ExperienceCard } from '~/components/experience-card'
 import { Link } from '~/components/link'
 import { PostCard } from '~/components/post-card'
 import { Slider } from '~/components/slider'
@@ -14,6 +15,26 @@ export default function Home() {
           applications that are daily accessed by thousands of users since 2019.
         </p>
         <Link label='read more about me' href='/todo' />
+      </div>
+
+      <div className='flex flex-col space-y-8' id='experience'>
+        <h1 className='font-bold text-3xl'>Experience</h1>
+        <ExperienceCard
+          title='Senior Frontend Software Engineer'
+          company='Cloudbeds'
+          employmentType='Full-time'
+          description={`As a Senior Frontend Engineer at Cloudbeds, I'm responsible for the creation of new Frontend integrations with several lodging business channels such as Tripadvisor, Hopper and HRS. I also enhance existing connections with platforms like Vrbo and Airbnb. Additionally, I play an important role within the Company's Frontend Brain Trust Group, driving the implementation of cutting-edge technologies and industry best practices throughout our Frontend teams.`}
+          skills={[
+            'React',
+            'TypeScript',
+            'Micro Frontends',
+            'Vue',
+            'Chakra UI',
+          ]}
+          startDate='Jan 2023'
+          endDate='Present'
+        />
+        <Link label='see my full experience history' href='/todo' />
       </div>
 
       <div className='flex flex-col space-y-8' id='blog'>
