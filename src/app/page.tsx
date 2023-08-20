@@ -5,7 +5,7 @@ import { blogPosts, socialMedias } from '~/utils/data.utils'
 export default function Home() {
   return (
     <main className='flex flex-col space-y-24 py-24'>
-      <div className='flex flex-col space-y-8'>
+      <div className='flex flex-col space-y-8' id='about'>
         <h1 className='font-bold text-5xl'>{`Hello 👋, I'm Emilio.`}</h1>
         <p className='text-2xl max-w-3xl'>
           As an experienced Software Engineer graduated with a B.Sc. degree in
@@ -15,7 +15,7 @@ export default function Home() {
         <Link label='read more about me' href='/todo' />
       </div>
 
-      <div className='flex flex-col space-y-8'>
+      <div className='flex flex-col space-y-8' id='blog'>
         <h1 className='font-bold text-3xl'>Blog posts</h1>
         <div className='flex space-x-8'>
           {blogPosts.map(({ title, description, url, image }) => (
@@ -31,7 +31,7 @@ export default function Home() {
         <Link label='see all posts' href='/todo' />
       </div>
 
-      <div className='flex flex-col space-y-8'>
+      <div className='flex flex-col space-y-8' id='contact'>
         <h1 className='font-bold text-3xl'>Contact me</h1>
         <p className='text-2xl max-w-3xl'>
           {`I'm always open for a chat!`}

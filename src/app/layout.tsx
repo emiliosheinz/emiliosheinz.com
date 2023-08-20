@@ -17,7 +17,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang='en' className='bg-codGray-500'>
+    <html lang='en' className='bg-codGray-500 scroll-smooth'>
       <body
         className={classNames(
           font.className,
