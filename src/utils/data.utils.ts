@@ -44,4 +44,12 @@ export const blogPosts = [
     image:
       '/images/blog-posts/how-to-setup-multiple-environments-in-react-native.webp',
   },
+  {
+    title: 'How to setup multiple environments in React Native',
+    description:
+      'In this article I’ll explain a bit more about how to setup different environments in React Native and how to properly manage them across Javascript and native code.',
+    url: 'https://medium.com/cwi-software/how-to-setup-multiple-environments-for-react-native-786005a360fc',
+    image:
+      '/images/blog-posts/how-to-setup-multiple-environments-in-react-native.webp',
+  },
 ]

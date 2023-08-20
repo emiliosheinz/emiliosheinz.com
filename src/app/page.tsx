@@ -1,5 +1,6 @@
 import { Link } from '~/components/link'
 import { PostCard } from '~/components/post-card'
+import { Slider } from '~/components/slider'
 import { blogPosts, socialMedias } from '~/utils/data.utils'
 
 export default function Home() {
@@ -17,17 +18,18 @@ export default function Home() {
 
       <div className='flex flex-col space-y-8' id='blog'>
         <h1 className='font-bold text-3xl'>Blog posts</h1>
-        <div className='flex space-x-8'>
+        <Slider.Root>
           {blogPosts.map(({ title, description, url, image }) => (
-            <PostCard
-              url={url}
-              key={title}
-              image={image}
-              title={title}
-              description={description}
-            />
+            <Slider.Item key={title}>
+              <PostCard
+                url={url}
+                image={image}
+                title={title}
+                description={description}
+              />
+            </Slider.Item>
           ))}
-        </div>
+        </Slider.Root>
         <Link label='see all posts' href='/todo' />
       </div>
 
