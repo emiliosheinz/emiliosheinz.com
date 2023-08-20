@@ -4,6 +4,7 @@ import {
   FaLinkedin,
   FaTwitter,
 } from 'react-icons/fa6'
+import { Link } from '~/components/link'
 import { PostCard } from '~/components/post-card'
 
 const socialMedias = [
@@ -62,10 +63,7 @@ export default function Home() {
           Computer Science, I have been working on the development of
           applications that are daily accessed by thousands of users since 2019.
         </p>
-        <a className='group text-lg hover:cursor-pointer'>
-          read more about me{' '}
-          <FaArrowRightLong className='inline group-hover:transition-all group-hover:translate-x-1 duration-300 ease-in-out' />
-        </a>
+        <Link label='read more about me' href='/todo' />
       </div>
 
       <div className='flex flex-col space-y-8'>
@@ -81,9 +79,7 @@ export default function Home() {
             />
           ))}
         </div>
-        <a className='text-lg hover:cursor-pointer'>
-          see all posts <FaArrowRightLong className='inline' />
-        </a>
+        <Link label='see all posts' href='/todo' />
       </div>
 
       <div className='flex flex-col space-y-8'>
