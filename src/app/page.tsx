@@ -1,9 +1,3 @@
-import {
-  FaArrowRightLong,
-  FaGithub,
-  FaLinkedin,
-  FaTwitter,
-} from 'react-icons/fa6'
 import { Link } from '~/components/link'
 import { PostCard } from '~/components/post-card'
 import { blogPosts, socialMedias } from '~/utils/data.utils'
