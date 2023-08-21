@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Image } from '../image'
 
 const headerLinks = [
@@ -22,13 +23,15 @@ const headerLinks = [
 export function Header() {
   return (
     <header className='flex flex-row items-center'>
-      <Image
-        src='/images/profile.png'
-        width={62}
-        height={62}
-        alt="Black and white picture of the website's owner on a sky blue background"
-        className='rounded-full'
-      />
+      <Link href='/'>
+        <Image
+          src='/images/profile.png'
+          width={62}
+          height={62}
+          alt="Black and white picture of the website's owner on a sky blue background"
+          className='rounded-full'
+        />
+      </Link>
       <div className='flex flex-1 justify-end space-x-5'>
         {headerLinks.map(({ href, label }) => (
           <a

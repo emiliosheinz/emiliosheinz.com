@@ -25,14 +25,7 @@ export function ExperienceCard({
         <br />
         <p className='text-lg'>{description}</p>
         <br />
-        <div className='flex divide-x-2 divide-solid'>
-          Skills:
-          {skills.map(skill => (
-            <span key={skill} className='text-base px-5'>
-              {skill}
-            </span>
-          ))}
-        </div>
+        <span>Skills: {skills.join(', ')}</span>
       </div>
     </div>
   )
