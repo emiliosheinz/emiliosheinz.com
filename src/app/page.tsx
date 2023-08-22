@@ -2,11 +2,9 @@ import { ExperienceCard } from '~/components/experience-card'
 import { Link } from '~/components/link'
 import { PostCard } from '~/components/post-card'
 import { Slider } from '~/components/slider'
-import { blogPosts } from '~/data/blog-posts'
-import { experiences } from '~/data/experiences'
 import { socialMedias } from '~/data/social-medias'
-
-const lastExperience = experiences[0]
+import { allPosts, allExperiences, Experience } from 'contentlayer/generated'
+import { currentExperience } from '~/content/experiences'
 
 export default function Home() {
   return (
@@ -23,14 +21,17 @@ export default function Home() {
 
       <div className='flex flex-col space-y-8' id='experience'>
         <h1 className='font-bold text-3xl'>Experience</h1>
-        <ExperienceCard {...lastExperience} />
+        <ExperienceCard
+          {...currentExperience}
+          description={currentExperience.body}
+        />
         <Link label='see my full experience history' href='/experience' />
       </div>
 
       <div className='flex flex-col space-y-8' id='blog'>
         <h1 className='font-bold text-3xl'>Blog posts</h1>
         <Slider.Root>
-          {blogPosts.map(({ title, description, url, image }) => (
+          {allPosts.map(({ title, url, image, description }) => (
             <Slider.Item key={title}>
               <PostCard
                 url={url}

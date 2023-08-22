@@ -1,9 +1,11 @@
+import { MDX } from 'contentlayer/core'
+
 export type ExperienceCardProps = {
   title: string
   company: string
   employmentType: string
-  description: string
+  description: MDX
   startDate: string
-  endDate: string
+  endDate?: string
   skills: string[]
 }
