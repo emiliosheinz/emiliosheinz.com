@@ -1,0 +1,205 @@
+---
+type: Post
+title: ESLint + Prettier, a dupla perfeita para produtividade e padronização de código.
+description: Padrões de código estão se tornando cada vez mais importantes por conta do crescimento dos times de desenvolvimento e a alta rotatividade do mercado de desenvolvedores.
+publishedAt: 10/09/2019
+---
+
+Padrões de código estão se tornando cada vez mais importantes por conta do crescimento dos times de desenvolvimento e a alta rotatividade do mercado de desenvolvedores.
+
+Imagine-se entrando em um projeto enorme, onde cada classe ou componente segue um tipo de padrão de código diferente, ou até mesmo com aquelas linhas intermináveis que geram scroll lateral até em TV's de 62 polegadas.
+
+Pois então, você provavelmente ficaria assim:
+
+// TODO gif
+
+É, eu também ficaria. Foi por isso que decidi escrever este artigo, no qual irei abordar algumas ferramentas bastante úteis para diminuir esse tipo de atrito dentro de um projeto, aumentando assim a produtividade dos desenvolvedores e do time por completo.
+
+Irei focar principalmente no desenvolvimento frontend com ReactJS e React Native, porém, todos os conceitos abordados aqui podem ser adaptados para outras plataformas como NodeJS ou Vue.
+
+As ferramentas abordadas neste artigo são:
+
+- ESLint: Responsável por identificar padrões de código em desacordo com as regras pré-estabelecidas.
+- Prettier: Responsável por formatar o código de acordo com essas regras.
+
+Bom, primeiramente, por que eu deveria implementar estas ferramentas no meu projeto?
+
+Além de facilitar a inserção de novos desenvolvedores no projeto, facilita também os code reviews e a manutenção do código. Se configurado da maneira correta, pode lhe poupar diversas horas procurando por aquela variável com o nome errado ou até mesmo os parênteses ou chaves que estavam faltando e você não viu.
+
+Dada esta rápida introdução do porquê fui motivado a escrever sobre o assunto e do que se tratam as ferramentas, vamos por a mão na massa!!!
+
+// TODO gif
+
+Irei usar como exemplo um projeto ReactJS recém criado com o seguinte comando:
+
+```bash
+yarn create react-app example
+```
+
+Após isso, iremos abrir o nosso projeto no vscode e nos certificar que temos algumas extensões instaladas nele. São elas:
+
+- ESLint
+- Prettier — Code formatter
+
+Como dito anteriormente, essas são as duas extensões que irão encontrar os códigos em desacordo com as regras estabelecidas (ESLint) e formatar o nosso código de acordo com essas regras (Prettier).
+
+Teremos também que garantir que o nosso VSCode está configurado da maneira correta, basta acessar as configurações do seu VSCode pelo comando `CTRL + SHIFT + P` e digitar `Open Settings (JSON)` e no arquivo que será aberto adicionar as seguintes configurações.
+
+```json
+"[javascript]": { "editor.formatOnSave": true },
+"editor.formatOnSave": true,
+"eslint.autoFixOnSave": true,
+```
+
+Feito isso, teremos que adicionar o ESLint como dependência de desenvolvimento do nosso projeto, isso pode ser feito rodando o comando:
+
+```bash
+yarn add eslint -D
+```
+
+Agora já podemos iniciar a configuração do ESLint. Para isso iremos utilizar o comando:
+
+```bash
+yarn eslint --init
+```
+
+Com isso serão exibidas 3 opções no terminal:
+
+```bash
+How would you like to use ESLint?
+> To check syntax only
+> To check syntax and find problems
+> To check syntax, find problems, and enforce code style
+```
+
+Irei escolher a terceira, que permitirá que o ESLint cheque a sintaxe do nosso código, ache problemas e corrija o estilo de código para o padrão definido.
+
+Você pode ficar à vontade para escolher qualquer uma das outras opções, porém, aconselho escolher a terceira pois desta forma o ESLint já virá pré-configurado e você pode apenas fazer alguns ajustes caso necessário.
+
+Após isso, teremos que responder qual tipo de import é usado no projeto.
+
+```bash
+What type of modules does your project use?
+- JavaScript modules (import/export)
+- CommonJS (require/exports)
+- None of these
+```
+
+Irei escolher a primeira opção, por conta do projeto ser em ReactJS e o padrão adotado por tal é import/export.
+
+Agora teremos que informar se estamos utilizando algum tipo de framework, como React ou Vue.
+
+```bash
+Which framework does your project use?
+- React
+- Vue.js
+- None of these
+```
+
+A próxima pergunta será referente ao lugar aonde sua aplicação está rodando, no nosso caso será em browsers, no caso de aplicações backend em NodeJS seria no node e no caso do React Native não escolheríamos nenhuma das duas opções e deixaríamos e resposta em branco.
+
+```
+Where does your code run?
+- Browser
+- Node
+```
+
+Logo após, precisamos pré-definir qual o estilo de código que o seu projeto irá seguir, você pode escolher qualquer uma das opções abaixo e ver com qual delas o seu time se adapta mais ou está mais próxima do esperado.
+
+```bash
+How would you like to define a style for your project?
+- Use a popular style guide
+- Answer questions about your style
+- Inspect your JavaScript file(s)
+```
+
+Vou optar por usar um style guide popular. Não escolhi responder perguntas sobre o meu estilo de código nem para que o ESLint inspecione o meu código pois, escolhendo a primeira opção, como já dito anteriormente, diversas configurações já vem prontas e podemos adequar apenas o que não nos agrada.
+
+Agora teremos que escolher uma das style guides disponíveis.
+
+```bash
+Which style guide do you want to follow?
+- Airbnb
+- Standard
+- Google
+```
+
+Irei escolher o style guide do Airbnb, mas sinta-se livre para usar qualquer um dos outros. Aconselho você a experimentar diversos style guides e descobrir qual que te agrada mais, ou então escolher um deles e ir adequando ele de acordo com as suas necessidades ou do seu time.
+
+Estamos chegando quase ao fim, só falta escolher qual o formato do arquivo de configurações do ESLint, irei escolher JavaScript por questão de costume.
+
+```bash
+What format do you want your config file to be in?
+- JavaScript
+- YAML
+- JSON
+```
+
+Caso você esteja utilizando `yarn` ao invés do `npm`, durante a instalação será perguntado se você gostaria de instalar as dependências com o npm, você deverá responder de forma afirmativa e aguardar o termino da instalação.
+
+Teremos que remover o arquivo `package-lock.json` e instalar as dependências novamente com `yarn`. Este arquivo surgiu durante o `— init` pelo fato do ESLint instalar as dependências com `npm`. Para fazer isso teremos que rodar o seguinte comando:
+
+```bash
+rm package-lock.json && yarn
+```
+
+Pronto, agora temos a parte do ESLint configurada, sendo assim, precisamos instalar o Prettier que é quem vai ler as regras do ESLint e formatar nosso código de acordo com elas, juntamente com o Prettier vamos instalar outras duas dependências que servem para linkar o ESLint com o Prettier e uma terceira `babel-eslint` que serve para dizer ao ESLint que estamos usando as últimas funcionalidades do JavaScript. O `-D` no final faz com que essas dependências sejam instaladas como dependências apenas de desenvolvimento.
+
+```bash
+yarn add prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
+```
+
+Feito isso estamos prontos para fazer algumas configurações diretamente no arquivo `.eslintrc`, que foi criado durante o init do ESLint.
+
+Dentro do arquivo `.eslintrc`, que foi criado na raiz do seu projeto, você encontrará um array nomeado _extends_, adicione as duas seguintes strings a este array.
+
+```json
+'prettier',
+'prettier/react'
+```
+
+Antes da opção `parserOptions` iremos adicionar o seguinte conteúdo:
+
+```
+parser: 'babel-eslint',
+```
+
+E por último iremos adicionar algumas regras no objeto de rules, ele deverá ficar parecido com isso:
+
+```json
+"rules": {
+  "prettier/prettier": "error",
+  "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
+  "import/prefer-default-export": "off",
+  "jsx-quotes": ["error", "prefer-single"]
+}
+```
+
+`'prettier/prettier: 'error'` quer dizer que tudo que for encontrado e não estiver de acordo com as regras definidas irá retornar um erro.
+
+`'react/jsx-filename-extension'` significa que todo os códigos `react` que forem escritos têm que ser escritos em arquivos `.js` ou `.jsx`, caso contrário irá retornar um `warning`.
+
+E por último estamos desabilitando uma regra que nos obriga a exportar por default quando temos apenas um export no arquivo.
+
+Agora basta criar um arquivo nomeado .prettierrc.json com o seguinte conteúdo e tudo estará funcionando.
+
+```json
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "jsxSingleQuote": true
+}
+```
+
+Bom, esta foi uma explicação básica de para que servem essas duas ferramentas e como elas podem ajudar você no seu dia-a-dia. Tentei trazer também uma configuração básica dessas ferramentas para que agora vocês possam definir algumas regras de acordo com o seu gosto ou necessidade.
+
+Quero encorajar você também a ir um pouco mais a fundo no conteúdo, dando uma passada no site do ESLint e do Prettier. Lá você pode encontrar mais detalhes de regras para os dois e como fazer algumas outras configurações mais avançadas.
+
+**ESLint:** https://eslint.org/<br />
+**Prettier:** https://prettier.io/
+
+Vou aproveitar também para indicar outra ferramenta que casa muito bem com essas duas que é o **EditorConfig for VS Code**. É uma ferramenta perfeita para padronizar as configs do seu time de acordo com cada projeto.
+
+Por hoje é isso, pessoal, espero que tenham gostado do artigo e que ele possa ajudar vocês e o time de vocês de alguma forma.

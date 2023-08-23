@@ -1,4 +1,5 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files'
+import highlight from 'rehype-highlight'
 
 export const Post = defineDocumentType(() => ({
   name: 'Post',
@@ -17,6 +18,10 @@ export const Post = defineDocumentType(() => ({
     image: {
       type: 'string',
       resolve: post => `/images/${post._raw.flattenedPath}.webp`,
+    },
+    slug: {
+      type: 'string',
+      resolve: post => post._raw.sourceFileName.replace(/\.mdx$/, ''),
     },
   },
 }))

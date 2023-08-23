@@ -3,10 +3,10 @@ import { Link } from '~/components/link'
 import { PostCard } from '~/components/post-card'
 import { Slider } from '~/components/slider'
 import { socialMedias } from '~/data/social-medias'
-import { allPosts, allExperiences, Experience } from 'contentlayer/generated'
+import { allPosts } from 'contentlayer/generated'
 import { currentExperience } from '~/content/experiences'
 
-export default function Home() {
+export default function HomePage() {
   return (
     <main className='flex flex-col space-y-24 py-24'>
       <div className='flex flex-col space-y-8' id='about'>
@@ -25,7 +25,7 @@ export default function Home() {
           {...currentExperience}
           description={currentExperience.body}
         />
-        <Link label='see my full experience history' href='/experience' />
+        <Link label='see my full experience history' href='/experiences' />
       </div>
 
       <div className='flex flex-col space-y-8' id='blog'>
