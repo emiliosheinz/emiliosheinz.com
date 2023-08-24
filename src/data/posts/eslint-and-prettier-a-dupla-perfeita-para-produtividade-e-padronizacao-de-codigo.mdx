@@ -65,7 +65,7 @@ yarn eslint --init
 
 Com isso serão exibidas 3 opções no terminal:
 
-```bash
+```txt
 How would you like to use ESLint?
 > To check syntax only
 > To check syntax and find problems
@@ -78,7 +78,7 @@ Você pode ficar à vontade para escolher qualquer uma das outras opções, por�
 
 Após isso, teremos que responder qual tipo de import é usado no projeto.
 
-```bash
+```txt
 What type of modules does your project use?
 - JavaScript modules (import/export)
 - CommonJS (require/exports)
@@ -89,7 +89,7 @@ Irei escolher a primeira opção, por conta do projeto ser em ReactJS e o padrã
 
 Agora teremos que informar se estamos utilizando algum tipo de framework, como React ou Vue.
 
-```bash
+```txt
 Which framework does your project use?
 - React
 - Vue.js
@@ -98,7 +98,7 @@ Which framework does your project use?
 
 A próxima pergunta será referente ao lugar aonde sua aplicação está rodando, no nosso caso será em browsers, no caso de aplicações backend em NodeJS seria no node e no caso do React Native não escolheríamos nenhuma das duas opções e deixaríamos e resposta em branco.
 
-```
+```txt
 Where does your code run?
 - Browser
 - Node
@@ -106,7 +106,7 @@ Where does your code run?
 
 Logo após, precisamos pré-definir qual o estilo de código que o seu projeto irá seguir, você pode escolher qualquer uma das opções abaixo e ver com qual delas o seu time se adapta mais ou está mais próxima do esperado.
 
-```bash
+```txt
 How would you like to define a style for your project?
 - Use a popular style guide
 - Answer questions about your style
@@ -117,7 +117,7 @@ Vou optar por usar um style guide popular. Não escolhi responder perguntas sobr
 
 Agora teremos que escolher uma das style guides disponíveis.
 
-```bash
+```txt
 Which style guide do you want to follow?
 - Airbnb
 - Standard
@@ -128,7 +128,7 @@ Irei escolher o style guide do Airbnb, mas sinta-se livre para usar qualquer um 
 
 Estamos chegando quase ao fim, só falta escolher qual o formato do arquivo de configurações do ESLint, irei escolher JavaScript por questão de costume.
 
-```bash
+```txt
 What format do you want your config file to be in?
 - JavaScript
 - YAML
@@ -154,14 +154,14 @@ Feito isso estamos prontos para fazer algumas configurações diretamente no arq
 Dentro do arquivo `.eslintrc`, que foi criado na raiz do seu projeto, você encontrará um array nomeado _extends_, adicione as duas seguintes strings a este array.
 
 ```json
-'prettier',
-'prettier/react'
+"prettier",
+"prettier/react"
 ```
 
 Antes da opção `parserOptions` iremos adicionar o seguinte conteúdo:
 
-```
-parser: 'babel-eslint',
+```json
+"parser": "babel-eslint",
 ```
 
 E por último iremos adicionar algumas regras no objeto de rules, ele deverá ficar parecido com isso:

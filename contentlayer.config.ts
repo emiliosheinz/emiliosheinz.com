@@ -1,5 +1,5 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files'
-import highlight from 'rehype-highlight'
+import rehypePrettyCode, { Options } from 'rehype-pretty-code'
 
 export const Post = defineDocumentType(() => ({
   name: 'Post',
@@ -40,7 +40,15 @@ export const Experience = defineDocumentType(() => ({
   },
 }))
 
+const rehypePrettyCodeOptions: Options = {
+  theme: 'dracula',
+}
+
 export default makeSource({
   contentDirPath: './src/data',
   documentTypes: [Post, Experience],
+
+  mdx: {
+    rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
+  },
 })

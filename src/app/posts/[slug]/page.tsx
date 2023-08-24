@@ -1,5 +1,5 @@
-import { useMDXComponent } from 'next-contentlayer/hooks'
 import { Image } from '~/components/image'
+import { MDXContent } from '~/components/mdx-content'
 import { getPostBySlug, posts } from '~/content/posts'
 
 type PostPageProps = {
@@ -14,10 +14,9 @@ export async function generateStaticParams() {
 
 export default function PostPage({ params }: PostPageProps) {
   const post = getPostBySlug(params.slug)
-  const MDXContent = useMDXComponent(post!.body.code)
 
   return (
-    <div className='flex flex-col gap-8 mt-20 text-lg'>
+    <>
       <h1 className='font-bold text-5xl mb-5'>{post?.title}</h1>
       <div className='relative flex aspect-video w-full'>
         <Image
@@ -31,7 +30,7 @@ export default function PostPage({ params }: PostPageProps) {
           `}
         />
       </div>
-      <MDXContent />
-    </div>
+      <MDXContent code={post!.body.code} />
+    </>
   )
 }
