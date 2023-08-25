@@ -18,13 +18,14 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang='en' className='bg-codGray-500 scroll-smooth'>
-      <body
-        className={classNames(
-          font.className,
-          'text-white py-10 px-16 max-w-6xl m-auto'
-        )}
-      >
+    <html
+      lang='en'
+      className={classNames(
+        font.className,
+        'bg-codGray-500 text-white scroll-smooth'
+      )}
+    >
+      <body className={'py-10 px-16 max-w-6xl m-auto'}>
         <Header />
         {children}
       </body>

@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { Image } from '../image'
 
@@ -21,27 +23,48 @@ const headerLinks = [
 ]
 
 export function Header() {
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault()
+
+    const href = e.currentTarget.href
+    const targetId = href.replace(/.*\#/, '')
+    const targetElement = document.getElementById(targetId)
+
+    if (!targetElement) return
+
+    const approximateHeaderHeight = 150
+    const targetElementTop = targetElement.getBoundingClientRect().top
+
+    window.scrollTo({
+      top: targetElementTop + window.scrollY - approximateHeaderHeight,
+      behavior: 'smooth',
+    })
+  }
+
   return (
-    <header className='flex flex-row items-center'>
-      <Link href='/'>
-        <Image
-          src='/images/profile.png'
-          width={62}
-          height={62}
-          alt="Black and white picture of the website's owner on a sky blue background"
-          className='rounded-full'
-        />
-      </Link>
-      <div className='flex flex-1 justify-end space-x-5'>
-        {headerLinks.map(({ href, label }) => (
-          <a
-            key={label}
-            href={href}
-            className='font-bold focus:text-dodgerBlue text-xl px-2 focus:outline-none'
-          >
-            {label}
-          </a>
-        ))}
+    <header className='fixed from-codGray-500 from-10% bg-gradient-to-b top-0 left-0 right-0 z-40'>
+      <div className='flex items-center w-full max-w-6xl m-auto py-10 px-16'>
+        <Link href='/'>
+          <Image
+            src='/images/profile.png'
+            width={62}
+            height={62}
+            alt="Black and white picture of the website's owner on a sky blue background"
+            className='rounded-full'
+          />
+        </Link>
+        <div className='flex flex-1 justify-end space-x-5'>
+          {headerLinks.map(({ href, label }) => (
+            <Link
+              key={label}
+              href={href}
+              onClick={handleScroll}
+              className='font-bold text-xl px-2 transition-colors hover:text-dodgerBlue'
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
       </div>
     </header>
   )

@@ -15,6 +15,7 @@ export default function HomePage() {
           As an experienced Software Engineer graduated with a B.Sc. degree in
           Computer Science, I have been working on the development of
           applications that are daily accessed by thousands of users since 2019.
+          I bring ideas to life through lines of code.
         </p>
         <Link label='read more about me' href='/todo' />
       </div>
@@ -63,7 +64,7 @@ export default function HomePage() {
         <div className='flex space-x-8'>
           {socialMedias.map(({ Icon, url, name }) => (
             <a target='_blank' key={name} href={url}>
-              <Icon className='w-8 h-8 hover:text-dodgerBlue hover:cursor-pointer transition-all duration-300 hover:-translate-y-1' />
+              <Icon className='w-8 h-8 hover:text-dodgerBlue hover:cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105' />
             </a>
           ))}
         </div>
