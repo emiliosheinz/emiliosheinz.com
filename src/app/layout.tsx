@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Roboto_Mono } from 'next/font/google'
 import { Header } from '~/components/header'
 import { classNames } from '~/utils/css.utils'
+import { Toaster } from 'react-hot-toast'
 
 const font = Roboto_Mono({ subsets: ['latin'] })
 
@@ -16,6 +17,20 @@ type RootLayoutProps = {
   children: React.ReactNode
 }
 
+function CustomToaster() {
+  return (
+    <Toaster
+      position='bottom-center'
+      toastOptions={{
+        style: {
+          backgroundColor: '#1A1A1A',
+          color: '#FFFFFF',
+        },
+      }}
+    />
+  )
+}
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
@@ -25,9 +40,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         'bg-codGray-500 text-white scroll-smooth'
       )}
     >
-      <body className={'py-10 px-16 max-w-6xl m-auto'}>
+      <body className={'pb-10 pt-28 px-16 max-w-6xl m-auto'}>
         <Header />
         {children}
+        <CustomToaster />
       </body>
     </html>
   )

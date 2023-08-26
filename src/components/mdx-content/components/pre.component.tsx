@@ -1,13 +1,19 @@
 import { ReactElement, cloneElement, useRef } from 'react'
 import { FaCopy } from 'react-icons/fa6'
+import { notify } from '~/utils/toast.utils'
 
 type PreProps = JSX.IntrinsicElements['pre']
 
 export function Pre({ children, ...props }: PreProps) {
   const codeRef = useRef<HTMLElement>(null)
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(String(codeRef.current?.textContent))
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(String(codeRef.current?.textContent))
+      notify.success('Copied to clipboard')
+    } catch {
+      notify.error('Failed to copy to clipboard')
+    }
   }
 
   return (
