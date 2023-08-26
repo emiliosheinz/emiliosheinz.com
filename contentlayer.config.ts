@@ -17,7 +17,7 @@ export const Post = defineDocumentType(() => ({
     },
     image: {
       type: 'string',
-      resolve: post => `/images/${post._raw.flattenedPath}.webp`,
+      resolve: post => `/images/${post._raw.flattenedPath}/cover.webp`,
     },
     slug: {
       type: 'string',
@@ -47,7 +47,6 @@ const rehypePrettyCodeOptions: Options = {
 export default makeSource({
   contentDirPath: './src/data',
   documentTypes: [Post, Experience],
-
   mdx: {
     rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
   },

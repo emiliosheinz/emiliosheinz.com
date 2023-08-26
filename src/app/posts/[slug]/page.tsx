@@ -21,6 +21,7 @@ export default function PostPage({ params }: PostPageProps) {
       <div className='relative flex aspect-video w-full'>
         <Image
           fill
+          priority
           alt={post!.title}
           src={post!.image}
           style={{ objectFit: 'cover' }}
