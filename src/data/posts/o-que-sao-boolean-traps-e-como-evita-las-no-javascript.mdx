@@ -63,7 +63,6 @@ Até ai tudo bem, pois como foi dito anteriormente, bastou adicionarmos o novo p
 Dessa forma, podemos observar que temos algumas limitações:
 
 - Para não precisar refatorar todos os lugares em que a função está sendo utilizada, temos que, obrigatoriamente, adicionar esse novo parâmetro como o último da função e passar um valor default para ele;
-
 - Caso o passo anterior já tenha sido feito, ao adicionar um novo parâmetro não opcional o refactor se faz necessário em todas as chamadas da função.
 
 ---
@@ -78,7 +77,7 @@ Agora que sabemos o que são boolean ou function parameter traps, vamos listar a
 
 Para resolver esses problemas, podemos utilizar um conceito introduzido no ES5: _Object Literal Function Parameteres_. Baseia-se em sempre passar um objeto como parâmetro de uma função fazendo a desestruturação dele diretamente na declaração da mesma. Vamos voltar no primeiro exemplo para entender melhor.
 
-**Sem Object Literal:**
+### Sem Object Literal:
 
 ```javascript
 NavigationService.popToTop(immediate) {
@@ -86,7 +85,7 @@ NavigationService.popToTop(immediate) {
 }
 ```
 
-**Com Object Literal:**
+### Com Object Literal:
 
 ```javascript
 NavigationService.popToTop({ immediate }) {
@@ -102,13 +101,13 @@ NavigationService.popToTop({ immediate: true })
 
 E quanto a função `getHeaderOptions` cheia de parâmetros dos mais variados tipos?
 
-**Antes:**
+### Antes:
 
 ```javascript
 getHeaderOptions(true, true, [], [], false, 'Home')
 ```
 
-**Depois:**
+### Depois:
 
 ```javascript
 getHeaderOptions({
@@ -140,9 +139,7 @@ No caso da necessidade de adicionar um novo parâmetro na função, basta adicio
 O principal intuito em utilizar o conceito de _Object Literal Function Parameters_ é melhorar a legibilidade de código, mas, além disso, ele pode ajudar em outras coisas, como:
 
 - Definição de parâmetros opcionais: Qualquer parâmetro da função pode ser opcional e receber um valor default;
-
 - Facilidade para utilizar as funções: Podemos passar apenas os parâmetros realmente necessários, não sendo obrigados a passar parâmetros que não queremos para chegar na posição de um parâmetro em específico;
-
 - Facilita refactors no código: Adicionar ou remover parâmetros nas funções se torna muito mais simples e menos custoso para os desenvolvedores.
 
 ## Referências
