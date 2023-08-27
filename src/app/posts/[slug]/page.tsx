@@ -11,13 +11,13 @@ type PostPageProps = {
 
 export async function generateMetadata(
   props: PostPageProps,
-  parent?: ResolvingMetadata
+  parent: ResolvingMetadata
 ) {
   const post = getPostBySlug(props.params.slug)
 
   if (!post) return
 
-  const previousImages = (await parent)?.openGraph?.images || []
+  const previousImages = (await parent).openGraph?.images || []
 
   return {
     title: post.title,
