@@ -60,7 +60,7 @@ export default function HomePage() {
       </Section>
 
       <Section title='Contact me' id='contact'>
-        <p className='text-2xl max-w-3xl'>
+        <p className='text-xl sm:text-2xl max-w-3xl'>
           {`I'm always open for a chat!`}
           <br />
           <br />
@@ -76,7 +76,7 @@ export default function HomePage() {
         <div className='flex space-x-8'>
           {socialMedias.map(({ Icon, url, name }) => (
             <a target='_blank' key={name} href={url}>
-              <Icon className='w-8 h-8 hover:text-dodgerBlue hover:cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105' />
+              <Icon className='w-6 h-6 sm:w-8 sm:h-8 hover:text-dodgerBlue hover:cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105' />
             </a>
           ))}
         </div>

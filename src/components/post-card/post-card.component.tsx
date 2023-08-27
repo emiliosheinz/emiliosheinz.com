@@ -5,7 +5,7 @@ import { Link } from '../link'
 
 export function PostCard({ title, description, url, image }: PostCardProps) {
   return (
-    <div className='flex flex-col bg-codGray-400 rounded-lg mb-5 w-96 overflow-hidden'>
+    <div className='flex flex-col bg-codGray-400 rounded-lg mb-5 w-72 sm:w-96 overflow-hidden'>
       <Image
         src={image}
         width={384}
@@ -14,7 +14,7 @@ export function PostCard({ title, description, url, image }: PostCardProps) {
         style={{ objectFit: 'cover' }}
         className='pointer-events-none'
       />
-      <div className='flex flex-1 flex-col justify-between p-5'>
+      <div className='flex flex-1 flex-col justify-between p-3 sm:p-5'>
         <div>
           <h5 className='font-bold text-xl mb-2 line-clamp-3'>{title}</h5>
           <p className='font-normal text-sm mb-3 line-clamp-5'>{description}</p>
