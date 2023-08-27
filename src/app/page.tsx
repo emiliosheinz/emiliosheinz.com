@@ -7,13 +7,14 @@ import { allPosts } from 'contentlayer/generated'
 import { currentExperience } from '~/content/experiences'
 
 type SectionProps = {
+  id: string
   title: string
   children: React.ReactNode
 }
 
-function Section({ title, children }: SectionProps) {
+function Section({ id, title, children }: SectionProps) {
   return (
-    <div className='flex flex-col space-y-6 sm:space-y-8' id='experience'>
+    <div className='flex flex-col space-y-6 sm:space-y-8' id={id}>
       <h1 className='font-bold text-2xl sm:text-3xl'>{title}</h1>
       {children}
     </div>
@@ -34,7 +35,7 @@ export default function HomePage() {
         <Link label='read more about me' href='/todo' />
       </div>
 
-      <Section title='Experience'>
+      <Section title='Experience' id='experience'>
         <ExperienceCard
           {...currentExperience}
           description={currentExperience.body}
@@ -42,7 +43,7 @@ export default function HomePage() {
         <Link label='see my full experience history' href='/experiences' />
       </Section>
 
-      <Section title='Blog posts'>
+      <Section title='Blog posts' id='blog'>
         <Slider.Root>
           {allPosts.map(({ title, url, image, description }) => (
             <Slider.Item key={title}>
@@ -58,7 +59,7 @@ export default function HomePage() {
         <Link label='see all posts' href='/todo' />
       </Section>
 
-      <Section title='Contact me'>
+      <Section title='Contact me' id='contact'>
         <p className='text-2xl max-w-3xl'>
           {`I'm always open for a chat!`}
           <br />
