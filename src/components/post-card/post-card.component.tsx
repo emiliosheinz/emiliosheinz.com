@@ -5,7 +5,7 @@ import { Link } from '../link'
 
 export function PostCard({ title, description, url, image }: PostCardProps) {
   return (
-    <div className='flex flex-col bg-codGray-400 rounded-lg mb-5 w-72 sm:w-96 overflow-hidden'>
+    <div className='flex flex-col bg-codGray-300 rounded-lg mb-5 w-72 sm:w-96 overflow-hidden'>
       <Image
         src={image}
         width={384}

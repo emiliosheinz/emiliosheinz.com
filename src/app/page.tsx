@@ -23,7 +23,7 @@ function Section({ id, title, children }: SectionProps) {
 
 export default function HomePage() {
   return (
-    <main className='flex flex-col space-y-16 sm:space-y-24 py-24'>
+    <main className='flex flex-col space-y-16 sm:space-y-24'>
       <div className='flex flex-col space-y-6 sm:space-y-8' id='about'>
         <h1 className='font-bold text-4xl sm:text-5xl'>{`Hello 👋, I'm Emilio.`}</h1>
         <p className='text-xl sm:text-2xl max-w-3xl'>
@@ -32,7 +32,7 @@ export default function HomePage() {
           applications that are daily accessed by thousands of users since 2019.
           I bring ideas to life through lines of code.
         </p>
-        <Link label='read more about me' href='/todo' />
+        {/* <Link label='read more about me' href='/todo' /> */}
       </div>
 
       <Section title='Experience' id='experience'>

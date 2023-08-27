@@ -3,5 +3,9 @@ type PostsLayoutProps = {
 }
 
 export default function PostsLayout({ children }: PostsLayoutProps) {
-  return <div className='flex flex-col gap-8 mt-20 text-lg'>{children}</div>
+  return (
+    <main className='flex flex-col gap-5 sm:gap-8 text-sm sm:text-lg'>
+      {children}
+    </main>
+  )
 }

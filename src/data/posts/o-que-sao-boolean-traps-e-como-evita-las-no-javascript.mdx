@@ -1,0 +1,150 @@
+---
+type: Post
+title: O que são Boolean Traps e como evitá-las no Javascript
+description: Recentemente fiz uma talk sobre este assunto, para a equipe na qual trabalho, tentando expor um pouco do problema e a possível solução para ele. Gostei bastante do conteúdo passado e o feedback das pessoas foi positivo o que me levou a transcrever a talk neste artigo.
+publishedAt: 08/06/2020
+---
+
+Recentemente fiz uma talk sobre este assunto, para a equipe na qual trabalho, tentando expor um pouco do problema e a possível solução para ele. Gostei bastante do conteúdo passado e o feedback das pessoas foi positivo o que me levou a transcrever a talk neste artigo.
+
+## O problema
+
+Antes de mais nada precisamos estar todos na mesma página, ou seja, saber o que é uma boolean trap e como identificá-la no código.
+
+Boolean traps ocorrem principalmente quando uma função recebe um parâmetro do tipo booleano e não fica claro o que aquele booleano significa e para o que serve. Isso pode ocorrer também com parâmetros de outros tipos primitivos, como Strings e Inteiros, nesses casos podemos chamá-los de function parameter traps.
+
+Um bom exemplo desse tipo de caso é a chamada da função a seguir:
+
+```javascript
+NavigationService.popToTop(true)
+```
+
+Podemos observar claramente uma boolean trap, estamos passando true para a função, mas não fica claro para o que ele serve. É necessário ler a documentação do código ou analisar a função mais a fundo para entender o contexto desse parâmetro.
+
+Vamos ver outro exemplo um pouco mais complexo.
+
+```javascript
+getHeaderOptions(true, true, [], [], false, 'Home')
+```
+
+Nesse caso, temos uma função com 6 parâmetros, dentre eles `booleanos`, `arrays` e `strings`, porém, ao bater o olho na chamada dessa função, não conseguimos identificar com clareza o que cada um deles representa, novamente, teríamos que olhar a documentação do código ou então analisá-lo a fundo.
+
+Digamos que agora essa mesma função, por algum motivo, precise receber um novo parâmetro e ele é opcional. Por ser opcional, será colocado por último na declaração da função e todos os lugares em que ela esta sendo utilizada continuarão funcionando.
+
+Declaração da função `getHeaderOptions` antes da adição do novo parâmetro:
+
+```javascript
+getHeaderOptions(
+  isTransparent,
+  isVisible,
+  rightButtons,
+  leftButtons,
+  showBackArrow,
+  headerTitle
+)
+```
+
+Agora, com o novo parâmetro, ficará assim:
+
+```javascript
+getHeaderOptions(
+  isTransparent,
+  isVisible,
+  rightButtons,
+  leftButtons,
+  showBackArrow,
+  headerTitle,
+  newParameter
+)
+```
+
+Até ai tudo bem, pois como foi dito anteriormente, bastou adicionarmos o novo parâmetro na última posição que os lugares em que a função ja estava sendo utilizada continuarão funcionando, eles precisam apenas ignorar este novo parâmetro. Porém, quando um novo parâmetro não opcional for adicionado a ela, todos esses lugares necessariamente precisarão ser refatorados ou a chamada dela irá quebrar, já que para receber um novo parâmetro o posicionamento dos outros terá que ser alterado de alguma forma. Tente você mesmo adicionar um parâmetro não opcional no ultimo exemplo da função `getHeaderOptions` sem que seja necessário modificar todos os lugares em que ela é utilizada, verá que não é possível.
+
+Dessa forma, podemos observar que temos algumas limitações:
+
+- Para não precisar refatorar todos os lugares em que a função está sendo utilizada, temos que, obrigatoriamente, adicionar esse novo parâmetro como o último da função e passar um valor default para ele;
+
+- Caso o passo anterior já tenha sido feito, ao adicionar um novo parâmetro não opcional o refactor se faz necessário em todas as chamadas da função.
+
+---
+
+Agora que sabemos o que são boolean ou function parameter traps, vamos listar alguns dos problemas que elas nos trazem:
+
+- Legibilidade de código;
+- Complexidade para modificações dos parâmetros da função;
+- Dificuldade para utilizar as funções.
+
+## A solução
+
+Para resolver esses problemas, podemos utilizar um conceito introduzido no ES5: _Object Literal Function Parameteres_. Baseia-se em sempre passar um objeto como parâmetro de uma função fazendo a desestruturação dele diretamente na declaração da mesma. Vamos voltar no primeiro exemplo para entender melhor.
+
+**Sem Object Literal:**
+
+```javascript
+NavigationService.popToTop(immediate) {
+  this.navigator.dispatch(StackActions.popToTop({ immediate }))
+}
+```
+
+**Com Object Literal:**
+
+```javascript
+NavigationService.popToTop({ immediate }) {
+  this.navigator.dispatch(StackActions.popToTop({ immediate }))
+}
+```
+
+Em um primeiro momento, parece que não mudou muita coisa, certo? Porém, o grande ganho que temos é na hora em que chamamos a função. Nesse momento, usando o conceito _Object Literal_, iremos chamá-la da seguinte forma:
+
+```javascript
+NavigationService.popToTop({ immediate: true })
+```
+
+E quanto a função `getHeaderOptions` cheia de parâmetros dos mais variados tipos?
+
+**Antes:**
+
+```javascript
+getHeaderOptions(true, true, [], [], false, 'Home')
+```
+
+**Depois:**
+
+```javascript
+getHeaderOptions({
+  isTransparent: true,
+  isVisible: true,
+  rightButtons: [],
+  leftButtons: [],
+  showBackArrow: false,
+  headerTitle: 'Home',
+})
+```
+
+Assim, fica muito mais fácil entender o que cada parâmetro faz, pois ele está nomeado. Conseguimos ver que na função `popToTop` o `booleano` significa `immediate`, o que nos leva a pensar que a ação daquela função será executada sem delays ou animações, de forma imediata. Já na função `getHeaderOptions`, podemos ver que o primeiro `booleano` controla a transparência do header e o segundo a visibilidade dele.
+
+Além disso, utilizando este conceito, podemos fazer com que qualquer parâmetro seja opcional e a ordem com que passamos esses parâmetros seja indiferente, já que a função olha para a chave dentro do objeto e não para a posição do parâmetro passado.
+
+Digamos que todos os parâmetro da função `getHeaderOptions` sejam opcionais e nós queremos mudar apenas o headerTitle. Com o conceito de _Object Literal Parameter_ a chamada ficará assim:
+
+```javascript
+getHeaderOptions({ headerTitle: 'Home' })
+```
+
+Caso contrário, seríamos obrigados a passar todos os parâmetros, mesmo que eles fossem opcionais, apenas para passar o `headerTitle`.
+
+No caso da necessidade de adicionar um novo parâmetro na função, basta adicionarmos uma nova chave ao objeto que está sendo desestruturado e definir um valor default para ele, assim, todos os lugares em que essa função estava sendo utilizada anteriormente, continuarão funcionando. Isso pode ser repetido quantas vezes forem necessárias.
+
+## Conclusão
+
+O principal intuito em utilizar o conceito de _Object Literal Function Parameters_ é melhorar a legibilidade de código, mas, além disso, ele pode ajudar em outras coisas, como:
+
+- Definição de parâmetros opcionais: Qualquer parâmetro da função pode ser opcional e receber um valor default;
+
+- Facilidade para utilizar as funções: Podemos passar apenas os parâmetros realmente necessários, não sendo obrigados a passar parâmetros que não queremos para chegar na posição de um parâmetro em específico;
+
+- Facilita refactors no código: Adicionar ou remover parâmetros nas funções se torna muito mais simples e menos custoso para os desenvolvedores.
+
+## Referências
+
+Essa artigo foi baseado em uma talk do BrazilJS 2016 feita pela Lea Verou, lá ela aborda outros diversos assuntos ligados a legibilidade de código e a experiência de quem está utilizando o código que nós escrevemos, vale a pena conferir.
