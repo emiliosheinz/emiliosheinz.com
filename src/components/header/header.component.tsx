@@ -43,7 +43,7 @@ export function Header() {
 
   return (
     <header className='fixed from-codGray-500 from-10% bg-gradient-to-b top-0 left-0 right-0 z-40'>
-      <div className='flex items-center w-full max-w-6xl m-auto py-10 px-16'>
+      <div className='flex items-center w-full max-w-6xl m-auto py-10 px-5'>
         <Link href='/'>
           <Image
             src='/images/profile.png'
@@ -53,7 +53,7 @@ export function Header() {
             className='rounded-full'
           />
         </Link>
-        <div className='flex flex-1 justify-end space-x-5'>
+        <div className='hidden sm:flex flex-1 justify-end space-x-5'>
           {headerLinks.map(({ href, label }) => (
             <Link
               key={label}

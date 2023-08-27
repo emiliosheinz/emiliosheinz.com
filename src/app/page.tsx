@@ -6,12 +6,26 @@ import { socialMedias } from '~/data/social-medias'
 import { allPosts } from 'contentlayer/generated'
 import { currentExperience } from '~/content/experiences'
 
+type SectionProps = {
+  title: string
+  children: React.ReactNode
+}
+
+function Section({ title, children }: SectionProps) {
+  return (
+    <div className='flex flex-col space-y-6 sm:space-y-8' id='experience'>
+      <h1 className='font-bold text-2xl sm:text-3xl'>{title}</h1>
+      {children}
+    </div>
+  )
+}
+
 export default function HomePage() {
   return (
-    <main className='flex flex-col space-y-24 py-24'>
-      <div className='flex flex-col space-y-8' id='about'>
-        <h1 className='font-bold text-5xl'>{`Hello 👋, I'm Emilio.`}</h1>
-        <p className='text-2xl max-w-3xl'>
+    <main className='flex flex-col space-y-16 sm:space-y-24 py-24'>
+      <div className='flex flex-col space-y-6 sm:space-y-8' id='about'>
+        <h1 className='font-bold text-4xl sm:text-5xl'>{`Hello 👋, I'm Emilio.`}</h1>
+        <p className='text-xl sm:text-2xl max-w-3xl'>
           As an experienced Software Engineer graduated with a B.Sc. degree in
           Computer Science, I have been working on the development of
           applications that are daily accessed by thousands of users since 2019.
@@ -20,17 +34,15 @@ export default function HomePage() {
         <Link label='read more about me' href='/todo' />
       </div>
 
-      <div className='flex flex-col space-y-8' id='experience'>
-        <h1 className='font-bold text-3xl'>Experience</h1>
+      <Section title='Experience'>
         <ExperienceCard
           {...currentExperience}
           description={currentExperience.body}
         />
         <Link label='see my full experience history' href='/experiences' />
-      </div>
+      </Section>
 
-      <div className='flex flex-col space-y-8' id='blog'>
-        <h1 className='font-bold text-3xl'>Blog posts</h1>
+      <Section title='Blog posts'>
         <Slider.Root>
           {allPosts.map(({ title, url, image, description }) => (
             <Slider.Item key={title}>
@@ -44,10 +56,9 @@ export default function HomePage() {
           ))}
         </Slider.Root>
         <Link label='see all posts' href='/todo' />
-      </div>
+      </Section>
 
-      <div className='flex flex-col space-y-8' id='contact'>
-        <h1 className='font-bold text-3xl'>Contact me</h1>
+      <Section title='Contact me'>
         <p className='text-2xl max-w-3xl'>
           {`I'm always open for a chat!`}
           <br />
@@ -68,7 +79,7 @@ export default function HomePage() {
             </a>
           ))}
         </div>
-      </div>
+      </Section>
     </main>
   )
 }

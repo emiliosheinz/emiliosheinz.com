@@ -40,7 +40,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         'bg-codGray-500 text-white scroll-smooth'
       )}
     >
-      <body className={'pb-10 pt-28 px-16 max-w-6xl m-auto'}>
+      <body className={'pb-10 pt-20 sm:pt-28 px-5 max-w-6xl m-auto'}>
         <Header />
         {children}
         <CustomToaster />
