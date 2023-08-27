@@ -11,6 +11,9 @@ const font = Roboto_Mono({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'emiliosheinz',
   description: 'TODO',
+  openGraph: {
+    images: '/images/profile.png',
+  },
 }
 
 type RootLayoutProps = {

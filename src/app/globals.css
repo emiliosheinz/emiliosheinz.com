@@ -45,5 +45,17 @@
 
   ul {
     @apply list-disc list-inside;
+
+    > li {
+      @apply mb-3;
+    }
+  }
+
+  ol {
+    @apply list-decimal list-inside;
+
+    > li {
+      @apply mb-3;
+    }
   }
 }
