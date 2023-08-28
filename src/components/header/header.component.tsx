@@ -59,7 +59,7 @@ export function Header() {
               key={label}
               href={href}
               onClick={handleScroll}
-              className='font-bold text-xl px-2 transition-colors hover:text-dodgerBlue'
+              className='font-bold text-xl px-2 transition-colors hover:text-dodgerBlue no-underline'
             >
               {label}
             </Link>

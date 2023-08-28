@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 export function Link({ href, label }: LinkProps) {
   return (
     <NextLink
-      className='group text-base sm:text-lg hover:cursor-pointer'
+      className='group text-base sm:text-lg hover:cursor-pointer no-underline'
       href={href}
     >
       <span className='transition-all ease-in-out group-hover:text-dodgerBlue'>{`${label} `}</span>
