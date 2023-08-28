@@ -2,5 +2,348 @@
 type: Post
 title: How to setup multiple environments in React Native
 description: In this article I’ll explain a bit more about how to setup different environments in React Native and how to properly manage them across Javascript and native code.
-publishedAt: 2021-12-24
+publishedAt: 08/09/2020
 ---
+
+In this article I'll explain a bit more about how to setup different environments in React Native and how to properly manage them across Javascript and native code.
+
+To fully understand it you need to have knowledge in Javascript, React Native and understand a bit about React Native's project native structure (iOS and Android). So… let's start.
+
+## Motivation
+
+That article is like a puzzle I grouped all the important and valuable information that I’ve found during the implementation of environment setup in a project. Most of the articles or tutorials that I could find about the theme did not approach both, Javascript and Native code. So, I decided to do it.
+
+I will be happy if it helps you in any aspect 😄
+
+## Understanding the problem
+
+In a real project, we usually have three main environments (Development, Staging and Release). Those have each a different environment setup, like different API urls or Firebase projects.
+
+_But, how can we properly setup these variables according to the type of App that we want to run?_
+
+Since we usually have a lot of configurations that depend on which environment we are running, all of you agree that changing them by hand is not a good idea, right? In that case, we need to write some scripts to automate it, in both JS and Native sides. And that is exactly what we are going to see during this article.
+
+## Setting up Javascript Environment
+
+Now that we know the problem, we can start to solve it. First, we need to setup different environments for the Javascript side of our project. That step is a bit easier and straight forward, since we just need to create some files and write a script to replace them before running the application.
+
+First of all, we need to create the folders and files structure. In our project `src` path, create a `config` folder with another folder called `env` inside it. For each of the environment types that we have in our application we need to create a folder under the `env` directory. The final structure will be something like that:
+
+```txt
+src
+│
+└─ config
+  │
+  └─ env
+    │
+    └─ debug
+    │
+    └─ staging
+    │
+    └─ release
+```
+
+Each of the folders will have its own `index.js` file, like in the example bellow:
+
+```javascript
+// config/index.js
+export * from './env'
+
+// config/env/index.js
+export { env } from './debug'
+
+// config/env/debug/index.js
+export const env = {
+  // Here you can put all your Debug environment variables accessible from Javascript.
+  name: 'DEBUG',
+}
+
+// config/env/staging/index.js
+export const env = {
+  // Here you can put all your Staging environment variables accessible from Javascript.
+  name: 'STAGING',
+}
+
+// config/env/release/index.js
+export const env = {
+  // Here you can put all your Release environment variables accessible from Javascript.
+  name: 'RELEASE',
+}
+```
+
+_Note: I like to work with that type of structure `folder/index.js`, but, feel free to modify it according to your project, and keep in mind that this will affect the code that you need to write in the following steps._
+
+The environment structure of our project for the Javasript side is created. But we need a way to run our application using each of these configurations. To do so, we can write a script that replaces `export { env } from './debug'` inside the `config/env` file with the right environment export string.
+
+To validate the params of our `node script` we are going to install `yargs` library:
+
+```bash
+yarn add -D yargs
+```
+
+Then, we are able to create the following script that will replace the line mentioned above and make it possible to choose what environment we want to run. The most important parts are commented with the explanation. Please, take a look:
+
+```javascript
+#!/bin/node
+const fs = require('fs')
+const path = require('path')
+const { argv } = require('yargs')
+
+const { env } = argv
+
+// Accepted environment params, they are directly related to the name of the folders created before.
+const acceptedEnvs = ['debug', 'staging', 'release']
+
+// Function that writes on the file.
+function writeFile(file, string) {
+  if (fs.existsSync(file)) {
+    fs.writeFileSync(file, string)
+    return true
+  }
+
+  console.log(`File "${file}" not found.`)
+  process.exit(1)
+}
+
+// Function that validate if the param passed to the script is a valid environment.
+function validateParams() {
+  console.log(`Validating params...`)
+  if (!env) {
+    console.log(
+      `Error.  Please inform a valid environment: ${acceptedEnvs.join(', ')}.`
+    )
+    process.exit(1)
+  }
+
+  if (!acceptedEnvs.includes(env)) {
+    console.log(
+      `Error. Wrong environment, choose one of those: ${acceptedEnvs.join(
+        ', '
+      )}.`
+    )
+    process.exit(1)
+  }
+}
+
+// Function that replaces the file content with the right content.
+function setEnvironment() {
+  console.log(`Setting environmet to ${env}...`)
+
+  // String that will override the current export string
+  const importerString = `export { env } from './${env}'\n`
+
+  // Env index file location that will be overridden
+  const envIndexFileLocation = path.resolve(
+    __dirname,
+    '..',
+    'src',
+    'config',
+    'env',
+    'index.js'
+  )
+
+  // Writes right content inside the environment file
+  writeFile(envIndexFileLocation, importerString)
+  console.log(`Environment successfully setted to ${env}.`)
+  process.exit(0)
+}
+
+// Script initialization
+validateParams()
+setEnvironment()
+```
+
+Usually I place that file inside the `scripts` folder on the `root` of my project (where I also have other scripts to automate other parts of my building process).
+
+We have already created the folders structure and the script that will replace everything, now we just need to run it before `react-native run-android` or `react-native run-ios` to make sure that the right environment is being used during the process. To do so, you can create some scripts inside `package.json`:
+
+```json
+{
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+
+    "set:env:debug": "node ./scripts/set-env.js --env debug",
+    "set:env:staging": "node ./scripts/set-env.js --env staging",
+    "set:env:release": "node ./scripts/set-env.js --env release",
+
+    "run:android:debug": "yarn set:env:debug && yarn android --variant debug",
+    "run:android:staging": "yarn set:env:staging && yarn android --variant staging",
+    "run:android:release": "yarn set:env:release && yarn android --variant release",
+
+    "run:ios:debug": "yarn set:env:debug && yarn ios --configuration Debug",
+    "run:ios:staging": "yarn set:env:staging && yarn ios --configuration Staging",
+    "run:ios:release": "yarn set:env:release && yarn ios --configuration Release"
+  }
+}
+```
+
+To run your project, instead of using `run-android` or `run-ios` you should use the scripts that we have created. For example, if I want to run my android app with `debug` environment, I am going to use `yarn run:android:debug`.
+
+For Javascript side that would be all. Now you just need to add the variables, like API Url, in each `env` object and use it in your application.
+
+## Setting up Native Environment
+
+As you may know, when working with React Native, some libraries or implementations need both Javascript and Native configuration. Examples of that are Facebook SDK and Firebase. To manage these different configurations on native side, we are going to work with `build types` for Android and with `build configurations` for iOS.
+
+### Setting up Android Environment
+
+First of all, inside `android/app/build.gradle` under `buildTypes` we need to add a new `buildType` called `staging`. It will look like that:
+
+```groovy
+staging {
+  matchingFallbacks = ['release']
+  signingConfig signingConfigs.debug
+  minifyEnabled enableProguardInReleaseBuilds
+  proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+}
+```
+
+Don't forget to add `matchingFallbacks` there, without it the build may fail. If you want, you can read more about it [here](https://stackoverflow.com/questions/60407756/react-native-build-fails-on-building-a-new-build-type-other-than-debug-release).
+
+Now we need to do some extra configuration to allow the staging build type to work properly. Inside the `project.ext.react` array add the following configuration:
+
+```groovy
+project.ext.react = [
+  enableHermes: false,
+  devDisabledInStaging: true,
+  bundleInStaging: true,
+]
+```
+
+That's necessary because, by default, React Native enables development mode and doesn't bundles Javascript in non default `buildTypes`.
+
+To finish, we need to create a new folder called `staging` under `android/app/src` and add a new `AndroidManifest.xml` file (you can copy the one that's already created inside the `debug` folder).
+
+Inside that folder you can add all configurations that are necessary for the staging `buildType`.
+
+That's the way Android knows what the configurations that are going to be used to build your app are. It will look inside the folder with same name as the `buildType`, and, after that, use the `main` folder configuration.
+
+Let's say you want to have different app names for each `buildType`. You can do it by adding a new `strings` file and overwriting the `app_name string`. That works with Firebase's `google-service.json` file too, just add the file under each folder and it will work fine.
+
+_Note: Don't forget to properly follow the folders structure. For example, the original `strings` file is located under `main/res/values`, so if you want to overwrite it on `staging` build, you need to create the same directories tree under `staging` folder._
+
+### Setting up iOS Environment
+
+For iOS the logic is almost the same, but with some little differences. Let's dive into 😜?
+
+Open the project in _XCode_ and duplicate the `Release` build configuration naming it with `Staging`.
+
+<Image
+  src='/images/posts/how-to-setup-multiple-environments-in-react-native/duplicate-release-env.webp'
+  alt='Example of duplicated Release build configuration'
+/>
+
+Under our iOS project folder, we are going to create a new folder called `ConfigFiles` and add three `.xcconfig` files, one for each build configuration. Let’s use the same example that I have used for Android. To have a different app name for each build configuration you can add a new property to each file.
+
+<Image
+  src='/images/posts/how-to-setup-multiple-environments-in-react-native/config-files.webp'
+  alt='Example of ConfigFiles folder being created'
+/>
+
+To have access to these properties in your application you need to load them inside each build configuration. We can do that by simply adding it as a `ConfigFile` on project level.
+
+<Image
+  src='/images/posts/how-to-setup-multiple-environments-in-react-native/load-config.webp'
+  alt='Example of ConfigFile being loaded inside build configuration'
+/>
+
+_Wait! But how can I use these properties that were loaded into my application?_
+
+Just go to your `Info.plist` file and replace whatever you want with the properties. Following the example, I will replace my old _Bundle display name_ with the variable `APP_DISPLAY_NAME`.
+
+<Image
+  src='/images/posts/how-to-setup-multiple-environments-in-react-native/info-plist.webp'
+  alt='Example of Info.plist file being updated'
+/>
+
+Ok… But that just allow us to load different properties and not different files for each build configuration. In case of Firebase, that has a different `GoogleService-Info.plist` file for each of the configurations, we need to have a different approach. To do that, we can run a script at build time that verifies what is the current build configuration that we are using and replace the necessary files.
+
+I am currently using the following script to do that work for me:
+
+```sh
+# Name of the resource we're selectively copying
+GOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist
+
+# Get references to debug, staging and prod versions of the GoogleService-Info.plist
+# NOTE: These should only live on the file system and should NOT be part of the target (since we'll be adding them to the target manually)
+GOOGLESERVICE_INFO_DEBUG=${PROJECT_DIR}/${TARGET_NAME}/ConfigFiles/Debug/${GOOGLESERVICE_INFO_PLIST}
+GOOGLESERVICE_INFO_STAGING=${PROJECT_DIR}/${TARGET_NAME}/ConfigFiles/Staging/${GOOGLESERVICE_INFO_PLIST}
+GOOGLESERVICE_INFO_RELEASE=${PROJECT_DIR}/${TARGET_NAME}/ConfigFiles/Release/${GOOGLESERVICE_INFO_PLIST}
+
+# Make sure the debug version of GoogleService-Info.plist exists
+echo "Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_DEBUG}"
+if [ ! -f $GOOGLESERVICE_INFO_DEBUG ]
+then
+    echo "No Debug GoogleService-Info.plist found. Please ensure it's in the proper directory."
+    exit 1
+fi
+
+# Make sure the staging version of GoogleService-Info.plist exists
+echo "Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_STAGING}"
+if [ ! -f $GOOGLESERVICE_INFO_PROD ]
+then
+    echo "No Staging GoogleService-Info.plist found. Please ensure it's in the proper directory."
+    exit 1
+fi
+
+# Make sure the release version of GoogleService-Info.plist exists
+echo "Looking for ${GOOGLESERVICE_INFO_PLIST} in ${GOOGLESERVICE_INFO_RELEASE}"
+if [ ! -f $GOOGLESERVICE_INFO_RELEASE ]
+then
+    echo "No Release GoogleService-Info.plist found. Please ensure it's in the proper directory."
+    exit 1
+fi
+
+# Get a reference to the destination location for the GoogleService-Info.plist
+PLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app
+echo "Will copy ${GOOGLESERVICE_INFO_PLIST} to final destination: ${PLIST_DESTINATION}"
+
+# Copy over the prod GoogleService-Info.plist for Release builds
+if [ "${CONFIGURATION}" == "Release" ]
+then
+    echo "Using ${GOOGLESERVICE_INFO_RELEASE}"
+    cp "${GOOGLESERVICE_INFO_RELEASE}" "${PLIST_DESTINATION}"
+fi
+
+if [ "${CONFIGURATION}" == "Staging" ]
+then
+    echo "Using ${GOOGLESERVICE_INFO_STAGING}"
+    cp "${GOOGLESERVICE_INFO_STAGING}" "${PLIST_DESTINATION}"
+fi
+
+if [ "${CONFIGURATION}" == "Debug" ]
+then
+    echo "Using ${GOOGLESERVICE_INFO_DEBUG}"
+    cp "${GOOGLESERVICE_INFO_DEBUG}" "${PLIST_DESTINATION}"
+fi
+```
+
+Basically, it searches for the `GoogleService-Info.plist` files inside my `ConfigFiles` folder, and replaces it according to the current build configuration.
+
+The most important sections of this script are commented. It was created to replace the Firebase’s `GoogleService-Info.plist` file, but it can easily be modified to replace other files too.
+
+To run this script, we need to add it to our target `Build Phases` as a new `Run Script Phase`:
+
+<Image
+  src='/images/posts/how-to-setup-multiple-environments-in-react-native/run-script.webp'
+  alt='Example of Run Script Phase being added to target Build Phases'
+/>
+
+Last but not least, we need to add the `GoogleService-Info.plist` files under our `ConfigFiles` directory to allow our script to run properly.
+
+_If you have other files that need to be replaced, you can add them in this directory tree too, just don’t forget to modify the current script or create a new one to replace these files._
+
+## That’s all folks 🚀
+
+Now, just like magic, you can properly manage multiple environments in your React Native project without thousands of lines of configuration. Just run your project using one of the created scripts and everything will work fine.
+
+If you have any questions or suggestions, please leave a comment. I would be glad in hearing you.
+
+I would like you to check out some other articles about this theme that helped me to write this one:
+
+- [The easiest way to setup multiple environments on React Native](https://itnext.io/the-easiest-way-to-setup-multiple-environments-on-react-native-67b33d073390)
+- [Using Multiple Firebase Environments in iOS](https://medium.com/atlas/using-multiple-firebase-environments-in-ios-12b204cfa6c0)
+- [Android + React Native + Fastlane: Working with multiple build types](https://medium.com/@tgpski/android-react-native-fastlane-working-with-multiple-build-types-a9a6641c5704)
+
+Thanks for reading!

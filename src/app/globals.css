@@ -58,4 +58,8 @@
       @apply mb-3;
     }
   }
+
+  a {
+    @apply hover:text-dodgerBlue underline underline-offset-4 transition-all duration-300;
+  }
 }
