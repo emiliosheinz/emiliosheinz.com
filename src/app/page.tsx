@@ -3,8 +3,8 @@ import { Link } from '~/components/link'
 import { PostCard } from '~/components/post-card'
 import { Slider } from '~/components/slider'
 import { socialMedias } from '~/data/social-medias'
-import { allPosts } from 'contentlayer/generated'
 import { currentExperience } from '~/content/experiences'
+import { getLastFivePosts } from '~/content/posts'
 
 type SectionProps = {
   id: string
@@ -45,7 +45,7 @@ export default function HomePage() {
 
       <Section title='Blog posts' id='blog'>
         <Slider.Root>
-          {allPosts.map(({ title, url, image, description }) => (
+          {getLastFivePosts().map(({ title, url, image, description }) => (
             <Slider.Item key={title}>
               <PostCard
                 url={url}
