@@ -17,10 +17,7 @@ export function Pre({ children, ...props }: PreProps) {
   }
 
   return (
-    <pre
-      {...props}
-      className='relative p-6 rounded overflow-y-scroll overflow-x-hidden bg-scroll'
-    >
+    <pre {...props}>
       {cloneElement(children as ReactElement, { ref: codeRef })}
       <button
         onClick={copyToClipboard}
