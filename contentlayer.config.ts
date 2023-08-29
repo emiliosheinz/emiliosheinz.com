@@ -42,6 +42,7 @@ export const Experience = defineDocumentType(() => ({
 
 const rehypePrettyCodeOptions: Options = {
   theme: 'dracula',
+  keepBackground: false,
 }
 
 export default makeSource({

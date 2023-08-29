@@ -4,14 +4,9 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { Pre } from './components/pre.component'
 import { Image } from './components/image.component'
 import { classNames } from '~/utils/css.utils'
+import { MDXContentProps } from './mdx-content.types'
 
-export function MDXContent({
-  code,
-  className = '',
-}: {
-  code: string
-  className?: string
-}) {
+export function MDXContent({ code, className = '' }: MDXContentProps) {
   const Content = useMDXComponent(code)
 
   return (

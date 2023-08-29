@@ -1,4 +1,3 @@
-import { FaArrowRightLong } from 'react-icons/fa6'
 import { PostCardProps } from './post-card.types'
 import { Image } from '../image'
 import { Link } from '../link'

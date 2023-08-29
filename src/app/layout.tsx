@@ -10,7 +10,8 @@ const font = Roboto_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'emiliosheinz',
-  description: 'TODO',
+  description:
+    'As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.',
   openGraph: {
     images: '/images/profile.png',
   },
