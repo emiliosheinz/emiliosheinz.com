@@ -17,15 +17,17 @@ export function Pre({ children, ...props }: PreProps) {
   }
 
   return (
-    <pre {...props}>
-      {cloneElement(children as ReactElement, { ref: codeRef })}
-      <button
-        onClick={copyToClipboard}
-        aria-label='Copy to clipboard'
-        className='absolute top-0 right-0 p-3 opacity-50 hover:opacity-100 transition-opacity'
-      >
-        <FaCopy />
-      </button>
-    </pre>
+    <div className='relative'>
+      <pre {...props}>
+        {cloneElement(children as ReactElement, { ref: codeRef })}
+        <button
+          onClick={copyToClipboard}
+          aria-label='Copy to clipboard'
+          className='absolute top-0 right-0 p-3 opacity-50 hover:opacity-100 transition-opacity'
+        >
+          <FaCopy />
+        </button>
+      </pre>
+    </div>
   )
 }

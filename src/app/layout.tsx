@@ -1,6 +1,7 @@
 import './globals.css'
 
 import type { Metadata } from 'next'
+import { motion } from 'framer-motion'
 import { Roboto_Mono } from 'next/font/google'
 import { Header } from '~/components/header'
 import { classNames } from '~/utils/css.utils'

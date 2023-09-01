@@ -19,6 +19,10 @@
     @apply bg-codGray-100;
   }
 
+  ::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
+
   .mdx-article {
     h1 {
       @apply text-4xl font-bold;
@@ -65,7 +69,7 @@
     }
 
     pre {
-      @apply relative p-3 sm:p-6 overflow-y-scroll overflow-x-hidden bg-scroll rounded;
+      @apply p-3 sm:p-6 overflow-y-scroll bg-scroll rounded;
       @apply bg-codGray-300;
 
       code {
