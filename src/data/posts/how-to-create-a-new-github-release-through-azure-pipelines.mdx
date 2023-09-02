@@ -2,5 +2,116 @@
 type: Post
 title: How to create a new GitHub Release through Azure Pipelines
 description: Creating a new GitHub release is a common task that a lot of developers are supposed to do during their careers. But on the other hand, it is not as well documented as it could. There are a lot of little tricky things that you will discover only during the process.
-publishedAt: 2021-12-24
+publishedAt: 10/02/2021
 ---
+
+Creating a new GitHub release is a common task that a lot of developers are supposed to do during their careers. But on the other hand, it is not as well documented as it could. There are a lot of little tricky things that you will discover only during the process.
+
+So… Let's start diving into it!
+
+_OBS: I'm assuming that you already have a basic pipeline structure running and you just need to do this little step (Generate a GitHub release)._
+
+During this article, we are going to use some code and scripts, the final version is below, if you want you can copy it and try to understand it by yourself, or read the entire article to understand each step in detail.
+
+```yaml
+name: 'GitHubReleaseExamplePipeline'
+
+pool:
+  vmImage: 'macOS-latest'
+
+variables:
+  - name: currentVersionName
+
+jobs:
+  # Your build job can gohere
+  - job: GenerateReleaseOnGitHub
+    dependsOn: # The name of you build job
+    displayName: Generate GitHub Release
+    condition: succeeded()
+    steps:
+      - script: |
+          export versionName=$(node scripts/get-current-version-name.js)
+          echo "##vso[task.setvariable variable=currentVersionName]$versionName"
+        displayName: Get current release name
+      - script: |
+          npm i -g rng-cli@latest
+          rng -o $(gh_org_name) -p $(gh_project_number) -t $(rng_gh_token) -c "DONE" >> $(release_notes_file_name)
+          cat $(release_notes_file_name)
+        displayName: Generate release notes
+      - task: GitHubRelease@0
+        inputs:
+          gitHubConnection: # Your GitHub connection service name
+          repositoryName: $(Build.Repository.Name)
+          action: 'create'
+          target: $(Build.SourceVersion)
+          tagSource: 'manual'
+          tag: $(currentVersionName)
+          title: 'Release $(currentVersionName)'
+          isPreRelease: true
+          addChangeLog: false
+          releaseNotesSource: 'file'
+          releaseNotesFile: $(release_notes_file_name)
+```
+
+First of all, we need to create a new GitHub connection service that gives the pipeline access to the repository in which you want to create the release. To create it, in the Azure DevOps platform, you need to access _Project settings > Service connections > New service connection > GitHub_. On OAuth Configuration select AzurePipelines, give it a name (this name will be used inside the _yml_ file), and save it. After that, you are gonna be able to fill the _gitHubConnection_ input with your Service connection name.
+
+Now, we need to discover what is the version that we are building to then fill in the inputs of the _tag_ and _title_ of our task. It can be a little tricky because the way that you get this info may change according to your project's structure and workflow.
+
+As an example, I’m going to use a scenario where you get the version from a node script, store it in a variable and pass it to the task as an input. You can do whatever you want inside that node script, in my case, for example, I’m reading the content of a file and extracting the version from it.
+
+```yaml
+# New multiline script declaration
+- script: |
+    # Export a new variable called vasionName with the output of my node script
+    export versionName=$(node scripts/get-current-version-name.js)
+
+    # Set the value of a global variable with the value of my local variable
+    echo "##vso[task.setvariable variable=currentVersionName]$versionName"
+  displayName: Get current release name
+```
+
+As an optional step, to do better documentation, you can generate some release notes for your release. I will be using a lib that takes all cards in a specific project column (in my case “DONE”) and generates a user-friendly release note for me. If it makes sense for you, you can use it too, or just do it by yourself in a way that better fits your workflow.
+
+```yaml
+# New multiline script declaration
+- script: |
+    # Release notes generator CLI lib instalation
+    npm i -g rng-cli@latest
+
+    # RNG call to generate the notes and store the result inside a .txt file
+    rng -o $(gh_org_name) -p $(gh_project_number) -t $(rng_gh_token) -c "DONE" >> $(release_notes_file_name)
+    # Print the content of the file
+    cat $(release_notes_file_name)
+  displayName: Generate release notes
+```
+
+_gh_org_name, gh_project_number, rng_gh_token, and release_notes_file_name_ are all variables stored in a variable group inside my Azure DevOps project, if you want you can use inline values but it is not reusable and secure.
+
+If you don't know how to create a new variable group you can take a look at [these](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=yaml) docs. And if you don't know how _rng-cli_ works you can take a look at [this](https://github.com/emiliosheinz/release-notes-generator) repository (I have created it for my own necessity, if you have any improvement proposal you can open an issue or a pull request).
+
+Now that we have everything set up we can call the _GitHubRelease_ task passing all the necessary inputs.
+
+```yaml
+# New task script declaration
+- task: GitHubRelease@0
+  inputs:
+    gitHubConnection: # Your GitHub connection service name
+    repositoryName: $(Build.Repository.Name)
+    action: 'create'
+    target: $(Build.SourceVersion)
+    tagSource: 'manual'
+    # Our current version name, set on tag and on release title
+    tag: $(currentVersionName)
+    title: 'Release $(currentVersionName)'
+    isPreRelease: true
+    addChangeLog: false
+    releaseNotesSource: 'file'
+    # The release notes file that we have created before in the pipeline
+    releaseNotesFile: $(release_notes_file_name)
+```
+
+If you want to know all the inputs that you can pass to the _GitHubRelease_ task, you can take a look at [these](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/github-release-v1?view=azure-pipelines&viewFallbackFrom=azure-devops) Microsoft docs, everything that you need to know will be there.
+
+That's all folks! Now we have a pipeline that automatically generates GitHub releases for us 🚀!
+
+I hope I could help you, if you have any questions or suggestions you can try to reach me here in the comments or via email, I will be happy to answer you!
