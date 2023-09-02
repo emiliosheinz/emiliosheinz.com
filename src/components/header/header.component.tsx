@@ -84,8 +84,8 @@ export function Header() {
             src='/images/profile.png'
             width={62}
             height={62}
-            alt="Black and white picture of the website's owner on a sky blue background"
             className='rounded-full'
+            alt="Emilio Schaedler Heinzmann's picture in black and white with a blue background"
           />
         </Link>
       </div>

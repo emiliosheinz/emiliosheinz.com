@@ -1,6 +1,87 @@
 ---
 type: Post
 title: Increase React render performance by avoiding unnecessary useEffects
-description: A common mistake I see people making while creating their React component is creating extra states and effects. That may cause unexpected bugs and extra renders.'
-publishedAt: 2021-12-24
+description: A common mistake I see people making while creating their React component is creating extra states and effects. That may cause unexpected bugs and extra renders.
+publishedAt: 2022-09-21
 ---
+
+A common mistake I see people making while creating their React component is creating extra states and effects. That may cause unexpected bugs and extra renders.
+
+Let's say that we have a simple app that generates a full name based on the value of two given inputs (first and last names) as shown below.
+
+<Image
+  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/application.gif'
+  alt='Application exemple with two fields and a title'
+/>
+
+The approach that I mostly see developers using is creating an extra state for the full name, and in an useEffect set this state according to the new values in the inputs:
+
+```ts
+const [firstName, setFirstName] = useState<string>('')
+const [lastName, setLastName] = useState<string>('')
+const [fullName, setFullName] = useState<string>('')
+
+useEffect(() => {
+  setFullName(`${firstName} ${lastName}`)
+}, [firstName, lastName])
+```
+
+That's not the right approach… But, why?
+
+- It doesn't use a single source of truth: Developers in the future will be able to directly set the _fullName_ state without respecting the fact that it should be based on the _firstName_ and _lastName_ states.
+- It causes extra renders: basically, every time we have a _setState_, React re-renders stuff. In this case, because of the extra _setState_ inside the _useEffect_, for every letter typed into any of the inputs we are gonna have one extra render.
+
+Basically what happens is:
+
+<Image
+  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/set-setate-flow.webp'
+  alt='React lifecycle flow with an extra state and effect'
+/>
+
+## The right approach
+
+When something derives from an existing prop or state we should always calculate it during render time. That avoids bugs that could be generated because of the extra states and increases performance because of the fewer renders.
+
+```ts
+const [firstName, setFirstName] = useState<string>('')
+const [lastName, setLastName] = useState<string>('')
+
+const fullName = `${firstName} ${lastName}`.trim()
+```
+
+With this new approach, our component lifecycle gets reduced to:
+
+<Image
+  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/derived-state-flow.webp'
+  alt='React lifecycle flow with a derived state'
+/>
+
+## Comparing the two approaches
+
+When comparing the two approaches with the name "James Robert" we see that the first approach does twice as much renders and has substantially more code than the second one.
+
+First approach total renders: first render + 2 x number of letters in the name.
+
+<Image src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/set-state-test.webp' /
+  alt='Print screen with the amount of re-renders in the first approach'
+>
+
+Second approach total renders: first render + number of letters in the name.
+
+<Image
+  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/derived-state-test.webp'
+  alt='Print screen with the amount of re-renders in the second approach'
+/>
+
+In this test case, since it is just a proof of concept, we will not see a big difference performance-wise, but in real-life features, we should always care about this kind of issue.
+
+## Code
+
+If you want, you can take a look at the code used in the article:
+
+- [emiliosheinz/full-name-generator](https://github.com/emiliosheinz/full-name-generator)
+
+## References
+
+- [A Complete Guide to useEffect](https://overreacted.io/a-complete-guide-to-useeffect)
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
