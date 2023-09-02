@@ -3,4 +3,5 @@ export type PostCardProps = {
   description: string
   url: string
   image: string
+  className?: string
 }

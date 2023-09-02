@@ -56,7 +56,7 @@ export default function HomePage() {
             </Slider.Item>
           ))}
         </Slider.Root>
-        <Link label='see all posts' href='/todo' />
+        <Link label='see all posts' href='/posts' />
       </Section>
 
       <Section title='Contact me' id='contact'>
