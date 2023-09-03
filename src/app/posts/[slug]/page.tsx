@@ -1,10 +1,7 @@
-import { ResolvingMetadata } from 'next'
+import { Metadata, ResolvingMetadata } from 'next'
 import { Image } from '~/components/image'
 import { MDXContent } from '~/components/mdx-content'
 import { getPostBySlug, posts } from '~/content/posts'
-import { ONE_HOUR_IN_SECONDS } from '~/utils/revalidate.utils'
-
-export const revalidate = ONE_HOUR_IN_SECONDS
 
 type PostPageProps = {
   params: {
@@ -15,18 +12,30 @@ type PostPageProps = {
 export async function generateMetadata(
   props: PostPageProps,
   parent: ResolvingMetadata
-) {
+): Promise<Metadata | undefined> {
   const post = getPostBySlug(props.params.slug)
 
   if (!post) return
 
+  const { title, description, publishedAt } = post
   const previousImages = (await parent).openGraph?.images || []
 
   return {
-    title: post.title,
-    description: post.description,
+    title,
+    description,
     openGraph: {
+      title,
+      description,
+      type: 'article',
+      publishedTime: publishedAt,
+      url: `https://emiliosheinz.com/posts/${post.slug}`,
       images: [post.image, ...previousImages],
+    },
+    twitter: {
+      title,
+      description,
+      images: [post.image, ...previousImages],
+      card: 'summary_large_image',
     },
   }
 }

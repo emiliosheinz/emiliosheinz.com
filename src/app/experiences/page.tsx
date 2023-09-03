@@ -1,8 +1,5 @@
 import { ExperienceCard } from '~/components/experience-card'
 import { experiences } from '~/content/experiences'
-import { ONE_HOUR_IN_SECONDS } from '~/utils/revalidate.utils'
-
-export const revalidate = ONE_HOUR_IN_SECONDS
 
 export default function ExperiencesPage() {
   return (

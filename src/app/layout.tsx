@@ -10,11 +10,35 @@ import { Toaster } from 'react-hot-toast'
 const font = Roboto_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'emiliosheinz',
+  metadataBase: new URL('https://emiliosheinz.com'),
+  title: {
+    default: 'emiliosheinz',
+    template: '%s | emiliosheinz',
+  },
   description:
     'As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.',
+
   openGraph: {
+    title: 'Emilio Schaedler Heinzmann',
+    description:
+      'As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.',
+    url: 'https://emiliosheinz.com',
+    siteName: 'emiliosheinz',
+    locale: 'en-US',
+    type: 'website',
     images: '/images/profile.png',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  twitter: {
+    title: 'Emilio Schaedler Heinzmann',
+    card: 'summary_large_image',
   },
 }
 
