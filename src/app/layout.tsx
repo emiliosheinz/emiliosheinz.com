@@ -1,7 +1,7 @@
 import './globals.css'
 
+import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
-import { motion } from 'framer-motion'
 import { Roboto_Mono } from 'next/font/google'
 import { Header } from '~/components/header'
 import { classNames } from '~/utils/css.utils'
@@ -74,6 +74,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Header />
         {children}
         <CustomToaster />
+        <Analytics />
       </body>
     </html>
   )
