@@ -2,6 +2,9 @@ import { ResolvingMetadata } from 'next'
 import { Image } from '~/components/image'
 import { MDXContent } from '~/components/mdx-content'
 import { getPostBySlug, posts } from '~/content/posts'
+import { ONE_HOUR_IN_SECONDS } from '~/utils/revalidate.utils'
+
+export const revalidate = ONE_HOUR_IN_SECONDS
 
 type PostPageProps = {
   params: {

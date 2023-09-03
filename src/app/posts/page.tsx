@@ -1,5 +1,8 @@
 import { PostCard } from '~/components/post-card'
 import { posts } from '~/content/posts'
+import { ONE_HOUR_IN_SECONDS } from '~/utils/revalidate.utils'
+
+export const revalidate = ONE_HOUR_IN_SECONDS
 
 export default function ExperiencesPage() {
   return (
