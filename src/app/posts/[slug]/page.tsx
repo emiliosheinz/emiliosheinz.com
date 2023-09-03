@@ -19,7 +19,6 @@ export async function generateMetadata(
   if (!post) return
 
   const { title, description, publishedAt } = post
-  const previousImages = (await parent).openGraph?.images || []
 
   return {
     title,
