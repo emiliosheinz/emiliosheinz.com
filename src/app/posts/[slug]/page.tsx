@@ -1,3 +1,4 @@
+import { url } from 'inspector'
 import { Metadata, ResolvingMetadata } from 'next'
 import { Image } from '~/components/image'
 import { MDXContent } from '~/components/mdx-content'
@@ -29,12 +30,12 @@ export async function generateMetadata(
       type: 'article',
       publishedTime: publishedAt,
       url: `https://emiliosheinz.com/posts/${post.slug}`,
-      images: [post.image, ...previousImages],
+      images: post.image,
     },
     twitter: {
       title,
       description,
-      images: [post.image, ...previousImages],
+      images: post.image,
       card: 'summary_large_image',
     },
   }

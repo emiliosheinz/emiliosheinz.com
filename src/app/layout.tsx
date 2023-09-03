@@ -9,19 +9,19 @@ import { Toaster } from 'react-hot-toast'
 
 const font = Roboto_Mono({ subsets: ['latin'] })
 
+const ogDescription =
+  'As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.'
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://emiliosheinz.com'),
   title: {
     default: 'emiliosheinz',
     template: '%s | emiliosheinz',
   },
-  description:
-    'As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.',
-
+  description: ogDescription,
   openGraph: {
     title: 'Emilio Schaedler Heinzmann',
-    description:
-      'As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.',
+    description: ogDescription,
     url: 'https://emiliosheinz.com',
     siteName: 'emiliosheinz',
     locale: 'en-US',
@@ -38,6 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: 'Emilio Schaedler Heinzmann',
+    images: '/images/profile.png',
     card: 'summary_large_image',
   },
 }
