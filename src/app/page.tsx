@@ -30,7 +30,7 @@ export default function HomePage() {
           As an experienced Software Engineer graduated with a B.Sc. degree in
           Computer Science, I have been working on the development of
           applications that are daily accessed by thousands of users since 2019.
-          I bring ideas to life through lines of code.
+          I bring ideas to life, I turn coffee into code ☕️.
         </p>
         {/* <Link label='read more about me' href='/todo' /> */}
       </div>
