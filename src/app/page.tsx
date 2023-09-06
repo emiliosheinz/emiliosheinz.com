@@ -71,7 +71,7 @@ export default function HomePage() {
           >
             emiliosheinz@gmail.com
           </a>{' '}
-          or reach me ou on social media.
+          or reach me out on social media.
         </p>
         <div className='flex space-x-8'>
           {socialMedias.map(({ Icon, url, name }) => (
