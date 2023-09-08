@@ -18,6 +18,3 @@ cd emiliosheinz.com
 yarn
 yarn dev
 ```
-
-## :man: Contributors
-- [@emiliosheinz](https://github.com/emiliosheinz)
