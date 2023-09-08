@@ -1,4 +1,4 @@
-## 🧙🏼‍♂️ emiliosheinz.com
+# 🧙🏼‍♂️ emiliosheinz.com
 This repository is the home of all the code for my personal portfolio website. Here, you can discover more about me, my professional background, past experiences, and explore my blog posts.
 
 ## :computer: Preview
