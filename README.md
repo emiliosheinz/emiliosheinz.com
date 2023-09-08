@@ -20,4 +20,4 @@ yarn dev
 ```
 
 ## :man: Contributors
-- [@emilioheinz](https://github.com/emiliosheinz)
+- [@emiliosheinz](https://github.com/emiliosheinz)
