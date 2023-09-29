@@ -5,7 +5,7 @@ export default function robots() {
         userAgent: '*',
       },
     ],
-    sitemap: 'https://emiliosheiz.com/sitemap.xml',
+    sitemap: 'https://emiliosheinz.com/sitemap.xml',
     host: 'https://emiliosheinz.com',
   }
 }
