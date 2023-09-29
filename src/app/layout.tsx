@@ -15,15 +15,15 @@ const ogDescription =
 export const metadata: Metadata = {
   metadataBase: new URL('https://emiliosheinz.com'),
   title: {
-    default: 'emiliosheinz',
-    template: '%s | emiliosheinz',
+    default: 'Emilio Schaedler Heinzmann',
+    template: '%s | Emilio Schaedler Heinzmann',
   },
   description: ogDescription,
   openGraph: {
     title: 'Emilio Schaedler Heinzmann',
     description: ogDescription,
     url: 'https://emiliosheinz.com',
-    siteName: 'emiliosheinz',
+    siteName: 'Emilio Schaedler Heinzmann',
     locale: 'en-US',
     type: 'website',
     images: '/images/profile.png',
