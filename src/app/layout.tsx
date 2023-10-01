@@ -9,24 +9,25 @@ import { Toaster } from 'react-hot-toast'
 
 const font = Roboto_Mono({ subsets: ['latin'] })
 
+const title = 'Emilio Schaedler Heinzmann'
 const ogDescription =
   'As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://emiliosheinz.com'),
   title: {
-    default: 'Emilio Schaedler Heinzmann',
-    template: '%s | Emilio Schaedler Heinzmann',
+    default: title,
+    template: `%s | ${title}`,
   },
   description: ogDescription,
   openGraph: {
-    title: 'Emilio Schaedler Heinzmann',
-    description: ogDescription,
-    url: 'https://emiliosheinz.com',
-    siteName: 'Emilio Schaedler Heinzmann',
-    locale: 'en-US',
+    title,
     type: 'website',
+    siteName: title,
+    locale: 'en-US',
+    description: ogDescription,
     images: '/images/profile.png',
+    url: 'https://emiliosheinz.com',
   },
   robots: {
     index: true,
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: 'Emilio Schaedler Heinzmann',
+    title,
     images: '/images/profile.png',
     card: 'summary_large_image',
   },
