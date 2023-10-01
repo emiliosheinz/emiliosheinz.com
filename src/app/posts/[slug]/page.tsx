@@ -10,8 +10,7 @@ type PostPageProps = {
 }
 
 export async function generateMetadata(
-  props: PostPageProps,
-  parent: ResolvingMetadata
+  props: PostPageProps
 ): Promise<Metadata | undefined> {
   const post = getPostBySlug(props.params.slug)
 
