@@ -1,4 +1,3 @@
-import { url } from 'inspector'
 import { Metadata, ResolvingMetadata } from 'next'
 import { Image } from '~/components/image'
 import { MDXContent } from '~/components/mdx-content'
