@@ -7,7 +7,11 @@ import { Header } from '~/components/header'
 import { classNames } from '~/utils/css.utils'
 import { Toaster } from 'react-hot-toast'
 
-const font = Roboto_Mono({ subsets: ['latin'] })
+const robotoMono = Roboto_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+})
 
 const title = 'Emilio Schaedler Heinzmann'
 const ogDescription =
@@ -67,7 +71,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang='en'
       className={classNames(
-        font.className,
+        robotoMono.className,
         'bg-codGray-500 text-white scroll-smooth'
       )}
     >
