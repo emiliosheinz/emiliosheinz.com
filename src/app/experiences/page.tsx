@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { ExperienceCard } from '~/components/experience-card'
+
 import { experiences } from '~/content/experiences'
 
 export const metadata: Metadata = {
