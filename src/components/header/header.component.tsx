@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Image } from '../image'
 import { FaArrowLeftLong } from 'react-icons/fa6'
+import { usePreviousRoute } from '~/hooks/usePreviousRoute'
 
 const headerLinks = [
   {
@@ -27,6 +28,8 @@ const headerLinks = [
 export function Header() {
   const pathname = usePathname()
   const router = useRouter()
+
+  const previousRoute = usePreviousRoute()
 
   const isHome = pathname === '/'
 
@@ -53,7 +56,10 @@ export function Header() {
       return (
         <button
           className='group text-base sm:text-lg hover:cursor-pointer'
-          onClick={() => router.back()}
+          onClick={() => {
+            if (previousRoute) router.back()
+            else router.replace('/')
+          }}
         >
           <FaArrowLeftLong className='inline transition-all ease-in-out group-hover:-translate-x-1 group-hover:text-dodgerBlue mr-3' />
           <span className='transition-all ease-in-out group-hover:text-dodgerBlue'>
