@@ -1,7 +1,12 @@
+import { Metadata } from 'next'
 import { PostCard } from '~/components/post-card'
 import { posts } from '~/content/posts'
 
-export default function ExperiencesPage() {
+export const metadata: Metadata = {
+  title: 'Blog Posts',
+}
+
+export default function BlogPostsPage() {
   return (
     <div className='flex flex-col gap-8'>
       <h1 className='font-bold text-4xl sm:text-5xl mb-2 sm:mb-5'>
