@@ -15,8 +15,8 @@ export default function ExperiencesPage() {
       </h1>
       {experiences.map(experience => (
         <ExperienceCard
-          key={experience.title}
           {...experience}
+          key={experience.title}
           description={experience.body}
         />
       ))}
