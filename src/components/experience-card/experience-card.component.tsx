@@ -20,10 +20,16 @@ export function ExperienceCard({
   return (
     <div className='flex w-full px-4 sm:px-6 bg-codGray-300 rounded gap-10 border border-white border-opacity-10'>
       <div className='hidden sm:flex flex-col text-end items-end gap-2 py-6 justify-between border-r-[2px] border-r-white my-2 border-opacity-75'>
-        <span className='whitespace-nowrap text-base bg-codGray-300 p-1 -mr-2 relative'>
+        <span
+          data-testid='formatted-end-date'
+          className='whitespace-nowrap text-base bg-codGray-300 p-1 -mr-2 relative'
+        >
           {formattedEndDate}
         </span>
-        <span className='whitespace-nowrap text-base bg-codGray-300 p-1 -mr-2'>
+        <span
+          data-testid='formatted-start-date'
+          className='whitespace-nowrap text-base bg-codGray-300 p-1 -mr-2'
+        >
           {formattedStartDate}
         </span>
       </div>
