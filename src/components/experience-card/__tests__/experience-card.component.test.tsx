@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import { ExperienceCard } from '../experience-card.component'
 import { ExperienceCardProps } from '../experience-card.types'
 
-jest.mock('../../mdx-content', () => ({
+jest.mock('~/components/mdx-content', () => ({
   MDXContent: ({ code }: { code: string }) => <div>MDXContent: {code}</div>,
 }))
 
