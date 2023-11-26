@@ -5,30 +5,11 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Image } from '../image'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { usePreviousRoute } from '~/hooks/usePreviousRoute'
-
-const headerLinks = [
-  {
-    label: 'About',
-    href: '#about',
-  },
-  {
-    label: 'Experience',
-    href: '#experience',
-  },
-  {
-    label: 'Blog',
-    href: '#blog',
-  },
-  {
-    label: 'Contact',
-    href: '#contact',
-  },
-]
+import { headerLinks } from './header.constants'
 
 export function Header() {
   const pathname = usePathname()
   const router = useRouter()
-
   const previousRoute = usePreviousRoute()
 
   const isHome = pathname === '/'
