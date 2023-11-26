@@ -1,3 +1,3 @@
 {
-  "conventionalCommits.scopes": ["ExperienceCard", "Header"]
+  "conventionalCommits.scopes": ["ExperienceCard", "Header", "Components"]
 }
