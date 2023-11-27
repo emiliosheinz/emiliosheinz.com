@@ -9,7 +9,10 @@ export function Link({ href, label }: LinkProps) {
       href={href}
     >
       <span className='transition-all ease-in-out group-hover:text-dodgerBlue'>{`${label}`}</span>
-      <FaArrowRightLong className='inline transition-all ease-in-out group-hover:translate-x-1 group-hover:text-dodgerBlue ml-3' />
+      <FaArrowRightLong
+        data-testid='arrow-right-icon'
+        className='inline transition-all ease-in-out group-hover:translate-x-1 group-hover:text-dodgerBlue ml-3'
+      />
     </NextLink>
   )
 }
