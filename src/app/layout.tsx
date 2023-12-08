@@ -1,11 +1,13 @@
 import './globals.css'
 
-import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Analytics } from '@vercel/analytics/react'
+import { Toaster } from 'react-hot-toast'
+
 import { Roboto_Mono } from 'next/font/google'
 import { Header } from '~/components/header'
 import { classNames } from '~/utils/css.utils'
-import { Toaster } from 'react-hot-toast'
 
 const robotoMono = Roboto_Mono({
   subsets: ['latin'],
@@ -80,6 +82,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         {children}
         <CustomToaster />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
