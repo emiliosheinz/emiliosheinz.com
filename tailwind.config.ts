@@ -17,6 +17,7 @@ const config: Config = {
         100: '#2C2C2C',
       },
       white: '#FFFFFF',
+      black: '#000000',
       transparent: 'transparent',
     },
     extend: {
