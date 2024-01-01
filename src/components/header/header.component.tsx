@@ -6,6 +6,7 @@ import { Image } from '../image'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { usePreviousRoute } from '~/hooks/usePreviousRoute'
 import { headerLinks } from './header.constants'
+import { CommandBarTrigger } from '../command-bar'
 
 export function Header() {
   const pathname = usePathname()
@@ -65,7 +66,6 @@ export function Header() {
   return (
     <header className='fixed bg-codGray-500 top-0 left-0 right-0 z-40'>
       <div className='flex items-center w-full max-w-6xl m-auto py-2 sm:py-5 px-5 overflow-y-scroll'>
-        <div className='flex flex-1 space-x-5 mr-10'>{renderLinks()}</div>
         <Link href='/' className='min-w-max'>
           <Image
             src='/images/profile.png'
@@ -75,6 +75,8 @@ export function Header() {
             alt="Emilio Schaedler Heinzmann's picture in black and white with a blue background"
           />
         </Link>
+        <div className='flex flex-1 space-x-5 ml-10'>{renderLinks()}</div>
+        <CommandBarTrigger />
       </div>
     </header>
   )
