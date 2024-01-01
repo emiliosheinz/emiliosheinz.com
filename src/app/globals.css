@@ -85,4 +85,8 @@
   a {
     @apply hover:text-dodgerBlue underline underline-offset-4 transition-all duration-300;
   }
+
+  kbd {
+    @apply bg-codGray-300 rounded px-2 py-0.5 border border-white border-opacity-10;
+  }
 }
