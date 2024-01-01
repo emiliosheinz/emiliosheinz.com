@@ -1,29 +1,29 @@
 import { Action } from 'kbar'
 import { useRouter } from 'next/navigation'
 import {
+  HiOutlineAtSymbol,
   HiOutlineBookOpen,
   HiOutlineCodeBracket,
   HiOutlineHome,
   HiOutlineLightBulb,
   HiOutlineLink,
 } from 'react-icons/hi2'
+import { socialMedias } from '~/data/social-medias'
 import { notify } from '~/utils/toast.utils'
 
 export function useActions(): Action[] {
   const router = useRouter()
 
-  return [
+  const utilActions: Action[] = [
     {
       id: 'copy-url',
       name: 'Copy URL',
       keywords: 'copy url',
       perform: () => {
         navigator.clipboard.writeText(window.location.href)
-        notify.success('Current URL copied to clipboard')
+        notify.success('URL copied to clipboard')
       },
       icon: <HiOutlineLink className='w-5 h-5 text-white' />,
-      shortcut: ['u'],
-      section: 'Utils',
     },
     {
       id: 'source-code',
@@ -36,17 +36,36 @@ export function useActions(): Action[] {
         )
       },
       icon: <HiOutlineCodeBracket className='w-5 h-5 text-white' />,
-      shortcut: ['c'],
-      section: 'Utils',
     },
+    {
+      id: 'email',
+      name: 'Send me an email',
+      keywords: 'email',
+      perform: () => {
+        window.open('mailto:emiliosheinz@gmail.com', '_blank')
+      },
+      icon: <HiOutlineAtSymbol className='w-5 h-5 text-white' />,
+    },
+  ].map(action => ({ ...action, section: 'Util' }))
+
+  const socialMediaActions: Action[] = socialMedias.map(
+    ({ Icon, url, name }) => ({
+      name,
+      id: name.toLowerCase(),
+      keywords: name.toLocaleLowerCase(),
+      perform: () => window.open(url, '_blank'),
+      icon: <Icon className='w-5 h-5 text-white' />,
+      section: 'Social Media',
+    })
+  )
+
+  const goToActions: Action[] = [
     {
       id: 'home',
       name: 'Home',
       keywords: 'home page start initial',
       perform: () => router.push('/'),
       icon: <HiOutlineHome className='w-5 h-5 text-white' />,
-      shortcut: ['g', 'h'],
-      section: 'Go to',
     },
     {
       id: 'experience',
@@ -54,8 +73,6 @@ export function useActions(): Action[] {
       keywords: 'experience work jobs',
       perform: () => router.push('/experiences'),
       icon: <HiOutlineLightBulb className='w-5 h-5 text-white' />,
-      shortcut: ['g', 'e'],
-      section: 'Go to',
     },
     {
       id: 'blog-posts',
@@ -63,8 +80,8 @@ export function useActions(): Action[] {
       keywords: 'blog posts articles',
       perform: () => router.push('/posts'),
       icon: <HiOutlineBookOpen className='w-5 h-5 text-white' />,
-      shortcut: ['g', 'p'],
-      section: 'Go to',
     },
-  ]
+  ].map(action => ({ ...action, section: 'Go to' }))
+
+  return [...utilActions, ...socialMediaActions, ...goToActions]
 }
