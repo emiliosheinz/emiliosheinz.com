@@ -6,7 +6,7 @@ import { Image } from '../image'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { usePreviousRoute } from '~/hooks/usePreviousRoute'
 import { headerLinks } from './header.constants'
-import { CommandBarTriggerLite } from '../command-bar/command-bar-trigger.component'
+import { CommandBarTriggerLite } from '../command-bar'
 
 export function Header() {
   const pathname = usePathname()

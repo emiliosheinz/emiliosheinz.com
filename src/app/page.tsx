@@ -6,7 +6,7 @@ import { socialMedias } from '~/data/social-medias'
 import { currentExperience } from '~/content/experiences'
 import { getLastFivePosts } from '~/content/posts'
 import { Image } from '~/components/image'
-import { CommandBarTriggerFull } from '~/components/command-bar/command-bar-trigger.component'
+import { CommandBarTriggerFull } from '~/components/command-bar'
 
 type SectionProps = {
   id: string
