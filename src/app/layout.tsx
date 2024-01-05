@@ -79,7 +79,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       )}
     >
       <CommandBar>
-        <body className='pb-10 pt-32 sm:pt-48 px-5 max-w-6xl m-auto'>
+        <body className='pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto'>
           <Header />
           {children}
           <CustomToaster />
