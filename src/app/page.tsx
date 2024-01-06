@@ -26,7 +26,7 @@ function Section({ id, title, children }: SectionProps) {
 export default function HomePage() {
   return (
     <main className='flex flex-col space-y-16 sm:space-y-24'>
-      <div className='flex items-center flex-col lg:flex-row'>
+      <div className='flex items-center flex-col lg:flex-row' id='about'>
         <Image
           src='/images/profile.png'
           width={225}
@@ -34,10 +34,7 @@ export default function HomePage() {
           className='rounded-full mb-10 lg:mb-0 lg:mr-10'
           alt="Emilio Schaedler Heinzmann's picture in black and white with a blue background"
         />
-        <div
-          className='flex flex-col space-y-6 sm:space-y-8 items-start'
-          id='about'
-        >
+        <div className='flex flex-col space-y-6 sm:space-y-8 items-start'>
           <h1 className='font-bold text-4xl sm:text-5xl'>
             {'Hello '}
             <span className='text-5xl sm:text-6xl inline-block origin-bottom-right animate-waving-hand'>

@@ -6,22 +6,16 @@ import { FaArrowRightLong } from 'react-icons/fa6'
 
 export function CommandBarTriggerFull() {
   const { query } = useKBar()
-  const [userAgent, setUserAgent] = useState('')
+  const [isMounted, setIsMounted] = useState(false)
 
-  /**
-   * This useEffect is required because the navigator is only defined on the client side.
-   * Therefore, we need to wait for the client to render before we can access the navigator.
-   */
   useEffect(() => {
-    setUserAgent(navigator.userAgent)
+    setIsMounted(true)
   }, [])
 
-  if (!userAgent) return null
-
-  const isMac = /(Mac)/i.test(navigator.userAgent)
-  const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent)
-
   const renderLabel = () => {
+    const isMac = /(Mac)/i.test(navigator.userAgent)
+    const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent)
+
     if (isMobile) {
       return <span>Tap to start</span>
     }
@@ -41,9 +35,13 @@ export function CommandBarTriggerFull() {
     )
   }
 
+  if (!isMounted) {
+    return <div className='h-10 w-64 bg-codGray-300 animate-pulse rounded-md' />
+  }
+
   return (
     <button
-      className='px-4 py-2 rounded border bg-white border-white bg-opacity-0 border-opacity-0 hover:bg-opacity-5 hover:border-opacity-20 transition-all ease-in-out'
+      className='px-4 h-10 rounded border bg-white border-white bg-opacity-0 border-opacity-0 hover:bg-opacity-5 hover:border-opacity-20 transition-all ease-in-out'
       onClick={query.toggle}
     >
       {renderLabel()}
