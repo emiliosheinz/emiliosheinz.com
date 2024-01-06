@@ -10,6 +10,9 @@ let mockPreviousRoute: string | undefined
 jest.mock('~/hooks/usePreviousRoute', () => ({
   usePreviousRoute: jest.fn(() => mockPreviousRoute),
 }))
+jest.mock('~/components/command-bar', () => ({
+  CommandBarTriggerLite: () => <div>CommandBarTriggerLite</div>,
+}))
 
 describe('Header', () => {
   it('should render a header element as the root node', () => {
@@ -69,5 +72,10 @@ describe('Header', () => {
 
     expect(mockReplace).toHaveBeenCalledTimes(1)
     expect(mockReplace).toHaveBeenCalledWith('/')
+  })
+
+  it('should render the lite command bar trigger', () => {
+    render(<Header />)
+    expect(screen.getByText('CommandBarTriggerLite')).toBeVisible()
   })
 })
