@@ -11,11 +11,11 @@ import {
 import { useActions } from './use-actions.hook'
 import { Results } from './results.component'
 
-type CommandBar = {
+type CommandBarProps = {
   children: React.ReactNode
 }
 
-export function CommandBar(props: CommandBar) {
+export function CommandBar(props: CommandBarProps) {
   const { children } = props
 
   const actions = useActions()
