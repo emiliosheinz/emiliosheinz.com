@@ -1,7 +1,10 @@
 import { Metadata, ResolvingMetadata } from 'next'
 import { Image } from '~/components/image'
 import { MDXContent } from '~/components/mdx-content'
-import { getPostBySlug, posts } from '~/content/posts'
+import { PostCard } from '~/components/post-card'
+import { Section } from '~/components/section'
+import { Slider } from '~/components/slider'
+import { getPostBySlug, getRandomPosts, posts } from '~/content/posts'
 
 type PostPageProps = {
   params: {
@@ -65,6 +68,22 @@ export default function PostPage({ params }: PostPageProps) {
         />
       </div>
       <MDXContent code={post.body.code} />
+      <Section title='Other Blog Posts' id='blog'>
+        <Slider.Root>
+          {getRandomPosts({ count: 3, excludeSlug: post.slug }).map(
+            ({ title, url, image, description }) => (
+              <Slider.Item key={title}>
+                <PostCard
+                  url={url}
+                  image={image}
+                  title={title}
+                  description={description}
+                />
+              </Slider.Item>
+            )
+          )}
+        </Slider.Root>
+      </Section>
     </>
   )
 }

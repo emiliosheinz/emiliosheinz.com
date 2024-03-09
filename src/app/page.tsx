@@ -7,21 +7,7 @@ import { currentExperience } from '~/content/experiences'
 import { getLastFivePosts } from '~/content/posts'
 import { Image } from '~/components/image'
 import { CommandBarTriggerFull } from '~/components/command-bar'
-
-type SectionProps = {
-  id: string
-  title: string
-  children: React.ReactNode
-}
-
-function Section({ id, title, children }: SectionProps) {
-  return (
-    <div className='flex flex-col space-y-6 sm:space-y-8' id={id}>
-      <h1 className='font-bold text-2xl sm:text-3xl'>{title}</h1>
-      {children}
-    </div>
-  )
-}
+import { Section } from '~/components/section'
 
 export default function HomePage() {
   return (
