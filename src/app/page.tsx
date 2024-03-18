@@ -18,7 +18,7 @@ export default function HomePage() {
           width={225}
           height={225}
           className='rounded-full mb-10 lg:mb-0 lg:mr-10'
-          alt="Emilio Schaedler Heinzmann's picture in black and white with a blue background"
+          alt="Emilio S. Heinzmann's picture in black and white with a blue background"
         />
         <div className='flex flex-col space-y-6 sm:space-y-8 items-start'>
           <h1 className='font-bold text-4xl sm:text-5xl'>
