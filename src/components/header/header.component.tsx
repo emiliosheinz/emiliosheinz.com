@@ -64,7 +64,7 @@ export function Header() {
   }
 
   return (
-    <header className='fixed bg-codGray-500 top-0 left-0 right-0 z-40'>
+    <header className='fixed bg-codGray-500 top-0 left-0 right-0 z-40 bg-opacity-90 backdrop-blur-md'>
       <div className='flex items-center w-full max-w-6xl m-auto py-2 sm:py-5 px-5 overflow-y-scroll'>
         <div className='flex flex-1 space-x-5'>{renderLinks()}</div>
         <div className='ml-5'>
