@@ -15,11 +15,7 @@ export default function HomePage() {
         />
         <div className="flex flex-col space-y-10 items-start">
           <h1 className="font-bold text-4xl sm:text-5xl">
-            {"Hello "}
-            <span className="text-5xl sm:text-6xl inline-block origin-bottom-right animate-waving-hand">
-              👋
-            </span>
-            {`, I'm Emilio.`}
+            {`Hello, I'm Emilio.`}
           </h1>
           <p className="text-lg sm:text-xl lg:max-w-2xl font-extralight leading-8 text-foreground/75 text-justify">
             I&apos;m an experienced{" "}
