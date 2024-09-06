@@ -8,25 +8,27 @@ import { getLastFivePosts } from "~/content/posts";
 import { Image } from "~/components/image";
 import { CommandBarTriggerFull } from "~/components/command-bar";
 import { Section } from "~/components/section";
+import { InteractiveCube } from "~/features/interactive-cube";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col space-y-16 sm:space-y-24">
+    <main className="relative flex flex-col space-y-16 sm:space-y-24">
       <div className="flex items-center flex-col lg:flex-row" id="about">
-        <Image
-          src="/images/profile.png"
-          width={225}
-          height={225}
-          className="rounded-full mb-10 lg:mb-0 lg:mr-10"
-          alt="Emilio Heinzmann's picture in black and white with a blue background"
-        />
-        <div className="flex flex-col space-y-6 sm:space-y-8 items-start">
+        <div className="relative mb-10 lg:mb-0 lg:mr-10">
+          <Image
+            src="/images/profile.png"
+            width={225}
+            height={225}
+            className="rounded-full "
+            alt="Emilio Heinzmann's picture in black and white with a blue background"
+          />
+          <div className="absolute -bottom-2 -right-2 w-20 h-20">
+            <InteractiveCube />
+          </div>
+        </div>
+        <div className=" flex flex-col space-y-6 sm:space-y-8 items-start">
           <h1 className="font-bold text-4xl sm:text-5xl">
-            {"Hello "}
-            <span className="text-5xl sm:text-6xl inline-block origin-bottom-right animate-waving-hand">
-              👋
-            </span>
-            {`, I'm Emilio.`}
+            {`Hello, I'm Emilio.`}
           </h1>
           <p className="text-xl sm:text-2xl lg:max-w-3xl">
             As an experienced Software Engineer graduated with a B.Sc. degree in
