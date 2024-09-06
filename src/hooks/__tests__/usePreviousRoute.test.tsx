@@ -1,26 +1,26 @@
-import { renderHook } from '@testing-library/react'
-import { usePreviousRoute } from '../usePreviousRoute'
+import { renderHook } from "@testing-library/react";
+import { usePreviousRoute } from "../usePreviousRoute";
 
-let mockPathName = '/mock-path-name'
+let mockPathName = "/mock-path-name";
 
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   usePathname: jest.fn(() => mockPathName),
-}))
+}));
 
-describe('usePreviousRoute', () => {
-  it('should return null', () => {
-    const { result } = renderHook(() => usePreviousRoute())
-    expect(result.current).toBeNull()
-  })
+describe("usePreviousRoute", () => {
+  it("should return null", () => {
+    const { result } = renderHook(() => usePreviousRoute());
+    expect(result.current).toBeNull();
+  });
 
-  it('should return previous route', () => {
-    const { result, rerender } = renderHook(() => usePreviousRoute())
+  it("should return previous route", () => {
+    const { result, rerender } = renderHook(() => usePreviousRoute());
 
-    rerender()
-    const previousRoute = mockPathName
-    mockPathName = '/new-mock-path-name'
-    rerender()
+    rerender();
+    const previousRoute = mockPathName;
+    mockPathName = "/new-mock-path-name";
+    rerender();
 
-    expect(result.current).toBe(previousRoute)
-  })
-})
+    expect(result.current).toBe(previousRoute);
+  });
+});

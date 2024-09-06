@@ -1,25 +1,25 @@
-import { Metadata, ResolvingMetadata } from 'next'
-import { Image } from '~/components/image'
-import { MDXContent } from '~/components/mdx-content'
-import { PostCard } from '~/components/post-card'
-import { Section } from '~/components/section'
-import { Slider } from '~/components/slider'
-import { getPostBySlug, getRandomPosts, posts } from '~/content/posts'
+import { Metadata, ResolvingMetadata } from "next";
+import { Image } from "~/components/image";
+import { MDXContent } from "~/components/mdx-content";
+import { PostCard } from "~/components/post-card";
+import { Section } from "~/components/section";
+import { Slider } from "~/components/slider";
+import { getPostBySlug, getRandomPosts, posts } from "~/content/posts";
 
 type PostPageProps = {
   params: {
-    slug: string
-  }
-}
+    slug: string;
+  };
+};
 
 export async function generateMetadata(
-  props: PostPageProps
+  props: PostPageProps,
 ): Promise<Metadata | undefined> {
-  const post = getPostBySlug(props.params.slug)
+  const post = getPostBySlug(props.params.slug);
 
-  if (!post) return
+  if (!post) return;
 
-  const { title, description, publishedAt } = post
+  const { title, description, publishedAt } = post;
 
   return {
     title,
@@ -27,7 +27,7 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
-      type: 'article',
+      type: "article",
       publishedTime: publishedAt,
       url: `https://emiliosheinz.com/posts/${post.slug}`,
       images: post.image,
@@ -36,31 +36,31 @@ export async function generateMetadata(
       title,
       description,
       images: post.image,
-      card: 'summary_large_image',
+      card: "summary_large_image",
     },
-  }
+  };
 }
 
 export async function generateStaticParams() {
-  return posts.map(post => ({ slug: post.slug }))
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export default function PostPage({ params }: PostPageProps) {
-  const post = getPostBySlug(params.slug)
+  const post = getPostBySlug(params.slug);
 
   /** TODO: add post not found handling */
-  if (!post) return null
+  if (!post) return null;
 
   return (
     <>
-      <h1 className='font-bold text-3xl sm:text-5xl md-5'>{post.title}</h1>
-      <div className='relative flex aspect-video w-full'>
+      <h1 className="font-bold text-3xl sm:text-5xl md-5">{post.title}</h1>
+      <div className="relative flex aspect-video w-full">
         <Image
           fill
           priority
           alt={post.title}
           src={post.image}
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: "cover" }}
           sizes={`
             (min-width: 1024px) 1024px,
             100vw
@@ -68,7 +68,7 @@ export default function PostPage({ params }: PostPageProps) {
         />
       </div>
       <MDXContent code={post.body.code} />
-      <Section title='Other Blog Posts' id='blog'>
+      <Section title="Other Blog Posts" id="blog">
         <Slider.Root>
           {getRandomPosts({ count: 3, excludeSlug: post.slug }).map(
             ({ title, url, image, description }) => (
@@ -80,10 +80,10 @@ export default function PostPage({ params }: PostPageProps) {
                   description={description}
                 />
               </Slider.Item>
-            )
+            ),
           )}
         </Slider.Root>
       </Section>
     </>
-  )
+  );
 }

@@ -16,7 +16,7 @@ Boolean traps ocorrem principalmente quando uma função recebe um parâmetro do
 Um bom exemplo desse tipo de caso é a chamada da função a seguir:
 
 ```javascript
-NavigationService.popToTop(true)
+NavigationService.popToTop(true);
 ```
 
 Podemos observar claramente uma boolean trap, estamos passando true para a função, mas não fica claro para o que ele serve. É necessário ler a documentação do código ou analisar a função mais a fundo para entender o contexto desse parâmetro.
@@ -24,7 +24,7 @@ Podemos observar claramente uma boolean trap, estamos passando true para a funç
 Vamos ver outro exemplo um pouco mais complexo.
 
 ```javascript
-getHeaderOptions(true, true, [], [], false, 'Home')
+getHeaderOptions(true, true, [], [], false, "Home");
 ```
 
 Nesse caso, temos uma função com 6 parâmetros, dentre eles `booleanos`, `arrays` e `strings`, porém, ao bater o olho na chamada dessa função, não conseguimos identificar com clareza o que cada um deles representa, novamente, teríamos que olhar a documentação do código ou então analisá-lo a fundo.
@@ -40,8 +40,8 @@ getHeaderOptions(
   rightButtons,
   leftButtons,
   showBackArrow,
-  headerTitle
-)
+  headerTitle,
+);
 ```
 
 Agora, com o novo parâmetro, ficará assim:
@@ -54,8 +54,8 @@ getHeaderOptions(
   leftButtons,
   showBackArrow,
   headerTitle,
-  newParameter
-)
+  newParameter,
+);
 ```
 
 Até ai tudo bem, pois como foi dito anteriormente, bastou adicionarmos o novo parâmetro na última posição que os lugares em que a função ja estava sendo utilizada continuarão funcionando, eles precisam apenas ignorar este novo parâmetro. Porém, quando um novo parâmetro não opcional for adicionado a ela, todos esses lugares necessariamente precisarão ser refatorados ou a chamada dela irá quebrar, já que para receber um novo parâmetro o posicionamento dos outros terá que ser alterado de alguma forma. Tente você mesmo adicionar um parâmetro não opcional no ultimo exemplo da função `getHeaderOptions` sem que seja necessário modificar todos os lugares em que ela é utilizada, verá que não é possível.
@@ -94,7 +94,7 @@ NavigationService.popToTop({ immediate }) {
 Em um primeiro momento, parece que não mudou muita coisa, certo? Porém, o grande ganho que temos é na hora em que chamamos a função. Nesse momento, usando o conceito _Object Literal_, iremos chamá-la da seguinte forma:
 
 ```javascript
-NavigationService.popToTop({ immediate: true })
+NavigationService.popToTop({ immediate: true });
 ```
 
 E quanto a função `getHeaderOptions` cheia de parâmetros dos mais variados tipos?
@@ -102,7 +102,7 @@ E quanto a função `getHeaderOptions` cheia de parâmetros dos mais variados ti
 ### Antes:
 
 ```javascript
-getHeaderOptions(true, true, [], [], false, 'Home')
+getHeaderOptions(true, true, [], [], false, "Home");
 ```
 
 ### Depois:
@@ -114,8 +114,8 @@ getHeaderOptions({
   rightButtons: [],
   leftButtons: [],
   showBackArrow: false,
-  headerTitle: 'Home',
-})
+  headerTitle: "Home",
+});
 ```
 
 Assim, fica muito mais fácil entender o que cada parâmetro faz, pois ele está nomeado. Conseguimos ver que na função `popToTop` o `booleano` significa `immediate`, o que nos leva a pensar que a ação daquela função será executada sem delays ou animações, de forma imediata. Já na função `getHeaderOptions`, podemos ver que o primeiro `booleano` controla a transparência do header e o segundo a visibilidade dele.
@@ -125,7 +125,7 @@ Além disso, utilizando este conceito, podemos fazer com que qualquer parâmetro
 Digamos que todos os parâmetro da função `getHeaderOptions` sejam opcionais e nós queremos mudar apenas o headerTitle. Com o conceito de _Object Literal Parameter_ a chamada ficará assim:
 
 ```javascript
-getHeaderOptions({ headerTitle: 'Home' })
+getHeaderOptions({ headerTitle: "Home" });
 ```
 
 Caso contrário, seríamos obrigados a passar todos os parâmetros, mesmo que eles fossem opcionais, apenas para passar o `headerTitle`.

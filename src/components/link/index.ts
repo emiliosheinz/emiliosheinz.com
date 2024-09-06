@@ -1,1 +1,1 @@
-export { Link } from './link.component'
+export { Link } from "./link.component";

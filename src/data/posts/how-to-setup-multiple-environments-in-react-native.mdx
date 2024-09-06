@@ -47,28 +47,28 @@ Each of the folders will have its own `index.js` file, like in the example bello
 
 ```javascript
 // config/index.js
-export * from './env'
+export * from "./env";
 
 // config/env/index.js
-export { env } from './debug'
+export { env } from "./debug";
 
 // config/env/debug/index.js
 export const env = {
   // Here you can put all your Debug environment variables accessible from Javascript.
-  name: 'DEBUG',
-}
+  name: "DEBUG",
+};
 
 // config/env/staging/index.js
 export const env = {
   // Here you can put all your Staging environment variables accessible from Javascript.
-  name: 'STAGING',
-}
+  name: "STAGING",
+};
 
 // config/env/release/index.js
 export const env = {
   // Here you can put all your Release environment variables accessible from Javascript.
-  name: 'RELEASE',
-}
+  name: "RELEASE",
+};
 ```
 
 _Note: I like to work with that type of structure `folder/index.js`, but, feel free to modify it according to your project, and keep in mind that this will affect the code that you need to write in the following steps._
@@ -85,72 +85,72 @@ Then, we are able to create the following script that will replace the line ment
 
 ```javascript
 #!/bin/node
-const fs = require('fs')
-const path = require('path')
-const { argv } = require('yargs')
+const fs = require("fs");
+const path = require("path");
+const { argv } = require("yargs");
 
-const { env } = argv
+const { env } = argv;
 
 // Accepted environment params, they are directly related to the name of the folders created before.
-const acceptedEnvs = ['debug', 'staging', 'release']
+const acceptedEnvs = ["debug", "staging", "release"];
 
 // Function that writes on the file.
 function writeFile(file, string) {
   if (fs.existsSync(file)) {
-    fs.writeFileSync(file, string)
-    return true
+    fs.writeFileSync(file, string);
+    return true;
   }
 
-  console.log(`File "${file}" not found.`)
-  process.exit(1)
+  console.log(`File "${file}" not found.`);
+  process.exit(1);
 }
 
 // Function that validate if the param passed to the script is a valid environment.
 function validateParams() {
-  console.log(`Validating params...`)
+  console.log(`Validating params...`);
   if (!env) {
     console.log(
-      `Error.  Please inform a valid environment: ${acceptedEnvs.join(', ')}.`
-    )
-    process.exit(1)
+      `Error.  Please inform a valid environment: ${acceptedEnvs.join(", ")}.`,
+    );
+    process.exit(1);
   }
 
   if (!acceptedEnvs.includes(env)) {
     console.log(
       `Error. Wrong environment, choose one of those: ${acceptedEnvs.join(
-        ', '
-      )}.`
-    )
-    process.exit(1)
+        ", ",
+      )}.`,
+    );
+    process.exit(1);
   }
 }
 
 // Function that replaces the file content with the right content.
 function setEnvironment() {
-  console.log(`Setting environmet to ${env}...`)
+  console.log(`Setting environmet to ${env}...`);
 
   // String that will override the current export string
-  const importerString = `export { env } from './${env}'\n`
+  const importerString = `export { env } from './${env}'\n`;
 
   // Env index file location that will be overridden
   const envIndexFileLocation = path.resolve(
     __dirname,
-    '..',
-    'src',
-    'config',
-    'env',
-    'index.js'
-  )
+    "..",
+    "src",
+    "config",
+    "env",
+    "index.js",
+  );
 
   // Writes right content inside the environment file
-  writeFile(envIndexFileLocation, importerString)
-  console.log(`Environment successfully setted to ${env}.`)
-  process.exit(0)
+  writeFile(envIndexFileLocation, importerString);
+  console.log(`Environment successfully setted to ${env}.`);
+  process.exit(0);
 }
 
 // Script initialization
-validateParams()
-setEnvironment()
+validateParams();
+setEnvironment();
 ```
 
 Usually I place that file inside the `scripts` folder on the `root` of my project (where I also have other scripts to automate other parts of my building process).
@@ -230,22 +230,22 @@ For iOS the logic is almost the same, but with some little differences. Let's di
 Open the project in _XCode_ and duplicate the `Release` build configuration naming it with `Staging`.
 
 <Image
-  src='/images/posts/how-to-setup-multiple-environments-in-react-native/duplicate-release-env.webp'
-  alt='Example of duplicated Release build configuration'
+  src="/images/posts/how-to-setup-multiple-environments-in-react-native/duplicate-release-env.webp"
+  alt="Example of duplicated Release build configuration"
 />
 
 Under our iOS project folder, we are going to create a new folder called `ConfigFiles` and add three `.xcconfig` files, one for each build configuration. Let’s use the same example that I have used for Android. To have a different app name for each build configuration you can add a new property to each file.
 
 <Image
-  src='/images/posts/how-to-setup-multiple-environments-in-react-native/config-files.webp'
-  alt='Example of ConfigFiles folder being created'
+  src="/images/posts/how-to-setup-multiple-environments-in-react-native/config-files.webp"
+  alt="Example of ConfigFiles folder being created"
 />
 
 To have access to these properties in your application you need to load them inside each build configuration. We can do that by simply adding it as a `ConfigFile` on project level.
 
 <Image
-  src='/images/posts/how-to-setup-multiple-environments-in-react-native/load-config.webp'
-  alt='Example of ConfigFile being loaded inside build configuration'
+  src="/images/posts/how-to-setup-multiple-environments-in-react-native/load-config.webp"
+  alt="Example of ConfigFile being loaded inside build configuration"
 />
 
 _Wait! But how can I use these properties that were loaded into my application?_
@@ -253,8 +253,8 @@ _Wait! But how can I use these properties that were loaded into my application?_
 Just go to your `Info.plist` file and replace whatever you want with the properties. Following the example, I will replace my old _Bundle display name_ with the variable `APP_DISPLAY_NAME`.
 
 <Image
-  src='/images/posts/how-to-setup-multiple-environments-in-react-native/info-plist.webp'
-  alt='Example of Info.plist file being updated'
+  src="/images/posts/how-to-setup-multiple-environments-in-react-native/info-plist.webp"
+  alt="Example of Info.plist file being updated"
 />
 
 Ok… But that just allow us to load different properties and not different files for each build configuration. In case of Firebase, that has a different `GoogleService-Info.plist` file for each of the configurations, we need to have a different approach. To do that, we can run a script at build time that verifies what is the current build configuration that we are using and replace the necessary files.
@@ -326,8 +326,8 @@ The most important sections of this script are commented. It was created to repl
 To run this script, we need to add it to our target `Build Phases` as a new `Run Script Phase`:
 
 <Image
-  src='/images/posts/how-to-setup-multiple-environments-in-react-native/run-script.webp'
-  alt='Example of Run Script Phase being added to target Build Phases'
+  src="/images/posts/how-to-setup-multiple-environments-in-react-native/run-script.webp"
+  alt="Example of Run Script Phase being added to target Build Phases"
 />
 
 Last but not least, we need to add the `GoogleService-Info.plist` files under our `ConfigFiles` directory to allow our script to run properly.

@@ -18,17 +18,17 @@ Vamos utilizar um fluxo onde verificaremos se o usuário é um admin e então fa
 #### Com if ternário:
 
 ```jsx
-return user.isAdmin ? <AdminComponent /> : <DefaultUserComponent />
+return user.isAdmin ? <AdminComponent /> : <DefaultUserComponent />;
 ```
 
 #### Com if + return:
 
 ```jsx
 if (user.isAdmin) {
-  return <AdminComponent />
+  return <AdminComponent />;
 }
 
-return <DefaultUserComponent />
+return <DefaultUserComponent />;
 ```
 
 Em um primeiro momento parece uma boa ideia utilizar o `if` ternário já que é um desvio simples e bastante direto, porém, na prática nunca é tão simples assim. Neste caso, teríamos que, por exemplo, buscar os dados do usuário antes de exibí-los, com isso, faremos mais um desvio condicional para exibir um `loader` ou o conteúdo da página, dependendo do estado em que estamos.
@@ -42,21 +42,21 @@ return isGettingUserData ? (
   <AdminComponente />
 ) : (
   <DefaultUserComponent />
-)
+);
 ```
 
 #### Com if + return:
 
 ```jsx
 if (isGettingUserData) {
-  return <Loader />
+  return <Loader />;
 }
 
 if (user.isAdmin) {
-  return <AdminComponent />
+  return <AdminComponent />;
 }
 
-return <DefaultUserComponent />
+return <DefaultUserComponent />;
 ```
 
 Aqui ja podemos ver que a abordagem com `ifs` ternários começou a ficar um pouco mais difícil de ser lida do que a anterior, além disso, não é possível simplesmente bater o olho e identificar todos os possíveis cenários de render desse fluxo. Agora vamos dizer que além das verificações já existentes você precisa verificar o tipo de admin que ele é e também se ele está autenticado ou não.
@@ -76,29 +76,29 @@ return !isAuthenticated ? (
   )
 ) : (
   <DefaultUserComponent />
-)
+);
 ```
 
 #### Com if + return:
 
 ```jsx
 if (!isAthenticated) {
-  return <LoginComponente />
+  return <LoginComponente />;
 }
 
 if (isGettingUserData) {
-  return <Loader />
+  return <Loader />;
 }
 
 if (user.isAdmin) {
   if (user.isHigherLevelAdmin) {
-    return <HigherLeverAdminComponent />
+    return <HigherLeverAdminComponent />;
   }
 
-  return <AdminComponent />
+  return <AdminComponent />;
 }
 
-return <DefaultUserComponent />
+return <DefaultUserComponent />;
 ```
 
 Neste ponto, o código com `ifs` ternários já se tornou complexo o suficiente para que toda vez que você bater o olho seja necessário pensar por alguns instantes o que está acontecendo, já o outro, apesar de ser mais verboso, deixa muito mais claras as intenções de cada um dos cenários e o fluxo de leitura do código é muito mais linear.

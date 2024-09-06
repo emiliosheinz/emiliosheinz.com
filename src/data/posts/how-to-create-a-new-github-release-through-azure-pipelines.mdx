@@ -14,10 +14,10 @@ _OBS: I'm assuming that you already have a basic pipeline structure running and 
 During this article, we are going to use some code and scripts, the final version is below, if you want you can copy it and try to understand it by yourself, or read the entire article to understand each step in detail.
 
 ```yaml
-name: 'GitHubReleaseExamplePipeline'
+name: "GitHubReleaseExamplePipeline"
 
 pool:
-  vmImage: 'macOS-latest'
+  vmImage: "macOS-latest"
 
 variables:
   - name: currentVersionName
@@ -42,14 +42,14 @@ jobs:
         inputs:
           gitHubConnection: # Your GitHub connection service name
           repositoryName: $(Build.Repository.Name)
-          action: 'create'
+          action: "create"
           target: $(Build.SourceVersion)
-          tagSource: 'manual'
+          tagSource: "manual"
           tag: $(currentVersionName)
-          title: 'Release $(currentVersionName)'
+          title: "Release $(currentVersionName)"
           isPreRelease: true
           addChangeLog: false
-          releaseNotesSource: 'file'
+          releaseNotesSource: "file"
           releaseNotesFile: $(release_notes_file_name)
 ```
 
@@ -97,15 +97,15 @@ Now that we have everything set up we can call the _GitHubRelease_ task passing 
   inputs:
     gitHubConnection: # Your GitHub connection service name
     repositoryName: $(Build.Repository.Name)
-    action: 'create'
+    action: "create"
     target: $(Build.SourceVersion)
-    tagSource: 'manual'
+    tagSource: "manual"
     # Our current version name, set on tag and on release title
     tag: $(currentVersionName)
-    title: 'Release $(currentVersionName)'
+    title: "Release $(currentVersionName)"
     isPreRelease: true
     addChangeLog: false
-    releaseNotesSource: 'file'
+    releaseNotesSource: "file"
     # The release notes file that we have created before in the pipeline
     releaseNotesFile: $(release_notes_file_name)
 ```

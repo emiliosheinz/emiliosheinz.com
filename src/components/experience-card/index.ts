@@ -1,1 +1,1 @@
-export { ExperienceCard } from './experience-card.component'
+export { ExperienceCard } from "./experience-card.component";

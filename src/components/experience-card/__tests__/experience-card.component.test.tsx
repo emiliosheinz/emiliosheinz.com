@@ -1,11 +1,11 @@
-import { faker } from '@faker-js/faker'
-import { render, screen } from '@testing-library/react'
-import { ExperienceCard } from '../experience-card.component'
-import { ExperienceCardProps } from '../experience-card.types'
+import { faker } from "@faker-js/faker";
+import { render, screen } from "@testing-library/react";
+import { ExperienceCard } from "../experience-card.component";
+import { ExperienceCardProps } from "../experience-card.types";
 
-jest.mock('~/components/mdx-content', () => ({
+jest.mock("~/components/mdx-content", () => ({
   MDXContent: ({ code }: { code: string }) => <div>MDXContent: {code}</div>,
-}))
+}));
 
 const makeExperienceCardProps = (): ExperienceCardProps => ({
   title: faker.person.jobTitle(),
@@ -18,74 +18,74 @@ const makeExperienceCardProps = (): ExperienceCardProps => ({
   skills: [faker.lorem.word(), faker.lorem.word()],
   startDate: faker.date.past().toISOString(),
   endDate: faker.date.past().toISOString(),
-})
+});
 
-describe('ExperienceCard', () => {
-  it('should render formatted start date', () => {
-    const props = makeExperienceCardProps()
-    render(<ExperienceCard {...props} />)
+describe("ExperienceCard", () => {
+  it("should render formatted start date", () => {
+    const props = makeExperienceCardProps();
+    render(<ExperienceCard {...props} />);
 
-    const formattedStartDateEl = screen.getByTestId('formatted-start-date')
+    const formattedStartDateEl = screen.getByTestId("formatted-start-date");
 
-    expect(formattedStartDateEl).toBeVisible()
-  })
+    expect(formattedStartDateEl).toBeVisible();
+  });
 
-  it('should render formatted end date', () => {
-    const props = makeExperienceCardProps()
-    render(<ExperienceCard {...props} />)
+  it("should render formatted end date", () => {
+    const props = makeExperienceCardProps();
+    render(<ExperienceCard {...props} />);
 
-    const formattedEndDateEl = screen.getByTestId('formatted-end-date')
+    const formattedEndDateEl = screen.getByTestId("formatted-end-date");
 
-    expect(formattedEndDateEl).toBeVisible()
-  })
+    expect(formattedEndDateEl).toBeVisible();
+  });
 
-  it('should render formatted end date as Present if no end date is provided', () => {
-    const props = makeExperienceCardProps()
-    delete props.endDate
-    render(<ExperienceCard {...props} />)
+  it("should render formatted end date as Present if no end date is provided", () => {
+    const props = makeExperienceCardProps();
+    delete props.endDate;
+    render(<ExperienceCard {...props} />);
 
-    const formattedEndDateEl = screen.getByTestId('formatted-end-date')
+    const formattedEndDateEl = screen.getByTestId("formatted-end-date");
 
-    expect(formattedEndDateEl).toHaveTextContent('Present')
-  })
+    expect(formattedEndDateEl).toHaveTextContent("Present");
+  });
 
-  it('should render title', () => {
-    const props = makeExperienceCardProps()
-    render(<ExperienceCard {...props} />)
+  it("should render title", () => {
+    const props = makeExperienceCardProps();
+    render(<ExperienceCard {...props} />);
 
-    const titleEl = screen.getByText(props.title)
+    const titleEl = screen.getByText(props.title);
 
-    expect(titleEl).toBeVisible()
-  })
+    expect(titleEl).toBeVisible();
+  });
 
-  it('should render company and employment type', () => {
-    const props = makeExperienceCardProps()
-    render(<ExperienceCard {...props} />)
+  it("should render company and employment type", () => {
+    const props = makeExperienceCardProps();
+    render(<ExperienceCard {...props} />);
 
     const companyAndEmploymentTypeEl = screen.getByText(
-      `${props.company}, ${props.employmentType}`
-    )
+      `${props.company}, ${props.employmentType}`,
+    );
 
-    expect(companyAndEmploymentTypeEl).toBeVisible()
-  })
+    expect(companyAndEmploymentTypeEl).toBeVisible();
+  });
 
-  it('should render description', () => {
-    const props = makeExperienceCardProps()
-    render(<ExperienceCard {...props} />)
+  it("should render description", () => {
+    const props = makeExperienceCardProps();
+    render(<ExperienceCard {...props} />);
 
     const descriptionEl = screen.getByText(
-      `MDXContent: ${props.description.code}`
-    )
+      `MDXContent: ${props.description.code}`,
+    );
 
-    expect(descriptionEl).toBeVisible()
-  })
+    expect(descriptionEl).toBeVisible();
+  });
 
-  it('should render skills', () => {
-    const props = makeExperienceCardProps()
-    render(<ExperienceCard {...props} />)
+  it("should render skills", () => {
+    const props = makeExperienceCardProps();
+    render(<ExperienceCard {...props} />);
 
-    const skillsEl = screen.getByText(`Skills: ${props.skills.join(', ')}`)
+    const skillsEl = screen.getByText(`Skills: ${props.skills.join(", ")}`);
 
-    expect(skillsEl).toBeVisible()
-  })
-})
+    expect(skillsEl).toBeVisible();
+  });
+});

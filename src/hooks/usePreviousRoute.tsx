@@ -1,14 +1,14 @@
-import { usePathname } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 export const usePreviousRoute = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
-  const ref = useRef<string | null>(null)
+  const ref = useRef<string | null>(null);
 
   useEffect(() => {
-    ref.current = pathname
-  }, [pathname])
+    ref.current = pathname;
+  }, [pathname]);
 
-  return ref.current
-}
+  return ref.current;
+};

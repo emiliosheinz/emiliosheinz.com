@@ -1,5 +1,5 @@
 export type SectionProps = {
-  id: string
-  title: string
-  children: React.ReactNode
-}
+  id: string;
+  title: string;
+  children: React.ReactNode;
+};

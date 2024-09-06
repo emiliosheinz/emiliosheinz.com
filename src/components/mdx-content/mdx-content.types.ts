@@ -1,4 +1,4 @@
 export type MDXContentProps = {
-  code: string
-  className?: string
-}
+  code: string;
+  className?: string;
+};

@@ -10,20 +10,20 @@ A common mistake I see people making while creating their React component is cre
 Let's say that we have a simple app that generates a full name based on the value of two given inputs (first and last names) as shown below.
 
 <Image
-  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/application.gif'
-  alt='Application exemple with two fields and a title'
+  src="/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/application.gif"
+  alt="Application exemple with two fields and a title"
 />
 
 The approach that I mostly see developers using is creating an extra state for the full name, and in an useEffect set this state according to the new values in the inputs:
 
 ```ts
-const [firstName, setFirstName] = useState<string>('')
-const [lastName, setLastName] = useState<string>('')
-const [fullName, setFullName] = useState<string>('')
+const [firstName, setFirstName] = useState<string>("");
+const [lastName, setLastName] = useState<string>("");
+const [fullName, setFullName] = useState<string>("");
 
 useEffect(() => {
-  setFullName(`${firstName} ${lastName}`)
-}, [firstName, lastName])
+  setFullName(`${firstName} ${lastName}`);
+}, [firstName, lastName]);
 ```
 
 That's not the right approach… But, why?
@@ -34,8 +34,8 @@ That's not the right approach… But, why?
 Basically what happens is:
 
 <Image
-  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/set-setate-flow.webp'
-  alt='React lifecycle flow with an extra state and effect'
+  src="/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/set-setate-flow.webp"
+  alt="React lifecycle flow with an extra state and effect"
 />
 
 ## The right approach
@@ -43,17 +43,17 @@ Basically what happens is:
 When something derives from an existing prop or state we should always calculate it during render time. That avoids bugs that could be generated because of the extra states and increases performance because of the fewer renders.
 
 ```ts
-const [firstName, setFirstName] = useState<string>('')
-const [lastName, setLastName] = useState<string>('')
+const [firstName, setFirstName] = useState<string>("");
+const [lastName, setLastName] = useState<string>("");
 
-const fullName = `${firstName} ${lastName}`.trim()
+const fullName = `${firstName} ${lastName}`.trim();
 ```
 
 With this new approach, our component lifecycle gets reduced to:
 
 <Image
-  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/derived-state-flow.webp'
-  alt='React lifecycle flow with a derived state'
+  src="/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/derived-state-flow.webp"
+  alt="React lifecycle flow with a derived state"
 />
 
 ## Comparing the two approaches
@@ -63,15 +63,15 @@ When comparing the two approaches with the name "James Robert" we see that the f
 First approach total renders: first render + 2 x number of letters in the name.
 
 <Image
-  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/set-state-test.webp'
-  alt='Print screen with the amount of re-renders in the first approach'
+  src="/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/set-state-test.webp"
+  alt="Print screen with the amount of re-renders in the first approach"
 />
 
 Second approach total renders: first render + number of letters in the name.
 
 <Image
-  src='/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/derived-state-test.webp'
-  alt='Print screen with the amount of re-renders in the second approach'
+  src="/images/posts/increase-react-render-performance-by-avoiding-unnecessary-useeffects/derived-state-test.webp"
+  alt="Print screen with the amount of re-renders in the second approach"
 />
 
 In this test case, since it is just a proof of concept, we will not see a big difference performance-wise, but in real-life features, we should always care about this kind of issue.

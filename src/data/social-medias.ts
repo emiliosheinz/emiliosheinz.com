@@ -1,19 +1,19 @@
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa6'
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa6";
 
 export const socialMedias = [
   {
-    name: 'GitHub',
+    name: "GitHub",
     Icon: FaGithub,
-    url: 'https://github.com/emiliosheinz',
+    url: "https://github.com/emiliosheinz",
   },
   {
-    name: 'LinkedIn',
+    name: "LinkedIn",
     Icon: FaLinkedin,
-    url: 'https://www.linkedin.com/in/emiliosheinz/',
+    url: "https://www.linkedin.com/in/emiliosheinz/",
   },
   {
-    name: 'Twitter',
+    name: "Twitter",
     Icon: FaTwitter,
-    url: 'https://twitter.com/emiliosheinz',
+    url: "https://twitter.com/emiliosheinz",
   },
-]
+];

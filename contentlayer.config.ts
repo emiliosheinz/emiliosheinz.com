@@ -1,54 +1,54 @@
-import { defineDocumentType, makeSource } from 'contentlayer/source-files'
-import rehypePrettyCode, { Options } from 'rehype-pretty-code'
+import { defineDocumentType, makeSource } from "contentlayer/source-files";
+import rehypePrettyCode, { Options } from "rehype-pretty-code";
 
 export const Post = defineDocumentType(() => ({
-  name: 'Post',
+  name: "Post",
   filePathPattern: `**/*.mdx`,
-  contentType: 'mdx',
+  contentType: "mdx",
   fields: {
-    title: { type: 'string', required: true },
-    publishedAt: { type: 'date', required: true },
-    description: { type: 'string', required: true },
+    title: { type: "string", required: true },
+    publishedAt: { type: "date", required: true },
+    description: { type: "string", required: true },
   },
   computedFields: {
     url: {
-      type: 'string',
-      resolve: post => post._raw.flattenedPath,
+      type: "string",
+      resolve: (post) => post._raw.flattenedPath,
     },
     image: {
-      type: 'string',
-      resolve: post => `/images/${post._raw.flattenedPath}/cover.webp`,
+      type: "string",
+      resolve: (post) => `/images/${post._raw.flattenedPath}/cover.webp`,
     },
     slug: {
-      type: 'string',
-      resolve: post => post._raw.sourceFileName.replace(/\.mdx$/, ''),
+      type: "string",
+      resolve: (post) => post._raw.sourceFileName.replace(/\.mdx$/, ""),
     },
   },
-}))
+}));
 
 export const Experience = defineDocumentType(() => ({
-  name: 'Experience',
+  name: "Experience",
   filePathPattern: `**/*.mdx`,
-  contentType: 'mdx',
+  contentType: "mdx",
   fields: {
-    title: { type: 'string', required: true },
-    company: { type: 'string', required: true },
-    employmentType: { type: 'string', required: true },
-    startDate: { type: 'date', required: true },
-    endDate: { type: 'date' },
-    skills: { type: 'list', required: true, of: { type: 'string' } },
+    title: { type: "string", required: true },
+    company: { type: "string", required: true },
+    employmentType: { type: "string", required: true },
+    startDate: { type: "date", required: true },
+    endDate: { type: "date" },
+    skills: { type: "list", required: true, of: { type: "string" } },
   },
-}))
+}));
 
 const rehypePrettyCodeOptions: Options = {
-  theme: 'dracula',
+  theme: "dracula",
   keepBackground: false,
-}
+};
 
 export default makeSource({
-  contentDirPath: './src/data',
+  contentDirPath: "./src/data",
   documentTypes: [Post, Experience],
   mdx: {
     rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
   },
-})
+});

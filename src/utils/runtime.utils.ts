@@ -1,3 +1,3 @@
 export function isServerSide() {
-  return typeof window === 'undefined'
+  return typeof window === "undefined";
 }

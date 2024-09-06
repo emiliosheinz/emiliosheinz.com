@@ -1,1 +1,1 @@
-export { PostCard } from './post-card.component'
+export { PostCard } from "./post-card.component";
