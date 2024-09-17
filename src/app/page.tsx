@@ -12,7 +12,7 @@ import { InteractiveCube } from "~/features/interactive-cube";
 
 export default function HomePage() {
   return (
-    <main className="relative flex flex-col space-y-16 sm:space-y-24">
+    <main className="flex flex-col space-y-16 sm:space-y-24">
       <div className="flex items-center flex-col lg:flex-row" id="about">
         <div className="mb-10 lg:mb-0 lg:mr-10">
           <Image
