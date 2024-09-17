@@ -14,7 +14,7 @@ export default function HomePage() {
   return (
     <main className="relative flex flex-col space-y-16 sm:space-y-24">
       <div className="flex items-center flex-col lg:flex-row" id="about">
-        <div className="relative mb-10 lg:mb-0 lg:mr-10">
+        <div className="mb-10 lg:mb-0 lg:mr-10">
           <Image
             src="/images/profile.png"
             width={225}
@@ -22,9 +22,7 @@ export default function HomePage() {
             className="rounded-full "
             alt="Emilio Heinzmann's picture in black and white with a blue background"
           />
-          <div className="absolute -bottom-2 -right-2 w-20 h-20">
-            <InteractiveCube />
-          </div>
+          <InteractiveCube />
         </div>
         <div className=" flex flex-col space-y-6 sm:space-y-8 items-start">
           <h1 className="font-bold text-4xl sm:text-5xl">
