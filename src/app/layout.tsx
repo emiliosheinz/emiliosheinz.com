@@ -78,15 +78,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
         "bg-codGray-500 text-white scroll-smooth",
       )}
     >
-      <CommandBar>
-        <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
-          <Header />
-          {children}
-          <CustomToaster />
-          <Analytics />
-          <SpeedInsights />
-        </body>
-      </CommandBar>
+      <body>
+        <CommandBar>
+          <div className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto ">
+            <Header />
+            {children}
+            <CustomToaster />
+            <Analytics />
+            <SpeedInsights />
+          </div>
+        </CommandBar>
+      </body>
     </html>
   );
 }
