@@ -14,7 +14,7 @@ export default function HomePage() {
   return (
     <main className="flex flex-col space-y-16 sm:space-y-24">
       <div className="flex items-center flex-col lg:flex-row" id="about">
-        <div className="relative mb-10 lg:mb-0 lg:mr-10">
+        <div className="relative mb-10 lg:mb-0 lg:mr-12">
           <Image
             src="/images/profile.png"
             width={225}
