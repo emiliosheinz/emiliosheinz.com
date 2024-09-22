@@ -215,7 +215,7 @@
     ul {
       @apply list-disc list-inside;
 
-      > li {
+      >li {
         @apply mb-3;
       }
     }
@@ -223,7 +223,7 @@
     ol {
       @apply list-decimal list-inside;
 
-      > li {
+      >li {
         @apply mb-3;
       }
     }
