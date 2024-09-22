@@ -12,34 +12,35 @@ export function InteractiveCube() {
   const [isFocused, setIsFocused] = useState(false);
   const isSpacePressed = useIsSpacePressed() || true;
 
-  console.log(isFocused);
+  const canvas = (
+    <Canvas
+      style={{ width: "100%", height: "100%" }}
+      camera={{ position: [6, 6, 6], fov: 30 }}
+      onCreated={({ camera, scene }) => {
+        const light = new PointLight();
+        light.position.set(0, 1, 0);
+        light.intensity = 300;
+
+        camera.add(light);
+        scene.add(camera);
+      }}
+      onDoubleClick={() => setIsFocused(true)}
+    >
+      <Cube />
+      {isSpacePressed && (
+        <OrbitControls autoRotate={!isFocused} enableZoom={false} />
+      )}
+      <ambientLight intensity={0.2} />
+    </Canvas>
+  );
 
   return (
-    <Dialog.Root>
-      <Dialog.Trigger>
-        <Canvas
-          camera={{ position: [6, 6, 6], fov: 30 }}
-          onCreated={({ camera, scene }) => {
-            const light = new PointLight();
-            light.position.set(0, 1, 0);
-            light.intensity = 300;
-
-            camera.add(light);
-            scene.add(camera);
-          }}
-        >
-          <Cube />
-          {isSpacePressed && <OrbitControls autoRotate enableZoom={false} />}
-          <ambientLight intensity={0.3} />
-        </Canvas>
-      </Dialog.Trigger>
+    <Dialog.Root open={isFocused} onOpenChange={setIsFocused}>
+      {canvas}
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content>
-          <Dialog.Title>Interactive Cube</Dialog.Title>
-          <Dialog.Description>
-            Click and drag to rotate the cube. Press space to auto-rotate.
-          </Dialog.Description>
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/90" />
+        <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full ">
+          {canvas}
           <Dialog.Close />
         </Dialog.Content>
       </Dialog.Portal>
