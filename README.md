@@ -23,3 +23,9 @@ cd emiliosheinz.com
 yarn
 yarn dev
 ```
+
+## TODO
+
+- Improve animation
+- Improve cube lighting effects
+- Fix layout on smaller screens
