@@ -5,7 +5,7 @@ description: Padrões de código estão se tornando cada vez mais importantes po
 publishedAt: 2019-09-10
 ---
 
-Padrões de código estão se tornando cada vez mais importantes por conta do crescimento dos times de desenvolvimento e a alta rotatividade do mercado de desenvolvedores.
+Padrões de código estão se tornando cada vez mais importantes por conta do crescimento dos times de desenvolvimento e a alta rotatividade do mercado de desenvolvedores de software.
 
 Imagine-se entrando em um projeto enorme, onde cada classe ou componente segue um tipo de padrão de código diferente, ou até mesmo com aquelas linhas intermináveis que geram scroll lateral até em TV's de 62 polegadas.
 
@@ -16,16 +16,14 @@ Pois então, você provavelmente ficaria assim:
   alt="Lost Tarantino meme"
 />
 
-É, eu também ficaria. Foi por isso que decidi escrever este artigo, no qual irei abordar algumas ferramentas bastante úteis para diminuir esse tipo de atrito dentro de um projeto, aumentando assim a produtividade dos desenvolvedores e do time por completo.
-
-Irei focar principalmente no desenvolvimento frontend com ReactJS e React Native, porém, todos os conceitos abordados aqui podem ser adaptados para outras plataformas como NodeJS ou Vue.
+É, eu também ficaria. Foi por isso que decidi escrever este artigo. Nele irei abordar algumas ferramentas bastante úteis para diminuir esse tipo de atrito dentro de projetos JavaScript e TypeScript, dessa forma, aumentando a produtividade dos desenvolvedores e do time por completo.
 
 As ferramentas abordadas neste artigo são:
 
 - **ESLint:** Responsável por identificar padrões de código em desacordo com as regras pré-estabelecidas.
-- **Prettier:** Responsável por formatar o código de acordo com essas regras.
+- **Prettier:** Formatador de código opinativo responsável por formatar o código com regras pré-estabelecidas.
 
-Bom, primeiramente, por que eu deveria implementar estas ferramentas no meu projeto?
+Primeiramente, por que eu deveria implementar estas ferramentas no meu projeto?
 
 Além de facilitar a inserção de novos desenvolvedores no projeto, facilita também os code reviews e a manutenção do código. Se configurado da maneira correta, pode lhe poupar diversas horas procurando por aquela variável com o nome errado ou até mesmo os parênteses ou chaves que estavam faltando e você não viu.
 
@@ -34,7 +32,7 @@ Dada esta rápida introdução do porquê fui motivado a escrever sobre o assunt
 Irei usar como exemplo um projeto ReactJS recém criado com o seguinte comando:
 
 ```bash
-yarn create react-app example
+yarn create react-app examplee
 ```
 
 Após isso, iremos abrir o nosso projeto no vscode e nos certificar que temos algumas extensões instaladas nele. São elas:
@@ -144,7 +142,7 @@ Teremos que remover o arquivo `package-lock.json` e instalar as dependências no
 rm package-lock.json && yarn
 ```
 
-Pronto, agora temos a parte do ESLint configurada, sendo assim, precisamos instalar o Prettier que é quem vai ler as regras do ESLint e formatar nosso código de acordo com elas, juntamente com o Prettier vamos instalar outras duas dependências que servem para linkar o ESLint com o Prettier e uma terceira `babel-eslint` que serve para dizer ao ESLint que estamos usando as últimas funcionalidades do JavaScript. O `-D` no final faz com que essas dependências sejam instaladas como dependências apenas de desenvolvimento.
+Pronto, agora temos a parte do ESLint configurada. Precisamos agora instalar o Prettier que é quem vai formatar o nosso código de forma automática, juntamente com o Prettier vamos instalar outras duas dependências que servem para linkar o ESLint com o Prettier e uma terceira `babel-eslint` que serve para dizer ao ESLint que estamos usando as últimas funcionalidades do JavaScript. O `-D` no final faz com que essas dependências sejam instaladas como dependências apenas de desenvolvimento.
 
 ```bash
 yarn add prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
