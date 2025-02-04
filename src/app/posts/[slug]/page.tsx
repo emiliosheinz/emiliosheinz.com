@@ -1,4 +1,5 @@
 import { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import { Image } from "~/components/image";
 import { MDXContent } from "~/components/mdx-content";
 import { PostCard } from "~/components/post-card";
@@ -49,7 +50,9 @@ export default function PostPage({ params }: PostPageProps) {
   const post = getPostBySlug(params.slug);
 
   /** TODO: add post not found handling */
-  if (!post) return null;
+  if (!post) {
+    notFound();
+  }
 
   return (
     <>
