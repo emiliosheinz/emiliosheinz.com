@@ -1,4 +1,4 @@
-import { ReactElement, cloneElement, useRef } from "react";
+import { ReactElement, cloneElement, useRef, type JSX } from "react";
 import { FaCopy } from "react-icons/fa6";
 import { notify } from "~/utils/toast.utils";
 
@@ -19,7 +19,7 @@ export function Pre({ children, ...props }: PreProps) {
   return (
     <div className="relative">
       <pre {...props}>
-        {cloneElement(children as ReactElement, { ref: codeRef })}
+        {cloneElement(children as ReactElement<any>, { ref: codeRef })}
         <button
           onClick={copyToClipboard}
           aria-label="Copy to clipboard"

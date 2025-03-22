@@ -8,15 +8,15 @@ import { Slider } from "~/components/slider";
 import { getPostBySlug, getRandomPosts, posts } from "~/content/posts";
 
 type PostPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export async function generateMetadata(
   props: PostPageProps,
 ): Promise<Metadata | undefined> {
-  const post = getPostBySlug(props.params.slug);
+  const post = getPostBySlug((await props.params).slug);
 
   if (!post) return;
 
@@ -46,7 +46,8 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
 }
 
-export default function PostPage({ params }: PostPageProps) {
+export default async function PostPage(props: PostPageProps) {
+  const params = await props.params;
   const post = getPostBySlug(params.slug);
 
   /** TODO: add post not found handling */

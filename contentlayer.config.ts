@@ -1,5 +1,13 @@
-import { defineDocumentType, makeSource } from "contentlayer/source-files";
+import fs from "fs";
+import path from "path";
+import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import rehypePrettyCode, { Options } from "rehype-pretty-code";
+
+const GENERATED_FILE_PATHS = [
+  path.resolve(".contentlayer/generated/Experience/_index.mjs"),
+  path.resolve(".contentlayer/generated/Post/_index.mjs"),
+  path.resolve(".contentlayer/generated/index.mjs"),
+];
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
@@ -50,5 +58,21 @@ export default makeSource({
   documentTypes: [Post, Experience],
   mdx: {
     rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
+  },
+  /** @see https://github.com/timlrx/contentlayer2/issues/21#issuecomment-2533524392 */
+  onSuccess: async () => {
+    for (const filePath of GENERATED_FILE_PATHS) {
+      if (!fs.existsSync(filePath)) return;
+
+      let content = fs.readFileSync(filePath, "utf-8");
+
+      // Remove invalid syntax like `with { type: 'json' }`
+      content = content.replace(/ with \{.*?\}/g, "");
+
+      fs.writeFileSync(filePath, content, "utf-8");
+      console.log(
+        `Patched ${filePath} after Contentlayer generation.`,
+      );
+    }
   },
 });

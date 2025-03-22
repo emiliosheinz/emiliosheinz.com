@@ -1,6 +1,6 @@
 "use client";
 
-import { useMDXComponent } from "next-contentlayer/hooks";
+import { useMDXComponent } from "next-contentlayer2/hooks";
 import { Pre } from "./components/pre.component";
 import { Image } from "./components/image.component";
 import { classNames } from "~/utils/css.utils";
