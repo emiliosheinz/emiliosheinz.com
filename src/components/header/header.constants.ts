@@ -8,7 +8,7 @@ export const headerLinks = [
     href: "#experience",
   },
   {
-    label: "Blog",
+    label: "Content",
     href: "#blog",
   },
   {
