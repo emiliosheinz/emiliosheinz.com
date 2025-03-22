@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { PostCard } from "~/components/post-card";
+import { PostCard } from "~/components/card";
 import { posts } from "~/content/posts";
 
 export const metadata: Metadata = {

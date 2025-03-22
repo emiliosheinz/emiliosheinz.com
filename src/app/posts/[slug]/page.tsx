@@ -2,7 +2,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import { Image } from "~/components/image";
 import { MDXContent } from "~/components/mdx-content";
-import { PostCard } from "~/components/post-card";
+import { PostCard } from "~/components/card";
 import { Section } from "~/components/section";
 import { Slider } from "~/components/slider";
 import { getPostBySlug, getRandomPosts, posts } from "~/content/posts";

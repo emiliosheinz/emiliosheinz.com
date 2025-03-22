@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import { PostCard } from "../post-card.component";
-import { PostCardProps } from "../post-card.types";
+import { PostCard } from "../card.component";
+import { CardProps } from "../card.types";
 import { faker } from "@faker-js/faker";
 
-const makePostCardProps = (): PostCardProps => ({
+const makePostCardProps = (): CardProps => ({
   title: faker.lorem.words(3),
   description: faker.lorem.words(15),
   url: faker.internet.url(),
