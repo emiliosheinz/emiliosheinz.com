@@ -13,7 +13,7 @@ export function YouTubeVideoCard({
   return (
     <div
       className={classNames(
-        "flex flex-col bg-codGray-300 rounded-lg w-72 sm:w-96 overflow-hidden border border-white border-opacity-10",
+        "flex flex-col bg-cod-gray-300 rounded-lg w-72 sm:w-96 overflow-hidden border border-white/10",
         className,
       )}
     >
@@ -55,7 +55,7 @@ export function PostCard({
   return (
     <div
       className={classNames(
-        "flex flex-col bg-codGray-300 rounded-lg w-72 sm:w-96 overflow-hidden border border-white border-opacity-10",
+        "flex flex-col bg-cod-gray-300 rounded-lg w-72 sm:w-96 overflow-hidden border border-white/10",
         className,
       )}
     >

@@ -75,7 +75,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       lang="en"
       className={classNames(
         robotoMono.className,
-        "bg-codGray-500 text-white scroll-smooth",
+        "bg-cod-gray-500 text-white scroll-smooth",
       )}
     >
       <CommandBar>

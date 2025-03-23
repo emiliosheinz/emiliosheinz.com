@@ -23,9 +23,9 @@ export function CommandBar(props: CommandBarProps) {
   return (
     <KBarProvider actions={actions}>
       <KBarPortal>
-        <KBarPositioner className="z-40 bg-black bg-opacity-80 backdrop-blur-sm">
-          <KBarAnimator className="w-full max-w-xl rounded-md bg-codGray-500 bg-opacity-80 backdrop-blur-xl">
-            <KBarSearch className="w-full h-12 p-5 bg-transparent rounded-md outline-none" />
+        <KBarPositioner className="z-40 bg-black bg-opacity-80 backdrop-blur-xs">
+          <KBarAnimator className="w-full max-w-xl rounded-md bg-cod-gray-500 bg-opacity-80 backdrop-blur-xl">
+            <KBarSearch className="w-full h-12 p-5 bg-transparent rounded-md outline-hidden" />
             <Results />
           </KBarAnimator>
         </KBarPositioner>

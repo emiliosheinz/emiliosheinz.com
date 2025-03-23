@@ -11,12 +11,12 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.0.15",
     "@types/node": "22.13.11",
     "@types/react": "19.0.12",
     "@types/react-dom": "19.0.4",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "autoprefixer": "10.4.21",
     "contentlayer2": "0.5.4",
     "date-fns": "^4.1.0",
     "eslint": "9.23.0",
@@ -32,7 +32,7 @@
     "react-icons": "^5.5.0",
     "rehype-pretty-code": "^0.14.1",
     "shiki": "^3.2.1",
-    "tailwindcss": "3.3.3",
+    "tailwindcss": "^4.0.15",
     "typescript": "5.8.2"
   },
   "devDependencies": {

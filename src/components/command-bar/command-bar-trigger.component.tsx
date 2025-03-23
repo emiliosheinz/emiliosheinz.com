@@ -37,19 +37,19 @@ export function CommandBarTriggerFull() {
 
   if (!isMounted) {
     return (
-      <div className="h-10 w-64 bg-codGray-300 animate-pulse rounded-md" />
+      <div className="h-10 w-64 bg-cod-gray-300 animate-pulse rounded-md" />
     );
   }
 
   return (
     <button
-      className="px-4 h-10 rounded border bg-white border-white bg-opacity-0 border-opacity-0 hover:bg-opacity-5 hover:border-opacity-20 transition-all ease-in-out"
       onClick={query.toggle}
+      className="px-4 h-10 rounded-sm border bg-white/0 border-white/0 hover:bg-white/5 hover:border-white/20 transition-all ease-in-out"
     >
       {renderLabel()}
       <FaArrowRightLong
         data-testid="arrow-right-icon"
-        className="inline transition-all ease-in-out group-hover:translate-x-1 group-hover:text-dodgerBlue ml-3"
+        className="inline transition-all ease-in-out group-hover:translate-x-1 group-hover:text-dodger-blue ml-3"
       />
     </button>
   );
@@ -60,9 +60,9 @@ export function CommandBarTriggerLite() {
 
   return (
     <button
-      className="px-2.5 rounded border bg-white border-white bg-opacity-0 border-opacity-0 hover:bg-opacity-5 hover:border-opacity-20 transition-all ease-in-out"
       onClick={query.toggle}
       title="Open command bar"
+      className="px-2.5 rounded-sm border bg-white/0 border-white/0 hover:bg-white/5 hover:border-white/20 transition-all ease-in-out"
     >
       <span className="text-3xl text-white">⌘</span>
     </button>
