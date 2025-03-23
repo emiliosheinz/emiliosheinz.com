@@ -26,7 +26,5 @@ yarn dev
 
 ## TODO 
 
-- [ ] Update libraries
 - [ ] Improve SEO, Server Side Rendering and Performance
 - [ ] Go through the code and improve it where necessary
-- [ ] Content layer was archived, check migration to another library

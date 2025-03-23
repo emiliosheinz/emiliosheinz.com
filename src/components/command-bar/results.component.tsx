@@ -10,7 +10,7 @@ export function Results() {
       onRender={({ item, active }) => {
         const itemClassNames = classNames(
           "px-5 py-3 flex gap-5 items-center",
-          active ? "bg-codGray-300 bg-opacity-50" : "bg-transparent",
+          active ? "bg-cod-gray-300 bg-opacity-50" : "bg-transparent",
         );
 
         if (typeof item === "string") {

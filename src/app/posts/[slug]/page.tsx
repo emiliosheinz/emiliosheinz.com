@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Image } from "~/components/image";
 import { MDXContent } from "~/components/mdx-content";

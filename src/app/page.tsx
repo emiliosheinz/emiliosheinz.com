@@ -99,7 +99,7 @@ export default async function HomePage() {
         <div className="flex space-x-8">
           {socialMedias.map(({ Icon, url, name }) => (
             <a target="_blank" key={name} href={url}>
-              <Icon className="w-6 h-6 sm:w-8 sm:h-8 hover:text-dodgerBlue hover:cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105" />
+              <Icon className="w-6 h-6 sm:w-8 sm:h-8 hover:text-dodger-blue hover:cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105" />
             </a>
           ))}
         </div>

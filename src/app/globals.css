@@ -1,6 +1,66 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+  --color-dodger-blue: #38b6ff;
+
+  --color-cod-gray-100: #2c2c2c;
+  --color-cod-gray-200: #262626;
+  --color-cod-gray-300: #212121;
+  --color-cod-gray-400: #1a1a1a;
+  --color-cod-gray-500: #121212;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
+  --animate-waving-hand: wave 2.5s linear infinite;
+
+  @keyframes wave {
+    0% {
+      transform: rotate(0deg);
+    }
+    10% {
+      transform: rotate(14deg);
+    }
+    20% {
+      transform: rotate(-8deg);
+    }
+    30% {
+      transform: rotate(14deg);
+    }
+    40% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    60% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 @layer base {
   ::-webkit-scrollbar {
@@ -8,15 +68,15 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-codGray-500;
+    @apply bg-cod-gray-500;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-codGray-300 rounded;
+    @apply bg-cod-gray-300 rounded-sm;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-codGray-100;
+    @apply bg-cod-gray-100;
   }
 
   ::-webkit-scrollbar-corner {
@@ -65,12 +125,12 @@
     }
 
     code {
-      @apply bg-codGray-300 rounded px-2 py-0.5 border border-white border-opacity-10;
+      @apply bg-cod-gray-300 rounded-sm px-2 py-0.5 border border-white/10;
     }
 
     pre {
-      @apply p-3 sm:p-6 overflow-y-scroll bg-scroll rounded;
-      @apply bg-codGray-300;
+      @apply p-3 sm:p-6 overflow-y-scroll bg-scroll rounded-sm;
+      @apply bg-cod-gray-300;
 
       code {
         @apply px-0 py-0 border-0;
@@ -83,10 +143,10 @@
   }
 
   a {
-    @apply hover:text-dodgerBlue underline underline-offset-4 transition-all duration-300;
+    @apply hover:text-dodger-blue underline underline-offset-4 transition-all duration-300;
   }
 
   kbd {
-    @apply bg-codGray-300 rounded px-2 py-0.5 border border-white border-opacity-10;
+    @apply bg-cod-gray-300 rounded-sm px-2 py-0.5 border border-white/10;
   }
 }

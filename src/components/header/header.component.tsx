@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Image } from "../image";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { usePreviousRoute } from "~/hooks/usePreviousRoute";
 import { headerLinks } from "./header.constants";
@@ -43,8 +42,8 @@ export function Header() {
             else router.replace("/");
           }}
         >
-          <FaArrowLeftLong className="inline transition-all ease-in-out group-hover:-translate-x-1 group-hover:text-dodgerBlue mr-3" />
-          <span className="transition-all ease-in-out group-hover:text-dodgerBlue">
+          <FaArrowLeftLong className="inline transition-all ease-in-out group-hover:-translate-x-1 group-hover:text-dodger-blue mr-3" />
+          <span className="transition-all ease-in-out group-hover:text-dodger-blue">
             go back
           </span>
         </button>
@@ -56,7 +55,7 @@ export function Header() {
         key={label}
         href={href}
         onClick={handleScroll}
-        className="font-bold text-xl px-2 transition-colors hover:text-dodgerBlue no-underline"
+        className="font-bold text-xl px-2 transition-colors hover:text-dodger-blue no-underline"
       >
         {label}
       </Link>
@@ -64,7 +63,7 @@ export function Header() {
   };
 
   return (
-    <header className="fixed bg-codGray-500 top-0 left-0 right-0 z-40 bg-opacity-90 backdrop-blur-md">
+    <header className="fixed bg-cod-gray-500 top-0 left-0 right-0 z-40 bg-opacity-90 backdrop-blur-md">
       <div className="flex items-center w-full max-w-6xl m-auto py-2 sm:py-5 px-5 overflow-y-scroll">
         <div className="flex flex-1 space-x-5">{renderLinks()}</div>
         <div className="ml-5">

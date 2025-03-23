@@ -9,10 +9,10 @@ export function Link({ href, label, target }: LinkProps) {
       target={target}
       className="group text-base sm:text-lg hover:cursor-pointer no-underline"
     >
-      <span className="transition-all ease-in-out group-hover:text-dodgerBlue">{`${label}`}</span>
+      <span className="transition-all ease-in-out group-hover:text-dodger-blue">{`${label}`}</span>
       <FaArrowRightLong
         data-testid="arrow-right-icon"
-        className="inline transition-all ease-in-out group-hover:translate-x-1 group-hover:text-dodgerBlue ml-3"
+        className="inline transition-all ease-in-out group-hover:translate-x-1 group-hover:text-dodger-blue ml-3"
       />
     </NextLink>
   );
