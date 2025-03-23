@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Image } from "../image";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { usePreviousRoute } from "~/hooks/usePreviousRoute";
 import { headerLinks } from "./header.constants";

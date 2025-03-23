@@ -19,7 +19,9 @@ export function Pre({ children, ...props }: PreProps) {
   return (
     <div className="relative">
       <pre {...props}>
-        {cloneElement(children as ReactElement<any>, { ref: codeRef })}
+        {cloneElement(children as ReactElement<{ ref: unknown }>, {
+          ref: codeRef,
+        })}
         <button
           onClick={copyToClipboard}
           aria-label="Copy to clipboard"
