@@ -1,4 +1,4 @@
-import { isServerSide } from "./runtime.utils";
+import 'server-only'
 
 type YoutubeApiResponseItem = {
   id: {
@@ -41,10 +41,6 @@ const ONCE_PER_WEEK = 1000 * 60 * 60 * 24 * 7;
 export async function getYouTubeVideos(
   params: GetYoutTubeVideosParams = {},
 ): Promise<GetYoutTubeVideosResponse> {
-  if (!isServerSide()) {
-    throw new Error("This function should only be called server-side");
-  }
-
   const searchParams = new URLSearchParams({
     part: "snippet",
     order: "date",
