@@ -1,3 +1,4 @@
+// TODO - emiliosheinz: DRY these components
 import { CardProps } from "./card.types";
 import { Image } from "../image";
 import { Link } from "../link";

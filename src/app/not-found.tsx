@@ -1,3 +1,4 @@
+// TODO - emiliosheinz: Improve the look and feel of this page
 
 export default function NotFound() {
   return (
