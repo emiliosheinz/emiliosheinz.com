@@ -2,6 +2,9 @@ import { Metadata } from "next";
 import { YouTubeVideoCard } from "~/components/card/card.component";
 import { getYouTubeVideos } from "~/utils/youtube.utils";
 
+/** Revalidate the page once per week */
+export const revalidate = 604800;
+
 export const metadata: Metadata = {
   title: "YouTube videos",
 };

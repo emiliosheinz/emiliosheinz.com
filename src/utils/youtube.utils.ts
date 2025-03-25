@@ -1,4 +1,4 @@
-import 'server-only'
+import "server-only";
 
 type YoutubeApiResponseItem = {
   id: {
@@ -33,7 +33,6 @@ type GetYoutTubeVideosResponse = {
 
 const YOUTUBE_VIDEO_KIND = "youtube#video";
 const MY_YOTUBE_CHANNEL_ID = "UCrrRsdMPYbsbtObtfxN2rmg";
-const ONCE_PER_WEEK = 1000 * 60 * 60 * 24 * 7;
 
 /**
  * @see https://developers.google.com/youtube/v3/docs/search/list#request
@@ -51,7 +50,11 @@ export async function getYouTubeVideos(
 
   const res = await fetch(
     `${process.env.YOUTUBE_DATA_API_BASE_URL}/search?${searchParams}`,
-    { next: { revalidate: ONCE_PER_WEEK } },
+    {
+      cache: "force-cache",
+      /** Revalidate every 24 hours (once per day) */
+      next: { revalidate: 86_400 },
+    },
   );
 
   if (!res.ok) {

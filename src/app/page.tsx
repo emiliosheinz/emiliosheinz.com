@@ -11,6 +11,9 @@ import { getYouTubeVideos } from "~/utils/youtube.utils";
 import { PostCard } from "~/components/card";
 import { YouTubeVideoCard } from "~/components/card/card.component";
 
+/** Revalidate the page once per week */
+export const revalidate = 604800;
+
 export default async function HomePage() {
   const { videos } = await getYouTubeVideos({ maxResults: 5 });
 
