@@ -73,10 +73,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
-      className={classNames(
-        urbanist.className,
-        "scroll-smooth",
-      )}
+      className={classNames(urbanist.className, "scroll-smooth dark")}
     >
       <CommandBar>
         <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
