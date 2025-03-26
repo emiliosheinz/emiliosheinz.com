@@ -5,12 +5,12 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { Roboto_Mono } from "next/font/google";
+import { Urbanist } from "next/font/google";
 import { Header } from "~/components/header";
-import { classNames } from "~/utils/css.utils";
 import { CommandBar } from "~/components/command-bar";
+import { classNames } from "~/utils/css.utils";
 
-const robotoMono = Roboto_Mono({
+const urbanist = Urbanist({
   subsets: ["latin"],
   display: "swap",
   preload: true,
@@ -74,8 +74,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="en"
       className={classNames(
-        robotoMono.className,
-        "bg-cod-gray-500 text-white scroll-smooth",
+        urbanist.className,
+        "scroll-smooth",
       )}
     >
       <CommandBar>
