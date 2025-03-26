@@ -51,7 +51,7 @@ export default async function HomePage() {
               I bring ideas to life 🧠, I turn coffee into code ☕️
             </span>
           </p>
-          <CommandBarTriggerFull />
+          <CommandBarTriggerFull className="-ml-4" />
         </div>
       </div>
 
