@@ -74,6 +74,7 @@ export function CommandBarTriggerLite() {
       variant="ghost"
       onClick={query.toggle}
       title="Open command bar"
+      className="cursor-pointer"
     >
       <Command />
     </Button>
