@@ -1,7 +1,12 @@
+"use client";
+
 import { format } from "date-fns";
+import { motion, useScroll, useTransform } from "motion/react";
 
 import { MDXContent } from "../mdx-content";
 import { ExperienceCardProps } from "./experience-card.types";
+import { useRef } from "react";
+import { Badge } from "../ui/badge";
 
 export function ExperienceCard({
   title,
@@ -18,29 +23,35 @@ export function ExperienceCard({
   const formattedStartDate = format(new Date(startDate), "MMM yyyy");
 
   return (
-    <div className="flex w-full px-4 sm:px-6 bg-cod-gray-300 rounded-sm gap-10 border border-white/10">
-      <div className="hidden sm:flex flex-col text-end items-end gap-2 py-6 justify-between border-r-[2px] my-2 border-r-white/75">
+    <div className="flex w-full px-4 sm:px-6 rounded-sm gap-10 border border-ring/30 bg-background">
+      <div className="hidden sm:flex flex-col text-end items-end gap-2 py-6 justify-between border-r-[2px] my-2 border-r-foreground/60">
         <span
           data-testid="formatted-end-date"
-          className="whitespace-nowrap text-base bg-cod-gray-300 p-1 -mr-2 relative"
+          className="whitespace-nowrap text-sm p-1 -mr-2 relative bg-background"
         >
           {formattedEndDate}
         </span>
         <span
           data-testid="formatted-start-date"
-          className="whitespace-nowrap text-base bg-cod-gray-300 p-1 -mr-2"
+          className="whitespace-nowrap text-sm p-1 -mr-2 bg-background"
         >
           {formattedStartDate}
         </span>
       </div>
       <div className="flex flex-col py-4 sm:py-6">
-        <strong className="text-xl">{title}</strong>
-        <span className="text-base">{`${company}, ${employmentType}`}</span>
-        <span className="inline sm:hidden text-base">{`${formattedStartDate} - ${formattedEndDate}`}</span>
+        <strong className="text-lg sm:text-xl">{title}</strong>
+        <span className="text-sm text-foreground/75">{`${company}, ${employmentType}`}</span>
+        <span className="inline sm:hidden text-sm">{`${formattedStartDate} - ${formattedEndDate}`}</span>
         <br />
-        <MDXContent code={description.code} className="text-lg" />
+        <MDXContent code={description.code} className="text-sm sm:text-base leading-8" />
         <br />
-        <span>Skills: {skills.join(", ")}</span>
+        <div className="flex flex-wrap gap-2">
+          {skills.map((skill) => (
+            <Badge key={skill} variant="secondary" className="text-xs">
+              {skill}
+            </Badge>
+          ))}
+        </div>
       </div>
     </div>
   );

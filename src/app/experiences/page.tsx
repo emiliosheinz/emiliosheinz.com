@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function ExperiencesPage() {
   return (
-    <div className="flex flex-col gap-8">
-      <h1 className="font-bold text-4xl sm:text-5xl mb-2 sm:mb-5">
+    <main className="flex flex-col gap-8 pt-14">
+      <h1 className="font-bold text-4xl sm:text-5xl mb-2 sm:mb-8">
         Experience
       </h1>
       {experiences.map((experience) => (
@@ -20,6 +20,6 @@ export default function ExperiencesPage() {
           description={experience.body}
         />
       ))}
-    </div>
+    </main>
   );
 }

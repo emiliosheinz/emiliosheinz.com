@@ -6,16 +6,16 @@ export const revalidate = 604800;
 
 export default async function HomePage() {
   return (
-    <main className="flex flex-col space-y-16 sm:space-y-24">
+    <main className="flex flex-col space-y-16 sm:space-y-24 pt-14 lg:pt-32">
       <div className="flex items-center flex-col lg:flex-row" id="about">
         <Image
           src="/images/profile.png"
-          width={225}
-          height={225}
-          className="rounded-full mb-10 lg:mb-0 lg:mr-10"
+          width={280}
+          height={280}
+          className="rounded-full mb-10 lg:mb-0 lg:mr-16"
           alt="Emilio Heinzmann's picture in black and white with a blue background"
         />
-        <div className="flex flex-col space-y-6 sm:space-y-10 items-start">
+        <div className="flex flex-col space-y-10 items-start">
           <h1 className="font-bold text-4xl sm:text-5xl">
             {"Hello "}
             <span className="text-5xl sm:text-6xl inline-block origin-bottom-right animate-waving-hand">

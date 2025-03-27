@@ -59,7 +59,7 @@ export function CommandBarTriggerFull({ className }: CommandBarTriggerProps) {
       {renderLabel()}
       <ArrowRight
         data-testid="arrow-right-icon"
-        className="inline transition-[margin] ease-in-out group-hover:ml-3"
+        className="inline transition-[margin,scale] ease-in-out group-hover:ml-2 group-hover:scale-110"
       />
     </Button>
   );

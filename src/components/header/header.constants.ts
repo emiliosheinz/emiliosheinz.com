@@ -4,7 +4,7 @@ export const headerLinks = [
     href: "/",
   },
   {
-    label: "Experiences",
+    label: "Experience",
     href: "/experiences",
   },
   {

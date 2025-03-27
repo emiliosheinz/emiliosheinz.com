@@ -73,7 +73,7 @@ function CustomToaster() {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html suppressHydrationWarning lang="en" className={cn(urbanist.className, 'h-full bg-background')}>
-      <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
+      <body className="pb-10 pt-14 px-5 max-w-6xl m-auto">
         <ThemeProvider attribute="class" defaultTheme="system">
           <CommandBar>
             <Header />
