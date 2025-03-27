@@ -45,20 +45,20 @@
 
 @layer base {
   ::-webkit-scrollbar {
-    @apply w-1 h-1;
+    @apply w-2 h-2;
   }
 
-  /* ::-webkit-scrollbar-track { */
-  /*   @apply bg-cod-gray-500; */
-  /* } */
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
 
-  /* ::-webkit-scrollbar-thumb { */
-  /*   @apply bg-cod-gray-300 rounded-sm; */
-  /* } */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground/20 dark:bg-accent rounded-sm;
+  }
 
-  /* ::-webkit-scrollbar-thumb:hover { */
-  /*   @apply bg-cod-gray-100; */
-  /* } */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-foreground/35 dark:bg-foreground/20;
+  }
 
   ::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);

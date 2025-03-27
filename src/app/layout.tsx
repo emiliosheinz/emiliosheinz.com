@@ -8,8 +8,8 @@ import { Toaster } from "react-hot-toast";
 import { Urbanist } from "next/font/google";
 import { Header } from "~/components/header";
 import { CommandBar } from "~/components/command-bar";
-import { classNames } from "~/utils/css.utils";
 import { ThemeProvider } from "~/components/theme-provider";
+import { cn } from "~/lib/utils";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -72,7 +72,7 @@ function CustomToaster() {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html suppressHydrationWarning lang="en" className={urbanist.className}>
+    <html suppressHydrationWarning lang="en" className={cn(urbanist.className, 'h-full bg-background')}>
       <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
         <ThemeProvider attribute="class" defaultTheme="system">
           <CommandBar>
