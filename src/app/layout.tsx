@@ -74,7 +74,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html suppressHydrationWarning lang="en" className={urbanist.className}>
       <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
-        <ThemeProvider attribute="class" defaultTheme="dark">
+        <ThemeProvider attribute="class" defaultTheme="system">
           <CommandBar>
             <Header />
             {children}
