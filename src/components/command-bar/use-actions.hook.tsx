@@ -23,7 +23,7 @@ export function useActions(): Action[] {
         navigator.clipboard.writeText(window.location.href);
         notify.success("URL copied to clipboard");
       },
-      icon: <HiOutlineLink className="w-5 h-5 text-white" />,
+      icon: <HiOutlineLink className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "source-code",
@@ -35,7 +35,7 @@ export function useActions(): Action[] {
           "_blank",
         );
       },
-      icon: <HiOutlineCodeBracket className="w-5 h-5 text-white" />,
+      icon: <HiOutlineCodeBracket className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "email",
@@ -44,7 +44,7 @@ export function useActions(): Action[] {
       perform: () => {
         window.open("mailto:emiliosheinz@gmail.com", "_blank");
       },
-      icon: <HiOutlineAtSymbol className="w-5 h-5 text-white" />,
+      icon: <HiOutlineAtSymbol className="w-5 h-5 text-accent-foreground" />,
     },
   ].map((action) => ({ ...action, section: "Util" }));
 
@@ -54,7 +54,7 @@ export function useActions(): Action[] {
       id: name.toLowerCase(),
       keywords: name.toLocaleLowerCase(),
       perform: () => window.open(url, "_blank"),
-      icon: <Icon className="w-5 h-5 text-white" />,
+      icon: <Icon className="w-5 h-5 text-accent-foreground" />,
       section: "Social Media",
     }),
   );
@@ -65,23 +65,23 @@ export function useActions(): Action[] {
       name: "Home",
       keywords: "home page start initial",
       perform: () => router.push("/"),
-      icon: <HiOutlineHome className="w-5 h-5 text-white" />,
+      icon: <HiOutlineHome className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "experience",
       name: "Experience",
       keywords: "experience work jobs",
       perform: () => router.push("/experiences"),
-      icon: <HiOutlineLightBulb className="w-5 h-5 text-white" />,
+      icon: <HiOutlineLightBulb className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "blog-posts",
       name: "Blog Posts",
       keywords: "blog posts articles",
       perform: () => router.push("/posts"),
-      icon: <HiOutlineBookOpen className="w-5 h-5 text-white" />,
+      icon: <HiOutlineBookOpen className="w-5 h-5 text-accent-foreground" />,
     },
   ].map((action) => ({ ...action, section: "Go to" }));
 
-  return [...utilActions, ...socialMediaActions, ...goToActions];
+  return [...goToActions, ...socialMediaActions, ...utilActions];
 }

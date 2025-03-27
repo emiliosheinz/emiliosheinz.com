@@ -9,8 +9,8 @@ export function Results() {
       items={results}
       onRender={({ item, active }) => {
         const itemClassNames = classNames(
-          "px-5 py-3 flex gap-5 items-center",
-          active ? "bg-cod-gray-300 bg-opacity-50" : "bg-transparent",
+          "px-5 py-3 flex gap-5 items-center rounded-sm",
+          active ? "bg-accent/30" : "bg-transparent",
         );
 
         if (typeof item === "string") {
@@ -21,10 +21,9 @@ export function Results() {
           <div className={itemClassNames}>
             {item.icon}
             <span
-              className={classNames(
-                "text-white",
-                active ? "opacity-100" : "opacity-50",
-              )}
+              className={
+                active ? "text-accent-foreground" : "text-accent-foreground/35"
+              }
             >
               {item.name}
             </span>

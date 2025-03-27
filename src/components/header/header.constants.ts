@@ -1,18 +1,18 @@
 export const headerLinks = [
   {
-    label: "About",
-    href: "#about",
+    label: "Home",
+    href: "/",
   },
   {
-    label: "Experience",
-    href: "#experience",
+    label: "Experiences",
+    href: "/experiences",
   },
   {
-    label: "Content",
-    href: "#blog",
+    label: "Blog",
+    href: "/posts",
   },
   {
-    label: "Contact",
-    href: "#contact",
+    label: "Videos",
+    href: "/videos",
   },
 ];

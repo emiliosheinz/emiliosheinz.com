@@ -1,22 +1,10 @@
-import { ExperienceCard } from "~/components/experience-card";
-import { Link } from "~/components/link";
-import { Slider } from "~/components/slider";
-import { socialMedias } from "~/data/social-medias";
-import { currentExperience } from "~/content/experiences";
-import { getLastFivePosts } from "~/content/posts";
 import { Image } from "~/components/image";
 import { CommandBarTriggerFull } from "~/components/command-bar";
-import { Section } from "~/components/section";
-import { getYouTubeVideos } from "~/utils/youtube.utils";
-import { PostCard } from "~/components/card";
-import { YouTubeVideoCard } from "~/components/card/card.component";
 
 /** Revalidate the page once per week */
 export const revalidate = 604800;
 
 export default async function HomePage() {
-  const { videos } = await getYouTubeVideos({ maxResults: 5 });
-
   return (
     <main className="flex flex-col space-y-16 sm:space-y-24">
       <div className="flex items-center flex-col lg:flex-row" id="about">
@@ -52,9 +40,9 @@ export default async function HomePage() {
             </span>
           </p>
           <CommandBarTriggerFull className="-ml-4" />
+
         </div>
       </div>
-
       {/* <Section title="Experience" id="experience"> */}
       {/*   <ExperienceCard */}
       {/*     {...currentExperience} */}

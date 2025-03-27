@@ -9,6 +9,7 @@ import { Urbanist } from "next/font/google";
 import { Header } from "~/components/header";
 import { CommandBar } from "~/components/command-bar";
 import { classNames } from "~/utils/css.utils";
+import { ThemeProvider } from "~/components/theme-provider";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -71,19 +72,18 @@ function CustomToaster() {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html
-      lang="en"
-      className={classNames(urbanist.className, "scroll-smooth dark")}
-    >
-      <CommandBar>
-        <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
-          <Header />
-          {children}
-          <CustomToaster />
-          <Analytics />
-          <SpeedInsights />
-        </body>
-      </CommandBar>
+    <html suppressHydrationWarning lang="en" className={urbanist.className}>
+      <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          <CommandBar>
+            <Header />
+            {children}
+            <CustomToaster />
+            <Analytics />
+            <SpeedInsights />
+          </CommandBar>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
