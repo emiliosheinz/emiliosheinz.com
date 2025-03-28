@@ -1,11 +1,7 @@
-"use client";
-
 import { format } from "date-fns";
-import { motion, useScroll, useTransform } from "motion/react";
 
 import { MDXContent } from "../mdx-content";
 import { ExperienceCardProps } from "./experience-card.types";
-import { useRef } from "react";
 import { Badge } from "../ui/badge";
 
 export function ExperienceCard({
@@ -43,7 +39,10 @@ export function ExperienceCard({
         <span className="text-sm text-foreground/75">{`${company}, ${employmentType}`}</span>
         <span className="inline sm:hidden text-sm">{`${formattedStartDate} - ${formattedEndDate}`}</span>
         <br />
-        <MDXContent code={description.code} className="text-sm sm:text-base leading-8" />
+        <MDXContent
+          code={description.code}
+          className="text-sm sm:text-base leading-8"
+        />
         <br />
         <div className="flex flex-wrap gap-2">
           {skills.map((skill) => (

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Image } from "~/components/image";
 import { MDXContent } from "~/components/mdx-content";
-import { PostCard } from "~/components/card";
+import { Card } from "~/components/card";
 import { Section } from "~/components/section";
 import { Slider } from "~/components/slider";
 import { getPostBySlug, getRandomPosts, posts } from "~/content/posts";
@@ -69,6 +69,7 @@ export default async function PostPage(props: PostPageProps) {
             (min-width: 1024px) 1024px,
             100vw
           `}
+          className='rounded-lg'
         />
       </div>
       <MDXContent code={post.body.code} />
@@ -77,7 +78,7 @@ export default async function PostPage(props: PostPageProps) {
           {getRandomPosts({ count: 3, excludeSlug: post.slug }).map(
             ({ title, url, image, description }) => (
               <Slider.Item key={title}>
-                <PostCard
+                <Card
                   url={url}
                   image={image}
                   title={title}

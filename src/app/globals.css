@@ -105,18 +105,18 @@
       }
     }
 
-    /* code { */
-    /*   @apply bg-background rounded-sm px-2 py-0.5 border border-ring/10; */
-    /* } */
-    /**/
-    /* pre { */
-    /*   @apply p-3 sm:p-6 overflow-y-scroll bg-scroll rounded-sm; */
-    /*   @apply bg-background; */
-    /**/
-    /*   code { */
-    /*     @apply px-0 py-0 border-0; */
-    /*   } */
-    /* } */
+    code {
+      @apply bg-accent/30 rounded-sm px-2 py-0.5 border border-ring/20;
+    }
+
+    pre {
+      @apply p-3 sm:p-6 overflow-y-scroll bg-scroll rounded-sm;
+      @apply bg-accent/30;
+
+      code {
+        @apply bg-transparent px-0 py-0 border-0;
+      }
+    }
 
     pre::-webkit-scrollbar {
       display: none;

@@ -17,7 +17,7 @@ const urbanist = Urbanist({
   preload: true,
 });
 
-const title = "Emilio Heinzmann";
+const title = "Emilio Heinzmann"
 const ogDescription =
   "As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.";
 
@@ -73,7 +73,7 @@ function CustomToaster() {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html suppressHydrationWarning lang="en" className={cn(urbanist.className, 'h-full bg-background')}>
-      <body className="pb-10 pt-14 px-5 max-w-6xl m-auto">
+      <body className="pb-10 pt-14 px-5 max-w-6xl m-auto min-h-full flex">
         <ThemeProvider attribute="class" defaultTheme="system">
           <CommandBar>
             <Header />

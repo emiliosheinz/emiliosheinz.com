@@ -6,7 +6,7 @@ export const revalidate = 604800;
 
 export default async function HomePage() {
   return (
-    <main className="flex flex-col space-y-16 sm:space-y-24 pt-14 lg:pt-32">
+    <main className="flex flex-col space-y-16 sm:space-y-24 self-center">
       <div className="flex items-center flex-col lg:flex-row" id="about">
         <Image
           src="/images/profile.png"
@@ -55,7 +55,7 @@ export default async function HomePage() {
       {/*   <Slider.Root> */}
       {/*     {getLastFivePosts().map(({ title, url, image, description }) => ( */}
       {/*       <Slider.Item key={title}> */}
-      {/*         <PostCard */}
+      {/*         <Card */}
       {/*           url={url} */}
       {/*           image={image} */}
       {/*           title={title} */}
@@ -71,7 +71,7 @@ export default async function HomePage() {
       {/*   <Slider.Root> */}
       {/*     {videos.map(({ id, title, description, thumbnail }) => ( */}
       {/*       <Slider.Item key={id}> */}
-      {/*         <YouTubeVideoCard */}
+      {/*         <Card */}
       {/*           title={title} */}
       {/*           image={thumbnail} */}
       {/*           description={description} */}
