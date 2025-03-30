@@ -49,7 +49,10 @@ export const Experience = defineDocumentType(() => ({
 }));
 
 const rehypePrettyCodeOptions: Options = {
-  theme: "dracula",
+  theme: {
+    dark: "catppuccin-mocha",
+    light: "catppuccin-latte",
+  },
   keepBackground: false,
 };
 
@@ -70,9 +73,7 @@ export default makeSource({
       content = content.replace(/ with \{.*?\}/g, "");
 
       fs.writeFileSync(filePath, content, "utf-8");
-      console.log(
-        `Patched ${filePath} after Contentlayer generation.`,
-      );
+      console.log(`Patched ${filePath} after Contentlayer generation.`);
     }
   },
 });
