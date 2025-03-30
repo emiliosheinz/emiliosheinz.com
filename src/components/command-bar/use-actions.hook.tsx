@@ -89,6 +89,13 @@ export function useActions(): Action[] {
       perform: () => router.push("/videos"),
       icon: <VideoIcon className="w-5 h-5 text-accent-foreground" />,
     },
+    {
+      id: "link",
+      name: "Links",
+      keywords: "links",
+      perform: () => router.push("/links"),
+      icon: <LinkIcon className="w-5 h-5 text-accent-foreground" />,
+    },
   ].map((action) => ({ ...action, section: "Go to" }));
 
   return [...goToActions, ...socialMediaActions, ...utilActions];

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function BlogPostsPage() {
   return (
-    <div className="flex flex-col gap-8 pt-14">
+    <main className="flex flex-col gap-8 pt-14">
       <h1 className="font-bold text-4xl sm:text-5xl mb-2 sm:mb-5">
         Blog posts
       </h1>
@@ -17,6 +17,6 @@ export default function BlogPostsPage() {
           <Card key={post.title} {...post} className="w-full sm:w-full" />
         ))}
       </div>
-    </div>
+    </main>
   );
 }

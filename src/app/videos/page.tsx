@@ -13,7 +13,7 @@ export default async function YouTubeVideosPage() {
   const { videos } = await getYouTubeVideos();
 
   return (
-    <div className="flex flex-col gap-8 pt-14">
+    <main className="flex flex-col gap-8 pt-14">
       <h1 className="font-bold text-4xl sm:text-5xl mb-2 sm:mb-5">
         YouTube videos
       </h1>
@@ -29,6 +29,6 @@ export default async function YouTubeVideosPage() {
           />
         ))}
       </div>
-    </div>
+    </main>
   );
 }

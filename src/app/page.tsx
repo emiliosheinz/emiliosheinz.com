@@ -40,71 +40,8 @@ export default async function HomePage() {
             </span>
           </p>
           <CommandBarTriggerFull className="-ml-4" />
-
         </div>
       </div>
-      {/* <Section title="Experience" id="experience"> */}
-      {/*   <ExperienceCard */}
-      {/*     {...currentExperience} */}
-      {/*     description={currentExperience.body} */}
-      {/*   /> */}
-      {/*   <Link label="see my full experience history" href="/experiences" /> */}
-      {/* </Section> */}
-      {/**/}
-      {/* <Section title="Blog posts" id="blog"> */}
-      {/*   <Slider.Root> */}
-      {/*     {getLastFivePosts().map(({ title, url, image, description }) => ( */}
-      {/*       <Slider.Item key={title}> */}
-      {/*         <Card */}
-      {/*           url={url} */}
-      {/*           image={image} */}
-      {/*           title={title} */}
-      {/*           description={description} */}
-      {/*         /> */}
-      {/*       </Slider.Item> */}
-      {/*     ))} */}
-      {/*   </Slider.Root> */}
-      {/*   <Link label="see all posts" href="/posts" /> */}
-      {/* </Section> */}
-      {/**/}
-      {/* <Section title="Videos" id="videos"> */}
-      {/*   <Slider.Root> */}
-      {/*     {videos.map(({ id, title, description, thumbnail }) => ( */}
-      {/*       <Slider.Item key={id}> */}
-      {/*         <Card */}
-      {/*           title={title} */}
-      {/*           image={thumbnail} */}
-      {/*           description={description} */}
-      {/*           url={`https://www.youtube.com/watch?v=${id}`} */}
-      {/*         /> */}
-      {/*       </Slider.Item> */}
-      {/*     ))} */}
-      {/*   </Slider.Root> */}
-      {/*   <Link label="see all videos" href="/videos" /> */}
-      {/* </Section> */}
-      {/**/}
-      {/* <Section title="Contact me" id="contact"> */}
-      {/*   <p className="text-xl sm:text-2xl max-w-3xl"> */}
-      {/*     {`I'm always open for a chat!`} */}
-      {/*     <br /> */}
-      {/*     <br /> */}
-      {/*     Send me an email at{" "} */}
-      {/*     <a */}
-      {/*       className="underline underline-offset-4" */}
-      {/*       href="mailto:emiliosheinz@gmail.com" */}
-      {/*     > */}
-      {/*       emiliosheinz@gmail.com */}
-      {/*     </a>{" "} */}
-      {/*     or reach me out on social media. */}
-      {/*   </p> */}
-      {/*   <div className="flex space-x-8"> */}
-      {/*     {socialMedias.map(({ Icon, url, name }) => ( */}
-      {/*       <a target="_blank" key={name} href={url}> */}
-      {/*         <Icon className="w-6 h-6 sm:w-8 sm:h-8 hover:text-dodger-blue hover:cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:scale-105" /> */}
-      {/*       </a> */}
-      {/*     ))} */}
-      {/*   </div> */}
-      {/* </Section> */}
     </main>
   );
 }

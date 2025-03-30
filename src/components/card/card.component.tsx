@@ -2,7 +2,6 @@ import { CardProps } from "./card.types";
 import { Image } from "../image";
 import { classNames } from "~/utils/css.utils";
 import Link from "next/link";
-import { ArrowRightIcon } from "lucide-react";
 
 export function Card({ title, description, url, image, className }: CardProps) {
   return (

@@ -15,4 +15,8 @@ export const headerLinks = [
     label: "Videos",
     href: "/videos",
   },
+  {
+    label: "Links",
+    href: "/links",
+  },
 ];
