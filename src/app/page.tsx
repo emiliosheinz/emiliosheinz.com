@@ -25,14 +25,24 @@ export default async function HomePage() {
           </h1>
           <p className="text-lg sm:text-xl lg:max-w-2xl font-extralight leading-8 text-foreground/75">
             I&apos;m an experienced{" "}
-            <span className="font-normal text-foreground">Software Engineer</span>{" "}
-            with a B.Sc. degree in{" "}
-            <span className="font-normal text-foreground">Computer Science</span>, I
-            have been building applications that are daily accessed by thousands
-            of users for over{" "}
             <span className="font-normal text-foreground">
-              {new Date().getFullYear() - 2019} years.
+              Full-stack Software Engineer
+            </span>{" "}
+            with a B.Sc. degree in{" "}
+            <span className="font-normal text-foreground">
+              Computer Science.{" "}
             </span>
+            With over{" "}
+            <span className="font-normal text-foreground">
+              {new Date().getFullYear() - 2019} years
+            </span>{" "}
+            of experience, I build{" "}
+            <span className="font-normal text-foreground">scalable</span>{" "}
+            applications that prioritize and enhance the{" "}
+            <span className="font-normal text-foreground">
+              end-user experience
+            </span>
+            .
             <br />
             <br />
             <span className="text-foreground">
