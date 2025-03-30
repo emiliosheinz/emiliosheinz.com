@@ -241,19 +241,17 @@
       }
     }
 
-    code[data-theme*=" "],
-    code[data-theme*=" "] span {
+    code[data-theme],
+    code[data-theme] span {
       color: var(--shiki-light);
     }
 
     &:is(.dark *) {
-      code[data-theme*=" "],
-      code[data-theme*=" "] span {
+      code[data-theme],
+      code[data-theme] span {
         color: var(--shiki-dark);
       }
     }
-
-    /* } */
 
     pre::-webkit-scrollbar {
       display: none;
