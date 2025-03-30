@@ -1,13 +1,14 @@
 import { Action } from "kbar";
-import { useRouter } from "next/navigation";
 import {
-  HiOutlineAtSymbol,
-  HiOutlineBookOpen,
-  HiOutlineCodeBracket,
-  HiOutlineHome,
-  HiOutlineLightBulb,
-  HiOutlineLink,
-} from "react-icons/hi2";
+  AtSignIcon,
+  BookOpenIcon,
+  CodeIcon,
+  HomeIcon,
+  LightbulbIcon,
+  LinkIcon,
+  VideoIcon,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 import { socialMedias } from "~/data/social-medias";
 import { notify } from "~/utils/toast.utils";
 
@@ -23,7 +24,7 @@ export function useActions(): Action[] {
         navigator.clipboard.writeText(window.location.href);
         notify.success("URL copied to clipboard");
       },
-      icon: <HiOutlineLink className="w-5 h-5 text-accent-foreground" />,
+      icon: <LinkIcon className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "source-code",
@@ -35,7 +36,7 @@ export function useActions(): Action[] {
           "_blank",
         );
       },
-      icon: <HiOutlineCodeBracket className="w-5 h-5 text-accent-foreground" />,
+      icon: <CodeIcon className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "email",
@@ -44,7 +45,7 @@ export function useActions(): Action[] {
       perform: () => {
         window.open("mailto:emiliosheinz@gmail.com", "_blank");
       },
-      icon: <HiOutlineAtSymbol className="w-5 h-5 text-accent-foreground" />,
+      icon: <AtSignIcon className="w-5 h-5 text-accent-foreground" />,
     },
   ].map((action) => ({ ...action, section: "Util" }));
 
@@ -65,21 +66,28 @@ export function useActions(): Action[] {
       name: "Home",
       keywords: "home page start initial",
       perform: () => router.push("/"),
-      icon: <HiOutlineHome className="w-5 h-5 text-accent-foreground" />,
+      icon: <HomeIcon className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "experience",
       name: "Experience",
       keywords: "experience work jobs",
       perform: () => router.push("/experiences"),
-      icon: <HiOutlineLightBulb className="w-5 h-5 text-accent-foreground" />,
+      icon: <LightbulbIcon className="w-5 h-5 text-accent-foreground" />,
     },
     {
       id: "blog-posts",
       name: "Blog Posts",
       keywords: "blog posts articles",
       perform: () => router.push("/posts"),
-      icon: <HiOutlineBookOpen className="w-5 h-5 text-accent-foreground" />,
+      icon: <BookOpenIcon className="w-5 h-5 text-accent-foreground" />,
+    },
+    {
+      id: "youtube-videos",
+      name: "YouTube Videos",
+      keywords: "videos yotube channel",
+      perform: () => router.push("/videos"),
+      icon: <VideoIcon className="w-5 h-5 text-accent-foreground" />,
     },
   ].map((action) => ({ ...action, section: "Go to" }));
 

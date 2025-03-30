@@ -6,6 +6,7 @@ import { Card } from "~/components/card";
 import { Section } from "~/components/section";
 import { Slider } from "~/components/slider";
 import { getPostBySlug, getRandomPosts, posts } from "~/content/posts";
+import { useRouter } from "next/router";
 
 type PostPageProps = {
   params: Promise<{
@@ -50,7 +51,6 @@ export default async function PostPage(props: PostPageProps) {
   const params = await props.params;
   const post = getPostBySlug(params.slug);
 
-  /** TODO: add post not found handling */
   if (!post) {
     notFound();
   }
