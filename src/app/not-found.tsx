@@ -6,8 +6,8 @@ export default function NotFound() {
       <div className="flex flex-col text-center items-center px-4 space-y-4">
         <Image
           src="/images/void.png"
-          width={280}
-          height={280}
+          width={300}
+          height={300}
           className="rounded-full"
           alt="Pixel art of a purple void with a black hole in the middle"
         />
