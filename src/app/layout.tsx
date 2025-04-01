@@ -19,7 +19,7 @@ const urbanist = Urbanist({
 
 const title = "Emilio Heinzmann"
 const ogDescription =
-  "As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.";
+  "I'm an experienced Full-stack Software Engineer with a B.Sc. degree in Computer Science. With over 6 years of experience, I build scalable applications that prioritize and enhance the end-user experience. I bring ideas to life. I turn coffee into code.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://emiliosheinz.com"),
@@ -62,8 +62,8 @@ function CustomToaster() {
       position="bottom-center"
       toastOptions={{
         style: {
-          backgroundColor: "#1A1A1A",
-          color: "#FFFFFF",
+          backgroundColor: "var(--accent)",
+          color: "var(--foreground)",
         },
       }}
     />

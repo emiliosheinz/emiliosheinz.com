@@ -47,7 +47,7 @@ export default async function HomePage() {
             <br />
             <br />
             <span className="text-foreground">
-              I bring ideas to life 🧠, I turn coffee into code ☕️
+              I bring ideas to life 🧠. I turn coffee into code ☕️
             </span>
           </p>
           <CommandBarTriggerFull className="-ml-4" />
