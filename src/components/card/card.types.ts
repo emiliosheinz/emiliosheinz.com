@@ -1,3 +1,5 @@
+import { HTMLAttributeAnchorTarget } from "react";
+
 export type CardProps = {
   title: string;
   description: string;
@@ -5,4 +7,5 @@ export type CardProps = {
   image: string;
   className?: string;
   priority?: boolean;
+  target?: HTMLAttributeAnchorTarget;
 };

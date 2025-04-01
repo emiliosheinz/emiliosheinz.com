@@ -6,7 +6,7 @@ export const revalidate = 604800;
 
 export default async function HomePage() {
   return (
-    <main className="flex flex-col space-y-16 sm:space-y-24 self-center">
+    <main className="flex flex-col space-y-16 mt-10 sm:space-y-24 sm:mt-0 self-center">
       <div className="flex items-center flex-col lg:flex-row" id="about">
         <Image
           priority

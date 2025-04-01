@@ -10,6 +10,7 @@ export function Card({
   image,
   className,
   priority,
+  target,
 }: CardProps) {
   return (
     <div
@@ -34,6 +35,7 @@ export function Card({
       </div>
       <Link
         href={url}
+        target={target}
         className="group relative flex flex-1 flex-col justify-between p-3 sm:p-5 gap-5 transition-colors bg-background hover:bg-accent/60"
       >
         <h5 className="font-bold text-xl line-clamp-3">{title}</h5>

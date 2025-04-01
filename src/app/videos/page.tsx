@@ -25,6 +25,7 @@ export default async function YouTubeVideosPage() {
             description={video.description}
             image={video.thumbnail}
             priority={index === 0}
+            target='_blank'
             className="w-full sm:w-full"
             url={`https://www.youtube.com/watch?v=${video.id}`}
           />
