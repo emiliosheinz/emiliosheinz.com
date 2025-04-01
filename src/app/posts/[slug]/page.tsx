@@ -3,10 +3,9 @@ import { notFound } from "next/navigation";
 import { Image } from "~/components/image";
 import { MDXContent } from "~/components/mdx-content";
 import { Card } from "~/components/card";
-import { Section } from "~/components/section";
 import { Slider } from "~/components/slider";
 import { getPostBySlug, getRandomPosts, posts } from "~/content/posts";
-import { useRouter } from "next/router";
+import { Section } from "~/components/section";
 
 type PostPageProps = {
   params: Promise<{
