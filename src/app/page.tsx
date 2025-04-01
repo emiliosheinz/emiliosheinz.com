@@ -1,10 +1,7 @@
 import { Image } from "~/components/image";
 import { CommandBarTriggerFull } from "~/components/command-bar";
 
-/** Revalidate the page once per week */
-export const revalidate = 604800;
-
-export default async function HomePage() {
+export default function HomePage() {
   return (
     <main className="flex flex-col space-y-16 mt-10 sm:space-y-24 sm:mt-0 self-center">
       <div className="flex items-center flex-col lg:flex-row" id="about">
