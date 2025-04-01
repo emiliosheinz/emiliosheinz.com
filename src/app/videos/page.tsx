@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Card } from "~/components/card/card.component";
+import { Card } from "~/components/card";
 import { getYouTubeVideos } from "~/utils/youtube.utils";
 
 /** Revalidate the page once per week */

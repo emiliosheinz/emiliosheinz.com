@@ -1977,6 +1977,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@plaiceholder/next@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@plaiceholder/next@npm:3.0.0"
+  peerDependencies:
+    next: ">= 10.0.0"
+    plaiceholder: ">=3.0.0"
+    sharp: ">= 0.30.6"
+  checksum: 10c0/94f7125b288914f0633e45da43888a596e287fdff3b7a4fd72361e669613188a383eb53fcfd52fbae089da3544d9d6e1ebb5b37d95346a467a92651e5fecfb98
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -4771,6 +4782,7 @@ __metadata:
   resolution: "emiliosheinz.com@workspace:."
   dependencies:
     "@faker-js/faker": "npm:^9.6.0"
+    "@plaiceholder/next": "npm:^3.0.0"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.6"
     "@radix-ui/react-navigation-menu": "npm:^1.2.5"
     "@radix-ui/react-slot": "npm:^1.1.2"
@@ -4802,6 +4814,7 @@ __metadata:
     next: "npm:15.2.3"
     next-contentlayer2: "npm:0.5.4"
     next-themes: "npm:^0.4.6"
+    plaiceholder: "npm:^3.0.0"
     postcss: "npm:8.5.3"
     prettier: "npm:3.5.3"
     react: "npm:19.0.0"
@@ -9606,6 +9619,15 @@ __metadata:
   dependencies:
     find-up: "npm:^4.0.0"
   checksum: 10c0/c56bda7769e04907a88423feb320babaed0711af8c436ce3e56763ab1021ba107c7b0cafb11cde7529f669cfc22bffcaebffb573645cbd63842ea9fb17cd7728
+  languageName: node
+  linkType: hard
+
+"plaiceholder@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "plaiceholder@npm:3.0.0"
+  peerDependencies:
+    sharp: ">= 0.30.6"
+  checksum: 10c0/b85879ac06f89f6229786237a9f64c920509d6cda7b0dfb8f984edb5c576b170c08bf401ab7e2be428694fd8978791e2ee8458d2cefa41f67f8c5935964a0639
   languageName: node
   linkType: hard
 
