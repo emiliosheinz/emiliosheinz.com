@@ -1,5 +1,5 @@
 import { KBarResults, useMatches } from "kbar";
-import { classNames } from "~/utils/css.utils";
+import { cn } from "~/lib/utils";
 
 export function Results() {
   const { results } = useMatches();
@@ -8,7 +8,7 @@ export function Results() {
     <KBarResults
       items={results}
       onRender={({ item, active }) => {
-        const itemClassNames = classNames(
+        const itemClassNames = cn(
           "px-5 py-3 flex gap-5 items-center rounded-sm",
           active ? "bg-accent/30" : "bg-transparent",
         );

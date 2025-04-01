@@ -1,12 +1,12 @@
 import { CardProps } from "./card.types";
 import { Image } from "../image";
-import { classNames } from "~/utils/css.utils";
 import Link from "next/link";
+import { cn } from "~/lib/utils";
 
 export function Card({ title, description, url, image, className }: CardProps) {
   return (
     <div
-      className={classNames(
+      className={cn(
         "flex flex-col bg-background rounded-lg w-72 sm:w-96 overflow-hidden border border-ring/35",
         className,
       )}
