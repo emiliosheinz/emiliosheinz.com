@@ -84,8 +84,9 @@ describe("ExperienceCard", () => {
     const props = makeExperienceCardProps();
     render(<ExperienceCard {...props} />);
 
-    const skillsEl = screen.getByText(`Skills: ${props.skills.join(", ")}`);
-
-    expect(skillsEl).toBeVisible();
+    props.skills.forEach((skill) => {
+      const skillEl = screen.getByText(skill);
+      expect(skillEl).toBeVisible();
+    })
   });
 });
