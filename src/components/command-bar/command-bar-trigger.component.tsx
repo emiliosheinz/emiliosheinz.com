@@ -3,7 +3,6 @@
 import { useKBar } from "kbar";
 import { Command, ArrowRight } from "lucide-react"
 import { useEffect, useState } from "react";
-import { FaArrowRightLong } from "react-icons/fa6";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
 
