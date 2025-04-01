@@ -1,18 +1,33 @@
-import { ImageProps } from "next/image";
-import { Image as CustomImage } from "~/components/image";
+import NextImage, { ImageProps } from "next/image";
+import { CSSProperties, memo } from "react";
 
-export function Image(props: ImageProps) {
+const removeUndefinedKeys = (object: Record<string, unknown>) =>
+  Object.fromEntries(Object.entries(object).filter(([, v]) => v !== undefined));
+
+function BaseImage(props: ImageProps) {
+  const { width, height, style, ...otherProps } = props;
+
+  const customImageStyle: CSSProperties = {
+    ...removeUndefinedKeys({ width, height }),
+    objectFit: "contain",
+    ...style,
+  };
+
   return (
     <div className="relative w-full aspect-video">
-      <CustomImage
+      <NextImage
         fill
-        style={{ objectFit: "contain" }}
+        width={width}
+        height={height}
+        style={customImageStyle}
         sizes={`
           (min-width: 1024px) 1024px,
           100vw
         `}
-        {...props}
+        {...otherProps}
       />
     </div>
   );
 }
+
+export const Image = memo(BaseImage);

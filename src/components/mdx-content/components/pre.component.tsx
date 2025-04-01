@@ -1,5 +1,6 @@
+import { CopyIcon } from "lucide-react";
 import { ReactElement, cloneElement, useRef, type JSX } from "react";
-import { FaCopy } from "react-icons/fa6";
+import { Button } from "~/components/ui/button";
 import { notify } from "~/utils/toast.utils";
 
 type PreProps = JSX.IntrinsicElements["pre"];
@@ -22,13 +23,14 @@ export function Pre({ children, ...props }: PreProps) {
         {cloneElement(children as ReactElement<{ ref: unknown }>, {
           ref: codeRef,
         })}
-        <button
+        <Button
+          variant="ghost"
           onClick={copyToClipboard}
           aria-label="Copy to clipboard"
-          className="absolute top-0 right-0 p-3 opacity-50 hover:opacity-100 transition-opacity"
+          className="absolute top-2 right-2 transition-colors text-foreground/65"
         >
-          <FaCopy />
-        </button>
+          <CopyIcon />
+        </Button>
       </pre>
     </div>
   );

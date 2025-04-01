@@ -1,17 +1,23 @@
-// TODO - emiliosheinz: Improve the look and feel of this page
+import { Image } from "~/components/image";
 
 export default function NotFound() {
   return (
-    <div className="flex items-center justify-center text-white">
-      <div className="text-center px-4 space-y-8">
-        <h1 className="font-bold text-5xl sm:text-6xl">
-          404
-        </h1>
-        <p className="text-lg sm:text-xl max-w-md">
-          Oops! This page has vanished into the digital void. Go back to safety using the header.
+    <div className="flex items-center justify-center text-foreground w-full">
+      <div className="flex flex-col text-center items-center px-4 space-y-4">
+        <Image
+          src="/images/void.png"
+          width={300}
+          height={300}
+          className="rounded-full"
+          alt="Pixel art of a purple void with a black hole in the middle"
+        />
+        <p className="text-lg sm:text-xl max-w-md text-foreground/75">
+          Oops! This page has <span className="text-foreground">vanished</span>{" "}
+          into the <span className="text-foreground">digital void</span>. Go
+          back to <span className="text-foreground">safety</span> using the{" "}
+          <span className="text-foreground">header</span>.
         </p>
       </div>
     </div>
   );
 }
-

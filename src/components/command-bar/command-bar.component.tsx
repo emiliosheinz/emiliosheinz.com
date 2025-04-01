@@ -21,10 +21,13 @@ export function CommandBar(props: CommandBarProps) {
   const actions = useActions();
 
   return (
-    <KBarProvider actions={actions}>
+    <KBarProvider
+      actions={actions}
+      options={{ disableScrollbarManagement: true }}
+    >
       <KBarPortal>
-        <KBarPositioner className="z-40 bg-black bg-opacity-80 backdrop-blur-xs">
-          <KBarAnimator className="w-full max-w-xl rounded-md bg-cod-gray-500 bg-opacity-80 backdrop-blur-xl">
+        <KBarPositioner className="z-40 bg-background/80 backdrop-blur-xs">
+          <KBarAnimator className="w-full max-w-xl rounded-md overflow-hidden bg-background/80 backdrop-blur-xl shadow-md">
             <KBarSearch className="w-full h-12 p-5 bg-transparent rounded-md outline-hidden" />
             <Results />
           </KBarAnimator>

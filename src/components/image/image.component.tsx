@@ -1,47 +1,58 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
+import fs from "node:fs/promises";
+import { getPlaiceholder } from "plaiceholder";
 
 import NextImage, { ImageProps } from "next/image";
-
-import { stringToBase64 } from "~/utils/conversion.utils";
-
-const shimmer = `
-<svg version="1.1" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100%" height="100%" fill="#262626" />
-</svg>`;
 
 const MINIMUM_IMAGE_SIZE_WITH_BLUR = 40;
 
 const removeUndefinedKeys = (object: Record<string, unknown>) =>
   Object.fromEntries(Object.entries(object).filter(([, v]) => v !== undefined));
 
-function BaseImage(props: ImageProps) {
+const getImageBuffer = async (src: string) => {
+  const isExternal = src.startsWith("http");
+
+  if (isExternal) {
+    const response = await fetch(src);
+    return Buffer.from(await response.arrayBuffer());
+  }
+
+  return fs.readFile(`./public${src}`);
+};
+
+async function BaseImage(props: ImageProps) {
   const { width, height, style, ...otherProps } = props;
 
-  const blurProps: Pick<ImageProps, "placeholder" | "blurDataURL"> =
-    useMemo(() => {
-      if (width && Number(width) < MINIMUM_IMAGE_SIZE_WITH_BLUR) return {};
+  const customImageStyle = {
+    ...removeUndefinedKeys({ width, height }),
+    ...style,
+  };
 
-      if (height && Number(height) < MINIMUM_IMAGE_SIZE_WITH_BLUR) return {};
+  const getBlurProps = async (): Promise<
+    Pick<ImageProps, "placeholder" | "blurDataURL">
+  > => {
+    if (width && Number(width) < MINIMUM_IMAGE_SIZE_WITH_BLUR) return {};
 
-      return {
-        placeholder: "blur",
-        blurDataURL: `data:image/svg+xml;base64,${stringToBase64(shimmer)}`,
-      };
-    }, [width, height]);
+    if (height && Number(height) < MINIMUM_IMAGE_SIZE_WITH_BLUR) return {};
 
-  const customImageStyle = useMemo(() => {
-    return {
-      ...removeUndefinedKeys({ width, height }),
-      ...style,
-    };
-  }, [width, height, style]);
+    if (typeof props.src !== "string") return { placeholder: "blur" };
+
+    try {
+      const buffer = await getImageBuffer(props.src);
+      const { base64 } = await getPlaiceholder(buffer, { saturation: 1 });
+      return { placeholder: "blur", blurDataURL: base64 };
+    } catch (error) {
+      console.error("Error generating blur data URL:", error);
+      return {};
+    }
+  };
 
   return (
     <NextImage
       width={width}
       height={height}
       style={customImageStyle}
-      {...blurProps}
+      {...await getBlurProps()}
       {...otherProps}
     />
   );

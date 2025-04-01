@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { YouTubeVideoCard } from "~/components/card/card.component";
+import { Card } from "~/components/card";
 import { getYouTubeVideos } from "~/utils/youtube.utils";
 
 /** Revalidate the page once per week */
@@ -13,22 +13,24 @@ export default async function YouTubeVideosPage() {
   const { videos } = await getYouTubeVideos();
 
   return (
-    <div className="flex flex-col gap-8">
+    <main className="flex flex-col gap-8 pt-14">
       <h1 className="font-bold text-4xl sm:text-5xl mb-2 sm:mb-5">
         YouTube videos
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {videos.map((video) => (
-          <YouTubeVideoCard
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {videos.map((video, index) => (
+          <Card
             key={video.id}
             title={video.title}
             description={video.description}
             image={video.thumbnail}
+            priority={index === 0}
+            target='_blank'
             className="w-full sm:w-full"
             url={`https://www.youtube.com/watch?v=${video.id}`}
           />
         ))}
       </div>
-    </div>
+    </main>
   );
 }

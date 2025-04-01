@@ -5,20 +5,21 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { Roboto_Mono } from "next/font/google";
+import { Urbanist } from "next/font/google";
 import { Header } from "~/components/header";
-import { classNames } from "~/utils/css.utils";
 import { CommandBar } from "~/components/command-bar";
+import { ThemeProvider } from "~/components/theme-provider";
+import { cn } from "~/lib/utils";
 
-const robotoMono = Roboto_Mono({
+const urbanist = Urbanist({
   subsets: ["latin"],
   display: "swap",
   preload: true,
 });
 
-const title = "Emilio Heinzmann";
+const title = "Emilio Heinzmann"
 const ogDescription =
-  "As an experienced Software Engineer graduated with a B.Sc. degree in Computer Science, I have been working on the development of applications that are daily accessed by thousands of users since 2019. I bring ideas to life through lines of code.";
+  "I'm an experienced Full-stack Software Engineer with a B.Sc. degree in Computer Science. With over 6 years of experience, I build scalable applications that prioritize and enhance the end-user experience. I bring ideas to life. I turn coffee into code.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://emiliosheinz.com"),
@@ -61,8 +62,8 @@ function CustomToaster() {
       position="bottom-center"
       toastOptions={{
         style: {
-          backgroundColor: "#1A1A1A",
-          color: "#FFFFFF",
+          backgroundColor: "var(--accent)",
+          color: "var(--foreground)",
         },
       }}
     />
@@ -71,22 +72,18 @@ function CustomToaster() {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html
-      lang="en"
-      className={classNames(
-        robotoMono.className,
-        "bg-cod-gray-500 text-white scroll-smooth",
-      )}
-    >
-      <CommandBar>
-        <body className="pb-10 pt-32 lg:pt-48 px-5 max-w-6xl m-auto">
-          <Header />
-          {children}
-          <CustomToaster />
-          <Analytics />
-          <SpeedInsights />
-        </body>
-      </CommandBar>
+    <html suppressHydrationWarning lang="en" className={cn(urbanist.className, 'h-full bg-background')}>
+      <body className="pb-10 pt-16 px-5 max-w-6xl m-auto min-h-full flex">
+        <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="system">
+          <CommandBar>
+            <Header />
+            {children}
+            <CustomToaster />
+            <Analytics />
+            <SpeedInsights />
+          </CommandBar>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

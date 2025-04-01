@@ -1,10 +1,16 @@
 "use client";
 
 import { useKBar } from "kbar";
+import { Command, ArrowRight } from "lucide-react"
 import { useEffect, useState } from "react";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { Button } from "../ui/button";
+import { cn } from "~/lib/utils";
 
-export function CommandBarTriggerFull() {
+type CommandBarTriggerProps = {
+  className?: string;
+};
+
+export function CommandBarTriggerFull({ className }: CommandBarTriggerProps) {
   const { query } = useKBar();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -36,22 +42,25 @@ export function CommandBarTriggerFull() {
   };
 
   if (!isMounted) {
-    return (
-      <div className="h-10 w-64 bg-cod-gray-300 animate-pulse rounded-md" />
-    );
+    return <div className="h-10 w-64 bg-accent animate-pulse rounded-md" />;
   }
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="lg"
       onClick={query.toggle}
-      className="px-4 h-10 rounded-sm border bg-white/0 border-white/0 hover:bg-white/5 hover:border-white/20 transition-all ease-in-out"
+      className={cn(
+        "cursor-pointer group text-base has-[>svg]:px-4",
+        className,
+      )}
     >
       {renderLabel()}
-      <FaArrowRightLong
+      <ArrowRight
         data-testid="arrow-right-icon"
-        className="inline transition-all ease-in-out group-hover:translate-x-1 group-hover:text-dodger-blue ml-3"
+        className="inline transition-[margin,scale] ease-in-out group-hover:ml-2 group-hover:scale-110"
       />
-    </button>
+    </Button>
   );
 }
 
@@ -59,12 +68,14 @@ export function CommandBarTriggerLite() {
   const { query } = useKBar();
 
   return (
-    <button
+    <Button
+      size="icon"
+      variant="ghost"
       onClick={query.toggle}
       title="Open command bar"
-      className="px-2.5 rounded-sm border bg-white/0 border-white/0 hover:bg-white/5 hover:border-white/20 transition-all ease-in-out"
+      className="cursor-pointer"
     >
-      <span className="text-3xl text-white">⌘</span>
-    </button>
+      <Command />
+    </Button>
   );
 }
