@@ -41,6 +41,7 @@
     "react-hot-toast": "^2.5.2",
     "rehype-pretty-code": "^0.14.1",
     "server-only": "^0.0.1",
+    "sharp": "^0.33.5",
     "shiki": "^3.2.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.15",
@@ -61,7 +62,7 @@
     "jiti": "^2.4.2",
     "prettier": "3.5.3"
   },
-  "packageManager": "yarn@4.7.0",
+  "packageManager": "yarn@4.8.1",
   "resolutions": {
     "@types/react": "19.0.12",
     "@types/react-dom": "19.0.4"

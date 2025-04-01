@@ -5,10 +5,6 @@ import { usePathname } from "next/navigation";
 
 const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>;
 
-let mockPreviousRoute: string | undefined;
-jest.mock("~/hooks/usePreviousRoute", () => ({
-  usePreviousRoute: jest.fn(() => mockPreviousRoute),
-}));
 jest.mock("~/components/command-bar", () => ({
   CommandBarTriggerLite: () => <div>CommandBarTriggerLite</div>,
 }));
