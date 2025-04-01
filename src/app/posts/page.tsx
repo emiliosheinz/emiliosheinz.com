@@ -13,8 +13,13 @@ export default function BlogPostsPage() {
         Blog posts
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {posts.map((post) => (
-          <Card key={post.title} {...post} className="w-full sm:w-full" />
+        {posts.map((post, index) => (
+          <Card
+            {...post}
+            key={post.title}
+            priority={index === 0}
+            className="w-full sm:w-full"
+          />
         ))}
       </div>
     </main>

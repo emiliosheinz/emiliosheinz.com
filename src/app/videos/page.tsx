@@ -18,12 +18,13 @@ export default async function YouTubeVideosPage() {
         YouTube videos
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {videos.map((video) => (
+        {videos.map((video, index) => (
           <Card
             key={video.id}
             title={video.title}
             description={video.description}
             image={video.thumbnail}
+            priority={index === 0}
             className="w-full sm:w-full"
             url={`https://www.youtube.com/watch?v=${video.id}`}
           />

@@ -4,4 +4,5 @@ export type CardProps = {
   url: string;
   image: string;
   className?: string;
+  priority?: boolean;
 };

@@ -9,6 +9,7 @@ export default async function HomePage() {
     <main className="flex flex-col space-y-16 sm:space-y-24 self-center">
       <div className="flex items-center flex-col lg:flex-row" id="about">
         <Image
+          priority
           src="/images/profile.png"
           width={280}
           height={280}

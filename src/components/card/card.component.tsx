@@ -3,7 +3,14 @@ import { Image } from "../image";
 import Link from "next/link";
 import { cn } from "~/lib/utils";
 
-export function Card({ title, description, url, image, className }: CardProps) {
+export function Card({
+  title,
+  description,
+  url,
+  image,
+  className,
+  priority,
+}: CardProps) {
   return (
     <div
       className={cn(
@@ -16,6 +23,7 @@ export function Card({ title, description, url, image, className }: CardProps) {
           fill
           alt={title}
           src={image}
+          priority={priority}
           style={{ objectFit: "cover" }}
           sizes={`
             (min-width: 1024px) 1024px,
