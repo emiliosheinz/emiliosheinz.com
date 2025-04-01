@@ -40,11 +40,7 @@ async function BaseImage(props: ImageProps) {
     try {
       const buffer = await getImageBuffer(props.src);
       const { base64 } = await getPlaiceholder(buffer, { saturation: 1 });
-
-      return {
-        placeholder: "blur",
-        blurDataURL: base64,
-      };
+      return { placeholder: "blur", blurDataURL: base64 };
     } catch (error) {
       console.error("Error generating blur data URL:", error);
       return {};
