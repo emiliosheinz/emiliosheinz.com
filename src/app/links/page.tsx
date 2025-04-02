@@ -1,4 +1,4 @@
-import { MailIcon } from "lucide-react";
+import { MailIcon, PaperclipIcon } from "lucide-react";
 import { Image } from "~/components/image";
 import { socialMedias } from "~/data/social-medias";
 
@@ -36,6 +36,12 @@ export default async function LinksPage() {
           <div className="flex flex-row items-center gap-5 border bg-accent/75 px-5 py-3 rounded-lg mt-4 transition-transform hover:scale-105">
             <MailIcon className="w-5 h-5" />
             <p className="text-base">Send me an email</p>
+          </div>
+        </a>
+        <a href="/files/resume.pdf" target="_blank">
+          <div className="flex flex-row items-center gap-5 border bg-accent/75 px-5 py-3 rounded-lg mt-4 transition-transform hover:scale-105">
+            <PaperclipIcon className="w-5 h-5" />
+            <p className="text-base">Check out my resume</p>
           </div>
         </a>
         {socialMedias.map(({ url, Icon, name }) => (
