@@ -23,8 +23,3 @@ cd emiliosheinz.com
 yarn
 yarn dev
 ```
-
-## TODO 
-
-- [ ] Improve SEO, Server Side Rendering and Performance
-- [ ] Go through the code and improve it where necessary
