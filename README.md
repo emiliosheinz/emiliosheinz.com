@@ -6,7 +6,7 @@ This repository is the home of all the code for my personal portfolio website. H
 
 ## :computer: Preview
 
-<img width="1470" alt="Application preview" src="https://github.com/emiliosheinz/emiliosheinz.com/assets/103655828/6d23f93b-5257-4541-a92e-f4a1d6878c26">
+![Screenshot 2025-04-04 at 21 45 07](https://github.com/user-attachments/assets/96e56030-6405-4ea3-ab7e-0ea46d283c51)
 
 ## :fire: Used technologies
 
