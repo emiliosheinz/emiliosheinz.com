@@ -4,6 +4,9 @@ import { withContentlayer } from "next-contentlayer2";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    viewTransition: true,
+  },
   images: {
     // Follows TailwindCSS screens breakpoints
     deviceSizes: [640, 768, 1024, 1280, 1536],

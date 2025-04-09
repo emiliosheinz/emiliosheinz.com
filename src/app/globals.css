@@ -215,7 +215,7 @@
     ul {
       @apply list-disc list-inside;
 
-      > li {
+      >li {
         @apply mb-3;
       }
     }
@@ -223,7 +223,7 @@
     ol {
       @apply list-decimal list-inside;
 
-      > li {
+      >li {
         @apply mb-3;
       }
     }
@@ -247,6 +247,7 @@
     }
 
     &:is(.dark *) {
+
       code[data-theme],
       code[data-theme] span {
         color: var(--shiki-dark);
@@ -260,5 +261,37 @@
 
   kbd {
     @apply rounded-sm bg-background/85 px-2.5 py-1 border border-ring/60;
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    to {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  ::view-transition-old(page) {
+    animation: fade-out 0.3s ease-in-out delay;
+  }
+
+  ::view-transition-new(page) {
+    animation: fade-in 0.3s ease-in-out;
   }
 }

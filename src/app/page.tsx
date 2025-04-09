@@ -3,8 +3,8 @@ import { CommandBarTriggerFull } from "~/components/command-bar";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col space-y-16 mt-10 sm:space-y-24 sm:mt-0 self-center">
-      <div className="flex items-center flex-col lg:flex-row" id="about">
+    <main className="flex justify-center space-y-16 mt-10 sm:space-y-24 sm:mt-0 ">
+      <div className="flex w-full items-center flex-col lg:flex-row">
         <Image
           priority
           src="/images/profile.png"
