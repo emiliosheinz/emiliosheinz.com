@@ -21,12 +21,12 @@ export default function HomePage() {
             </span>
             {`, I'm Emilio.`}
           </h1>
-          <p className="text-lg sm:text-xl lg:max-w-2xl font-extralight leading-8 text-foreground/75">
+          <p className="text-lg sm:text-xl lg:max-w-2xl font-extralight leading-8 text-foreground/75 text-justify">
             I&apos;m an experienced{" "}
             <span className="font-normal text-foreground">
-              Full-stack Software Engineer
+              Software Engineer
             </span>{" "}
-            with a B.Sc. degree in{" "}
+            with a B.Sc. in{" "}
             <span className="font-normal text-foreground">
               Computer Science.{" "}
             </span>
