@@ -19,7 +19,7 @@ const urbanist = Urbanist({
 
 const title = "Emilio Heinzmann"
 const ogDescription =
-  "I'm an experienced Software Engineer with a B.Sc. in Computer Science. With over 6 years of experience, I build scalable applications that prioritize and enhance the end-user experience. I bring ideas to life. I turn coffee into code.";
+  "I'm an experienced Software Engineer with a B.Sc. in Computer Science. With over 7 years of experience, I build scalable applications that prioritize and enhance the end-user experience. I bring ideas to life. I turn coffee into code.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://emiliosheinz.com"),
