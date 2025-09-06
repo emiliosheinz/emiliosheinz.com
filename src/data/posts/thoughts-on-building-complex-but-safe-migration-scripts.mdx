@@ -1,0 +1,139 @@
+---
+type: Post
+title: Thoughts on building complex but safe data migration scripts
+description: Moving or reshaping large datasets can be scary but is sometimes required. When it goes well, no one notices, when it goes wrong, everybody does. The goal isn’t just "make it work", it’s "make it safe to run more than once, observable, and boring to operate".
+publishedAt: 2025-09-05
+---
+
+I recently worked on a migration script that had to touch a relatively complex and big amount of data. This article isn’t a how-to or a code walk-through, it’s actually the handful of things that mattered most while I was building it, the mindset and the guardrails that kept me (and the data) safe throughout the process.
+
+Moving or reshaping large datasets can be scary but is sometimes required. When it goes well, no one notices, when it goes wrong, everybody does. The goal isn’t just "make it work", it’s "make it safe to run more than once, observable, and boring to operate". Think of it like doing maintenance on an airplane: invisible to the passenger, but absolutely critical behind the scenes.
+
+## Dry run or don’t run
+
+A **dry run** is basically a simulation mode: the script shows you exactly what it would do, without actually writing anything. Being able to preview changes lets you sanity-check scale and shape, spot mismatches early (weird counts, unexpected gaps), and build intuition for how long things will run. 
+
+When dealing with large datasets, a good **dry run** will usually output both:
+
+- a sample of the changes that would be applied
+- summary statistics like counts and time estimates 
+
+## Idempotency is key
+
+**Idempotency** means that running the script once or ten times leads to the same final result. That’s a safety net. Things fail: networks have hiccups, containers die, pods get restarted. If your script can be safely rerun without making a mess, you’re in a much better place.
+
+To achieve **idempotency**, you often need to build in checks like: 
+
+- “if this record already exists, skip it”
+- “if this field is already set, don’t change it” 
+
+This might mean adding unique constraints, flags, or timestamps to track what’s been processed.
+
+## Batch everything
+
+**Batch processing** means breaking the job into smaller, more manageable chunks (say 1000 rows at a time). Instead of lifting the entire mountain at once, you carry it out in buckets.
+
+This approach:
+
+- keeps memory and database load under control
+- gives you natural checkpoints
+- makes it easier to recover (if one **batch** fails, you only redo that part)
+
+A common scenario where **batching** becomes crucial is when you're trying to filter database entries by checking if they are in a certain list. If that list is large, doing a single query with a massive `IN` clause will lead to performance issues or even exceed query size limits. Instead, break the list into smaller chunks and process each one in a separate query. 
+
+## Log like future-you depends on it
+
+Good **logging** is your compass. It is the cheapest way to turn the migration from a black box into a clear progress bar with receipts. 
+
+**Log** things like:
+
+- start/finish times 
+- chunk sizes, 
+- counts created/skipped
+- timing
+- memory usage  
+
+Think of it like leaving breadcrumbs in a forest. If something looks off, you know exactly where you’ve been.
+
+## Wrap work in transactions
+
+A **transaction** groups a set of operations so they either all succeed or all fail together. 
+
+For migrations, **transactions** buy you **atomicity** and **safety**. Committing in smaller boundaries means less lock time and simpler recovery if something goes wrong. 
+
+**Transactions** are especially important when your system does not tolerate partial states. If you’re updating multiple related tables, a **transaction** ensures that either all updates happen or none do, keeping your data always consistent.
+
+## Tests aren’t overhead
+
+Write **tests** for the happy path and the awkward edge cases:
+
+- already-migrated data
+- empty sets
+- partial duplicates
+- resume scenarios
+
+**Tests** clarify the rules and catch the “oh, right” cases before production teaches you a painful lesson.
+
+## Lower environments are your playground
+
+Run the whole thing in staging or another **lower environment** first. 
+
+You’ll:
+
+- learn real numbers (counts, durations)
+- uncover quirks you didn’t model
+- refine your **logs** and safety checks. 
+
+No one wants to improvise live with 10M rows.
+
+## Communication & coordination
+
+Migrations aren’t just technical. They often require **coordination** with other teams like infrastructure, product, or even customer support.
+
+Announcing the **migration** ahead of time, scheduling it during the right window, and designating a clear **rollback** owner can make the difference between a smooth rollout and a fire drill. Even a quick Slack message or incident-style channel can align everyone on what’s happening and who to call if things go wrong.
+
+Make sure to always:
+
+- **communicate** openly
+- **communicate** frequently 
+- do not try to hide problems
+
+## Data validation after migration
+
+Testing before running is essential, but **validation** after the migration is just as critical.
+
+Post-migration checks might include:
+
+- comparing row counts
+- verifying checksums or hashes
+- sampling migrated records to confirm correctness
+- manual product testing
+
+This step ensures confidence before you declare success and it helps you catch silent errors that might otherwise slip into production unnoticed.
+
+## Plan for rollbacks
+
+A **rollback** strategy is your parachute. 
+
+Options include:
+
+- reversible writes
+- shadow table
+- a simple and clean feature flag 
+
+If something goes wrong, you’ll want a way out. **Rollbacks** don't have to be perfect, but having something in place means mistakes aren’t catastrophic and will be manageable. 
+
+## Conclusion
+
+The real lesson isn't about the code itself, but about understanding these concepts and knowing when to put the right safety nets in place. 
+
+- **dry runs** gave me visibility
+- **idempotency** gave me confidence
+- **batching** kept things moving
+- **logging/tests** gave me clarity along the way
+- **transactions** and **rollbacks** kept me safe
+- **good communication** kept the team aligned.
+- **validation** after migration gave me certainty.
+
+These things might feel like extra work up front, but they’re exactly what make a big scary migration feel manageable. And honestly, if the whole process ends up being predictable and even a little boring, that’s the best outcome you could have.
+
