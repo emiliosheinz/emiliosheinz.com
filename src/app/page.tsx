@@ -1,5 +1,6 @@
 import { Image } from "~/components/image";
 import { CommandBarTriggerFull } from "~/components/command-bar";
+import { InteractiveCube } from "../features/interactive-cube";
 
 export default function HomePage() {
   return (
@@ -48,6 +49,7 @@ export default function HomePage() {
             </span>
           </p>
           <CommandBarTriggerFull className="-ml-4" />
+          <InteractiveCube />
         </div>
       </div>
     </main>
