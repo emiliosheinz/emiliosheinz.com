@@ -11,6 +11,4 @@ export interface PegatineTextures {
 
 export type PegatineColor = keyof PegatineTextures;
 
-export type FaceName = "U" | "D" | "L" | "R" | "F" | "B" | "M" | "E" | "S";
 
-export type SliceName = "M" | "S" | "E";

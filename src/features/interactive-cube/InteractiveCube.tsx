@@ -7,10 +7,12 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Cube } from "./Cube";
 import { useIsSpacePressed } from "./useIsSpacePressed";
 import { useState } from "react";
+import { createSolvedState } from "./cubeState";
 
 export function InteractiveCube() {
-  const [isFocused, setIsFocused] = useState(false);
-  const isSpacePressed = useIsSpacePressed() || true;
+  const [isFocused, setIsFocused] = useState(true);
+  const isSpacePressed = useIsSpacePressed() || true
+  
 
   const canvas = (
     <Canvas
@@ -26,7 +28,7 @@ export function InteractiveCube() {
       }}
       onDoubleClick={() => setIsFocused(true)}
     >
-      <Cube />
+      <Cube state={createSolvedState()} />
       {isSpacePressed && (
         <OrbitControls autoRotate={!isFocused} enableZoom={false} />
       )}
