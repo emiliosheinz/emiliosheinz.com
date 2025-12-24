@@ -8,6 +8,7 @@ import { Cube } from "./Cube";
 import { useIsSpacePressed } from "./useIsSpacePressed";
 import { useState } from "react";
 import { createSolvedState } from "./cubeState";
+import { applyMove } from "./moves";
 
 export function InteractiveCube() {
   const [isFocused, setIsFocused] = useState(true);

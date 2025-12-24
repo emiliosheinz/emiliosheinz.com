@@ -2,7 +2,18 @@ import { Move, applyMove } from "./moves";
 import { CubeState } from "./cubeState";
 
 const MOVES: Move[] = [
-  "U","U'","U2","R","R'","R2","F","F'","F2","L","L'","L2","D","D'","D2","B","B'","B2",
+  "U",
+  "U'",
+  "R",
+  "R'",
+  "F",
+  "F'",
+  "L",
+  "L'",
+  "D",
+  "D'",
+  "B",
+  "B'",
 ];
 
 export function scramble(state: CubeState, length = 20) {

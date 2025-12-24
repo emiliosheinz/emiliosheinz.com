@@ -5,7 +5,7 @@ export type Sticker = "white" | "yellow" | "red" | "orange" | "green" | "blue";
 export type CubeState = Record<Face, Sticker[]>;
 
 export function createSolvedState(): CubeState {
-  return {
+  const state = {
     U: Array(9).fill("yellow"),
     D: Array(9).fill("white"),
     L: Array(9).fill("red"),
@@ -13,4 +13,6 @@ export function createSolvedState(): CubeState {
     F: Array(9).fill("green"),
     B: Array(9).fill("blue"),
   };
+
+  return state;
 }
