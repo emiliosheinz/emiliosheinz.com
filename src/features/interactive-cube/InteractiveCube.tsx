@@ -10,6 +10,7 @@ import { useState } from "react";
 import { createSolvedState } from "./cubeState";
 
 export function InteractiveCube() {
+  const [cubeState, setCubeState] = useState(createSolvedState());
   const [isFocused, setIsFocused] = useState(true);
   const isSpacePressed = useIsSpacePressed()
 
@@ -27,7 +28,7 @@ export function InteractiveCube() {
       }}
       onDoubleClick={() => setIsFocused(true)}
     >
-      <Cube state={createSolvedState()} />
+      <Cube state={cubeState} onStateChange={setCubeState}/>
       {isSpacePressed && (
         <OrbitControls autoRotate={!isFocused} enableZoom={false} />
       )}

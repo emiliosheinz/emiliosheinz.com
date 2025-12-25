@@ -9,7 +9,10 @@ import {
   renderIndex,
 } from "./mapping";
 
-export type CubeRef = {};
+type CubeProps = {
+  state: CubeState;
+  onStateChange: (newState: CubeState) => void;
+};
 
 function getCubiePositions(): Array<[Coord, Coord, Coord]> {
   const coords: Coord[] = [-1, 0, 1];
@@ -35,51 +38,41 @@ function getCurbieOrientation([x, y, z]: [Coord, Coord, Coord]) {
   };
 }
 
-export const Cube = React.forwardRef<CubeRef, { state: CubeState }>(
-  ({ state }, ref) => {
-    return (
-      <React.Suspense fallback={null}>
-        {getCubiePositions().map(([x, y, z]) => {
-          const { isTop, isBottom, isLeft, isRight, isFront, isBack } =
-            getCurbieOrientation([x, y, z]);
-          return (
-            <Cubie
-              key={`${x},${y},${z}`}
-              position={[x, y, z]}
-              upColor={
-                isTop ? state.U[renderIndex("U", indexFromXZ(x, z))] : undefined
-              }
-              downColor={
-                isBottom
-                  ? state.D[renderIndex("D", indexFromXZ(x, z))]
-                  : undefined
-              }
-              leftColor={
-                isLeft
-                  ? state.L[renderIndex("L", indexFromZY(z, y))]
-                  : undefined
-              }
-              rightColor={
-                isRight
-                  ? state.R[renderIndex("R", indexFromZY(z, y))]
-                  : undefined
-              }
-              frontColor={
-                isFront
-                  ? state.F[renderIndex("F", indexFromXY(x, y))]
-                  : undefined
-              }
-              backColor={
-                isBack
-                  ? state.B[renderIndex("B", indexFromXY(x, y))]
-                  : undefined
-              }
-            />
-          );
-        })}
-      </React.Suspense>
-    );
-  },
-);
+export const Cube = ({ state, onStateChange }: CubeProps) => {
+  return (
+    <React.Suspense fallback={null}>
+      {getCubiePositions().map(([x, y, z]) => {
+        const { isTop, isBottom, isLeft, isRight, isFront, isBack } =
+          getCurbieOrientation([x, y, z]);
+        return (
+          <Cubie
+            key={`${x},${y},${z}`}
+            position={[x, y, z]}
+            upColor={
+              isTop ? state.U[renderIndex("U", indexFromXZ(x, z))] : undefined
+            }
+            downColor={
+              isBottom
+                ? state.D[renderIndex("D", indexFromXZ(x, z))]
+                : undefined
+            }
+            leftColor={
+              isLeft ? state.L[renderIndex("L", indexFromZY(z, y))] : undefined
+            }
+            rightColor={
+              isRight ? state.R[renderIndex("R", indexFromZY(z, y))] : undefined
+            }
+            frontColor={
+              isFront ? state.F[renderIndex("F", indexFromXY(x, y))] : undefined
+            }
+            backColor={
+              isBack ? state.B[renderIndex("B", indexFromXY(x, y))] : undefined
+            }
+          />
+        );
+      })}
+    </React.Suspense>
+  );
+};
 
 Cube.displayName = "Cube";
