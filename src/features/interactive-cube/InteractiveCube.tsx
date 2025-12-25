@@ -19,8 +19,8 @@ export function InteractiveCube() {
       camera={{ position: [6, 6, 6], fov: 30 }}
       onCreated={({ camera, scene }) => {
         const light = new PointLight();
-        light.position.set(0, 1, 0);
-        light.intensity = 300;
+        light.position.set(10, 10, 10);
+        light.intensity = 100;
 
         camera.add(light);
         scene.add(camera);
@@ -31,7 +31,7 @@ export function InteractiveCube() {
       {isSpacePressed && (
         <OrbitControls autoRotate={!isFocused} enableZoom={false} />
       )}
-      <ambientLight intensity={0.2} />
+      <ambientLight intensity={8} />
     </Canvas>
   );
 

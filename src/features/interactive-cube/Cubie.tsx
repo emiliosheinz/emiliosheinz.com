@@ -30,12 +30,18 @@ export const Cubie = React.forwardRef<THREE.Mesh, CubieProps>(
 
     function getMaterialProps(
       faceColor?: PegatineColor,
-    ): { color: string } | { map: THREE.Texture; metalness: number } {
+    ):
+      | { color: string }
+      | { map: THREE.Texture; metalness: number; roughness: number } {
       if (!faceColor) {
         return { color: "black" };
       }
 
-      return { map: textures[faceColor] as THREE.Texture, metalness: 0.3 };
+      return {
+        map: textures[faceColor] as THREE.Texture,
+        metalness: 0.8,
+        roughness: 0.2,
+      };
     }
 
     return (
