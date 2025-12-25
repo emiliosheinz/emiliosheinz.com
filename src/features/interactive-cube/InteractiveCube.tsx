@@ -11,7 +11,7 @@ import { createSolvedState } from "./cubeState";
 
 export function InteractiveCube() {
   const [isFocused, setIsFocused] = useState(true);
-  const isSpacePressed = useIsSpacePressed() || true
+  const isSpacePressed = useIsSpacePressed()
 
   const canvas = (
     <Canvas
