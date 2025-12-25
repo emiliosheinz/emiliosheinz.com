@@ -2,10 +2,6 @@ import { Face } from "./cubeState";
 
 export type Coord = -1 | 0 | 1;
 
-export function negativeCoord(c: Coord): Coord {
-  return (c === -1 ? 1 : c === 1 ? -1 : 0);
-}
-
 export function indexFromXY(x: Coord, y: Coord) {
   const row = y === 1 ? 0 : y === 0 ? 1 : 2;
   const col = x === -1 ? 0 : x === 0 ? 1 : 2;

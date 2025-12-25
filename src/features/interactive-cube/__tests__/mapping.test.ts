@@ -1,21 +1,7 @@
-import { negativeCoord, indexFromXY, indexFromXZ, indexFromZY, renderIndex, type Coord } from "../mapping";
+import { indexFromXY, indexFromXZ, indexFromZY, renderIndex, type Coord } from "../mapping";
 import type { Face } from "../cubeState";
 
 describe("mapping", () => {
-  describe("negativeCoord", () => {
-    it("should invert positive coordinate to negative", () => {
-      expect(negativeCoord(1 as Coord)).toBe(-1);
-    });
-
-    it("should invert negative coordinate to positive", () => {
-      expect(negativeCoord(-1 as Coord)).toBe(1);
-    });
-
-    it("should keep zero as zero", () => {
-      expect(negativeCoord(0 as Coord)).toBe(0);
-    });
-  });
-
   describe("indexFromXY", () => {
     it("should map top-left corner correctly", () => {
       expect(indexFromXY(-1 as Coord, 1 as Coord)).toBe(0);

@@ -6,7 +6,6 @@ import {
   indexFromXY,
   indexFromXZ,
   indexFromZY,
-  negativeCoord,
   renderIndex,
 } from "./mapping";
 
