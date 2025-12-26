@@ -5167,6 +5167,7 @@ __metadata:
     "@types/react": "npm:19.0.12"
     "@types/react-dom": "npm:19.0.4"
     "@types/three": "npm:^0"
+    "@use-gesture/react": "npm:^10.3.1"
     "@vercel/analytics": "npm:^1.5.0"
     "@vercel/speed-insights": "npm:^1.2.0"
     class-variance-authority: "npm:^0.7.1"

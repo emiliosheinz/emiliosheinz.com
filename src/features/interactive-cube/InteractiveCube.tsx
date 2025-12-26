@@ -29,7 +29,7 @@ export function InteractiveCube() {
       onDoubleClick={() => setIsFocused(true)}
     >
       <Cube state={cubeState} onStateChange={setCubeState}/>
-      {isSpacePressed && (
+      {(isSpacePressed || !isFocused) && (
         <OrbitControls autoRotate={!isFocused} enableZoom={false} />
       )}
       <ambientLight intensity={8} />
