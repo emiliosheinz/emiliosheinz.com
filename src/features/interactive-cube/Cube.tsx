@@ -96,6 +96,15 @@ export const Cube = ({ state, onStateChange }: CubeProps) => {
         backColor={
           isBack ? state.B[renderIndex("B", indexFromXY(x, y))] : undefined
         }
+        onDragStart={({ face, event }) => {
+          console.log("Drag started on face:", face, { event });
+        }}
+        onDrag={({ x: deltaX, y: deltaY }) => {
+          console.log("Dragging...", { deltaX, deltaY });
+        }}
+        onDragEnd={() => {
+          console.log("Drag ended");
+        }}
       />
     );
   };
