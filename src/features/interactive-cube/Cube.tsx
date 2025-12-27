@@ -15,6 +15,7 @@ import { applyMove, Move } from "./moves";
 type CubeProps = {
   state: CubeState;
   onStateChange: (newState: CubeState) => void;
+  disableDrag?: boolean;
 };
 
 type Axis = "x" | "y" | "z";
@@ -74,7 +75,7 @@ function isCubieInRotationLayer(
   }
 }
 
-export const Cube = ({ state, onStateChange }: CubeProps) => {
+export const Cube = ({ state, onStateChange, disableDrag = false }: CubeProps) => {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [rotationState, setRotationState] = useState<RotationState>(null);
 
@@ -87,6 +88,7 @@ export const Cube = ({ state, onStateChange }: CubeProps) => {
     point: THREE.Vector3;
     normal: THREE.Vector3;
   }) => {
+    if (disableDrag) return;
     const [x, y, z] = info.position as [Coord, Coord, Coord];
     console.log(
       `🎯 Drag Start: face=${info.face} pos=[${x},${y},${z}] point=[${info.point.x.toFixed(2)},${info.point.y.toFixed(2)},${info.point.z.toFixed(2)}] normal=[${info.normal.x.toFixed(2)},${info.normal.y.toFixed(2)},${info.normal.z.toFixed(2)}]`
