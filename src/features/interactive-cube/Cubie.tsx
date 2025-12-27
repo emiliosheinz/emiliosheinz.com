@@ -58,20 +58,40 @@ export const Cubie = ({
     event.stopPropagation();
 
     if (onDragStart && event.face) {
-      const face = getFaceFromNormal(event.face.normal);
+      // The face normal from the raycast is in world space (already transformed by cube rotation)
+      // But we need the CUBE-LOCAL normal to determine which cube face was clicked
+      // We can derive this from the cubie's position and which face of the box was hit
+      
+      // Get the local face normal (which face of the cube: +X, -X, +Y, -Y, +Z, -Z)
+      const faceNormal = event.face.normal.clone();
+      
+      // Determine face from the normal direction in the cubie's local space
+      // The cubie mesh normal is in its own local space (not affected by cube rotation yet)
+      const face = getFaceFromNormal(faceNormal);
+      
       clickedFace.current = face;
       isDragging.current = true;
       dragStartPos.current = { x: event.clientX, y: event.clientY };
 
       (event.target as any).setPointerCapture(event.pointerId);
 
-      // Pass the 3D point where the drag started and the face normal
+      // Now we need to provide the cube-local normal based on the cubie position and face
+      // Each cubie face corresponds to a cube face direction
+      let cubeFaceNormal = new THREE.Vector3();
+      
+      if (face === "right") cubeFaceNormal.set(1, 0, 0);
+      else if (face === "left") cubeFaceNormal.set(-1, 0, 0);
+      else if (face === "up") cubeFaceNormal.set(0, 1, 0);
+      else if (face === "down") cubeFaceNormal.set(0, -1, 0);
+      else if (face === "front") cubeFaceNormal.set(0, 0, 1);
+      else if (face === "back") cubeFaceNormal.set(0, 0, -1);
+
       onDragStart({ 
         position, 
         face, 
         event,
         point: event.point,
-        normal: event.face.normal,
+        normal: cubeFaceNormal, // Pass cube-local normal, not world-transformed
       });
     }
   };

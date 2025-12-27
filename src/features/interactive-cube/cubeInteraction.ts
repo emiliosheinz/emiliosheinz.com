@@ -7,12 +7,15 @@
  * - Layers identified by coordinate on the rotation axis: -1, 0, +1
  * 
  * INTERACTION STRATEGY:
- * 1. Convert raycast hit normal and drag vector to cube-local space
- * 2. Identify face by dominant component of local normal
- * 3. Compute drag direction in face plane (local space)
- * 4. Rotation axis = snap(cross(normal, drag)) to nearest basis axis
- * 5. Layer = cubie coord perpendicular to rotation axis
- * 6. Sign = dot(snapped_axis, raw_cross) determines CW/CCW
+ * 1. Convert raycast hit normal and screen drag from world to cube-local space
+ * 2. Compute cross(localNormal, localDrag) to get rotation axis
+ * 3. This is frame-invariant: works regardless of cube orientation
+ * 4. Snap axis to nearest basis, determine layer, apply rotation in local space
+ * 
+ * WHY LOCAL SPACE:
+ * - Rotations are applied to cube structure in its local coordinate frame
+ * - Converting drag to local space makes it relative to cube's current orientation
+ * - Cross product in local space gives axis that's always aligned with cube axes
  */
 
 import * as THREE from "three";
@@ -104,26 +107,33 @@ export function worldToCubeLocal(
 
 /**
  * Compute drag direction in cube-local space from screen delta.
- * Uses camera's right/up vectors converted to cube-local frame.
+ * 
+ * Strategy: Work in world space where screen projection is natural,
+ * then convert final result to cube-local space.
  */
 export function computeLocalDragDirection(
   screenDelta: { x: number; y: number },
   camera: THREE.Camera,
   cubeGroup: THREE.Group,
+  faceNormal: THREE.Vector3, // World-space normal of clicked face
 ): THREE.Vector3 {
   // Get camera's world-space basis vectors
   const cameraRight = new THREE.Vector3();
   const cameraUp = new THREE.Vector3();
   camera.matrixWorld.extractBasis(cameraRight, cameraUp, new THREE.Vector3());
-
+  
   // Build world-space drag vector from screen delta
+  // Screen X → camera right, Screen Y → camera up (inverted)
   const worldDrag = new THREE.Vector3()
     .addScaledVector(cameraRight, screenDelta.x)
-    .addScaledVector(cameraUp, -screenDelta.y) // Y is inverted in screen coords
-    .normalize();
-
+    .addScaledVector(cameraUp, -screenDelta.y);
+  
+  // Project world drag onto the face plane (perpendicular to world normal)
+  const n = faceNormal.clone().normalize();
+  const worldDragInPlane = projectToPlane(worldDrag, n);
+  
   // Convert to cube-local space
-  return worldToCubeLocal(worldDrag, cubeGroup);
+  return worldToCubeLocal(worldDragInPlane, cubeGroup);
 }
 
 /**
@@ -141,46 +151,70 @@ export function projectToPlane(
 
 /**
  * Determine rotation axis, layer, and sign from drag gesture.
- * All input vectors must be in cube-local space.
  * 
- * @param localNormal - Hit face normal in cube-local coords
- * @param localDragDir - Drag direction in cube-local coords (raw, not necessarily in-plane)
- * @param cubiePos - Position of the dragged cubie [-1|0|1, -1|0|1, -1|0|1]
+ * ALL calculations in CUBE-LOCAL space for frame-invariant behavior.
+ * 
+ * @param localNormal - Hit face normal in CUBE-LOCAL space (±X/±Y/±Z)
+ * @param localDragDir - Drag direction in CUBE-LOCAL space
+ * @param cubiePos - Position of the dragged cubie in cube-local coords [-1|0|1, -1|0|1, -1|0|1]
+ * @param cubeGroup - The cube group (for logging only now)
  * @returns RotationInfo with axis, layer, sign, and debug info
  */
 export function determineRotation(
   localNormal: THREE.Vector3,
   localDragDir: THREE.Vector3,
   cubiePos: [Coord, Coord, Coord],
+  cubeGroup: THREE.Group,
 ): RotationInfo {
   const n = localNormal.clone().normalize();
   const faceName = getFaceFromLocalNormal(n);
 
-  // Project drag direction onto face plane
-  const dragInPlane = projectToPlane(localDragDir, n);
+  // Project drag direction onto face plane (in local space)
+  const localDrag = projectToPlane(localDragDir, n).normalize();
 
-  // Rotation axis = cross(normal, dragInPlane)
-  // Right-hand rule: fingers curl from N to D, thumb points along axis
-  const rawCross = new THREE.Vector3().crossVectors(n, dragInPlane).normalize();
+  // Rotation axis = cross(normal, drag) in LOCAL space
+  // This is frame-invariant: always gives correct axis relative to cube structure
+  const localRotationAxis = new THREE.Vector3().crossVectors(n, localDrag);
+  
+  if (localRotationAxis.length() < 0.001) {
+    // Degenerate case - drag is parallel to normal
+    console.warn("Degenerate drag: parallel to normal");
+    return {
+      axis: "x",
+      layer: 0,
+      sign: 1,
+      faceName,
+      localNormal: n,
+      localDragDir: localDrag,
+      rawCross: localRotationAxis,
+    };
+  }
+  
+  localRotationAxis.normalize();
+
+  console.log(
+    `  🔧 Local-space cross product:`,
+    `\n    Local Normal: [${n.x.toFixed(2)}, ${n.y.toFixed(2)}, ${n.z.toFixed(2)}]`,
+    `\n    Local Drag: [${localDrag.x.toFixed(2)}, ${localDrag.y.toFixed(2)}, ${localDrag.z.toFixed(2)}]`,
+    `\n    Cross result: [${localRotationAxis.x.toFixed(2)}, ${localRotationAxis.y.toFixed(2)}, ${localRotationAxis.z.toFixed(2)}]`
+  );
 
   // Snap to nearest basis axis
-  const { axis, sign: axisSign } = snapToAxis(rawCross);
+  const { axis, sign: axisSign } = snapToAxis(localRotationAxis);
 
   // Determine the layer on this axis
   const layer = getLayerFromCubiePosition(cubiePos, axis);
 
-  // Determine rotation sign:
-  // The raw cross product gives us a direction. We've snapped it to ±axis.
-  // The sign of rotation should match the sign of the component of rawCross along the snapped axis.
+  // Determine rotation sign
   let rotationSign = axisSign;
   
-  // Adjust sign based on the actual dot product to handle all orientations correctly
+  // Verify sign using dot product
   const snappedAxisVec = new THREE.Vector3();
   if (axis === "x") snappedAxisVec.set(axisSign, 0, 0);
   else if (axis === "y") snappedAxisVec.set(0, axisSign, 0);
   else snappedAxisVec.set(0, 0, axisSign);
 
-  const dotProduct = rawCross.dot(snappedAxisVec);
+  const dotProduct = localRotationAxis.dot(snappedAxisVec);
   if (dotProduct < 0) {
     rotationSign *= -1;
   }
@@ -191,8 +225,8 @@ export function determineRotation(
     sign: rotationSign,
     faceName,
     localNormal: n,
-    localDragDir: dragInPlane,
-    rawCross,
+    localDragDir: localDrag,
+    rawCross: localRotationAxis,
   };
 }
 

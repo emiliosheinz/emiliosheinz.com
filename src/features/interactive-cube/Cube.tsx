@@ -15,7 +15,6 @@ import {
   Axis,
   FaceName,
   determineRotation,
-  computeLocalDragDirection,
   worldToCubeLocal,
   computeRotationAngle,
   snapToQuarterTurn,
@@ -101,20 +100,16 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     
     const [x, y, z] = info.position as [Coord, Coord, Coord];
     
-    // Convert world-space normal to cube-local space for accurate face detection
-    const localNormal = worldToCubeLocal(info.normal, cubeGroupRef.current);
-    
     console.log(
-      `🎯 Drag Start: worldFace=${info.face} pos=[${x},${y},${z}] ` +
-      `worldNormal=[${info.normal.x.toFixed(2)},${info.normal.y.toFixed(2)},${info.normal.z.toFixed(2)}] ` +
-      `localNormal=[${localNormal.x.toFixed(2)},${localNormal.y.toFixed(2)},${localNormal.z.toFixed(2)}]`
+      `🎯 Drag Start: face=${info.face} pos=[${x},${y},${z}] ` +
+      `cubeLocalNormal=[${info.normal.x.toFixed(2)},${info.normal.y.toFixed(2)},${info.normal.z.toFixed(2)}]`
     );
     
     setDragState({ 
       position: [x, y, z], 
       face: info.face,
       startPoint: info.point.clone(),
-      faceNormal: info.normal.clone().normalize(),
+      faceNormal: info.normal.clone().normalize(), // This is now cube-local normal
       camera: info.event.camera,
     });
     setRotationState(null);
@@ -138,14 +133,34 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
       const camera = dragState.camera;
       if (!camera) return;
 
-      // Convert hit normal to cube-local space
-      const localNormal = worldToCubeLocal(dragState.faceNormal, cubeGroupRef.current);
+      // Build world-space drag vector from screen delta
+      const cameraRight = new THREE.Vector3();
+      const cameraUp = new THREE.Vector3();
+      camera.matrixWorld.extractBasis(cameraRight, cameraUp, new THREE.Vector3());
       
-      // Convert screen drag to cube-local drag direction
-      const localDragDir = computeLocalDragDirection(screenDelta, camera, cubeGroupRef.current);
+      const worldDrag = new THREE.Vector3()
+        .addScaledVector(cameraRight, screenDelta.x)
+        .addScaledVector(cameraUp, -screenDelta.y);
       
-      // Determine rotation using frame-invariant math
-      const rotationInfo = determineRotation(localNormal, localDragDir, dragState.position);
+      // Convert world drag to cube-local space
+      const localDrag = worldToCubeLocal(worldDrag, cubeGroupRef.current);
+      
+      console.log(
+        `📊 Debug Info:`,
+        `\n  Screen Delta: (${screenDelta.x.toFixed(1)}, ${screenDelta.y.toFixed(1)})`,
+        `\n  Cube-Local Normal: [${dragState.faceNormal.x.toFixed(2)}, ${dragState.faceNormal.y.toFixed(2)}, ${dragState.faceNormal.z.toFixed(2)}]`,
+        `\n  World Drag: [${worldDrag.x.toFixed(2)}, ${worldDrag.y.toFixed(2)}, ${worldDrag.z.toFixed(2)}]`,
+        `\n  Local Drag: [${localDrag.x.toFixed(2)}, ${localDrag.y.toFixed(2)}, ${localDrag.z.toFixed(2)}]`,
+        `\n  Cube Quaternion: [${cubeGroupRef.current.quaternion.x.toFixed(2)}, ${cubeGroupRef.current.quaternion.y.toFixed(2)}, ${cubeGroupRef.current.quaternion.z.toFixed(2)}, ${cubeGroupRef.current.quaternion.w.toFixed(2)}]`
+      );
+      
+      // Determine rotation - faceNormal is already in cube-local space
+      const rotationInfo = determineRotation(
+        dragState.faceNormal,  // Cube-local normal (from cubie face direction)
+        localDrag,              // Cube-local drag
+        dragState.position,
+        cubeGroupRef.current,
+      );
       
       // Compute initial angle
       const dragMagnitude = Math.sqrt(screenDelta.x * screenDelta.x + screenDelta.y * screenDelta.y);
@@ -156,7 +171,7 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
         `\n  Face: ${rotationInfo.faceName} at cubie [${dragState.position.join(',')}]`,
         `\n  LocalNormal: [${rotationInfo.localNormal.x.toFixed(2)}, ${rotationInfo.localNormal.y.toFixed(2)}, ${rotationInfo.localNormal.z.toFixed(2)}]`,
         `\n  LocalDrag: [${rotationInfo.localDragDir.x.toFixed(2)}, ${rotationInfo.localDragDir.y.toFixed(2)}, ${rotationInfo.localDragDir.z.toFixed(2)}]`,
-        `\n  RawCross: [${rotationInfo.rawCross.x.toFixed(2)}, ${rotationInfo.rawCross.y.toFixed(2)}, ${rotationInfo.rawCross.z.toFixed(2)}]`,
+        `\n  LocalRotationAxis: [${rotationInfo.rawCross.x.toFixed(2)}, ${rotationInfo.rawCross.y.toFixed(2)}, ${rotationInfo.rawCross.z.toFixed(2)}]`,
         `\n  Axis: ${rotationInfo.axis} | Layer: ${rotationInfo.layer} | Sign: ${rotationInfo.sign}`,
         `\n  Angle: ${angle.toFixed(4)} rad (${(angle * 180 / Math.PI).toFixed(1)}°)`
       );
