@@ -12,6 +12,7 @@ export type CubieProps = {
   downColor?: PegatineColor;
   frontColor?: PegatineColor;
   backColor?: PegatineColor;
+  isDragging?: boolean;
   onDragStart?: (info: {
     position: [number, number, number];
     face: "right" | "left" | "up" | "down" | "front" | "back";
@@ -65,7 +66,14 @@ export const Cubie = ({
 
       (event.target as any).setPointerCapture(event.pointerId);
 
-      onDragStart({ position, face, event });
+      // Pass the 3D point where the drag started and the face normal
+      onDragStart({ 
+        position, 
+        face, 
+        event,
+        point: event.point,
+        normal: event.face.normal,
+      });
     }
   };
 
@@ -74,7 +82,12 @@ export const Cubie = ({
       const deltaX = event.clientX - dragStartPos.current.x;
       const deltaY = event.clientY - dragStartPos.current.y;
 
-      onDrag({ x: deltaX, y: deltaY });
+      // Pass both screen delta and the current 3D point
+      onDrag({ 
+        x: deltaX, 
+        y: deltaY,
+        point: event.point,
+      });
     }
   };
 
