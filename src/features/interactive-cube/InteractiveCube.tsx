@@ -120,11 +120,12 @@ function RotatableCubeWrapper({
   }, [allowManualRotation, isDragging, lastPos, camera]);
   
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} name="cube-group">
       <Cube 
         state={cubeState} 
         onStateChange={onStateChange}
         disableDrag={!allowPieceRotation}
+        cubeGroupRef={groupRef}
       />
     </group>
   );

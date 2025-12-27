@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import { PegatineColor } from "./types";
 import { usePegatineTextures } from "./usePegatineTexture";
+import { FaceName } from "./cubeInteraction";
 
 export type CubieProps = {
   position: [number, number, number];
@@ -15,16 +16,16 @@ export type CubieProps = {
   isDragging?: boolean;
   onDragStart?: (info: {
     position: [number, number, number];
-    face: "right" | "left" | "up" | "down" | "front" | "back";
+    face: FaceName;
     event: ThreeEvent<PointerEvent>;
+    point: THREE.Vector3;
+    normal: THREE.Vector3;
   }) => void;
-  onDrag?: (delta: { x: number; y: number }) => void;
+  onDrag?: (delta: { x: number; y: number; point?: THREE.Vector3 }) => void;
   onDragEnd?: () => void;
 };
 
-function getFaceFromNormal(
-  normal: THREE.Vector3,
-): "right" | "left" | "up" | "down" | "front" | "back" {
+function getFaceFromNormal(normal: THREE.Vector3): FaceName {
   const n = normal.clone().normalize();
 
   if (Math.abs(n.x) > Math.abs(n.y) && Math.abs(n.x) > Math.abs(n.z)) {
@@ -50,9 +51,7 @@ export const Cubie = ({
 }: CubieProps) => {
   const textures = usePegatineTextures();
   const isDragging = useRef(false);
-  const clickedFace = useRef<
-    "right" | "left" | "up" | "down" | "front" | "back" | null
-  >(null);
+  const clickedFace = useRef<FaceName | null>(null);
   const dragStartPos = useRef({ x: 0, y: 0 });
 
   const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {

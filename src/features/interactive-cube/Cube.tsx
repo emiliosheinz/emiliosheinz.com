@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { Cubie } from "./Cubie";
@@ -11,18 +11,26 @@ import {
   renderIndex,
 } from "./mapping";
 import { applyMove, Move } from "./moves";
+import {
+  Axis,
+  FaceName,
+  determineRotation,
+  computeLocalDragDirection,
+  worldToCubeLocal,
+  computeRotationAngle,
+  snapToQuarterTurn,
+} from "./cubeInteraction";
 
 type CubeProps = {
   state: CubeState;
   onStateChange: (newState: CubeState) => void;
   disableDrag?: boolean;
+  cubeGroupRef?: React.RefObject<THREE.Group | null>;
 };
-
-type Axis = "x" | "y" | "z";
 
 type DragState = {
   position: [Coord, Coord, Coord];
-  face: "right" | "left" | "up" | "down" | "front" | "back";
+  face: FaceName;
   startPoint: THREE.Vector3;
   faceNormal: THREE.Vector3;
   camera?: THREE.Camera;
@@ -32,7 +40,8 @@ type RotationState = {
   axis: Axis;
   layer: Coord;
   angle: number;
-  startFace: "right" | "left" | "up" | "down" | "front" | "back";
+  startFace: FaceName;
+  sign: number;
 } | null;
 
 function getCubiePositions(): Array<[Coord, Coord, Coord]> {
@@ -75,7 +84,7 @@ function isCubieInRotationLayer(
   }
 }
 
-export const Cube = ({ state, onStateChange, disableDrag = false }: CubeProps) => {
+export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }: CubeProps) => {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [rotationState, setRotationState] = useState<RotationState>(null);
 
@@ -83,16 +92,24 @@ export const Cube = ({ state, onStateChange, disableDrag = false }: CubeProps) =
 
   const handleDragStart = (info: {
     position: [number, number, number];
-    face: "right" | "left" | "up" | "down" | "front" | "back";
+    face: FaceName;
     event: ThreeEvent<PointerEvent>;
     point: THREE.Vector3;
     normal: THREE.Vector3;
   }) => {
-    if (disableDrag) return;
+    if (disableDrag || !cubeGroupRef?.current) return;
+    
     const [x, y, z] = info.position as [Coord, Coord, Coord];
+    
+    // Convert world-space normal to cube-local space for accurate face detection
+    const localNormal = worldToCubeLocal(info.normal, cubeGroupRef.current);
+    
     console.log(
-      `🎯 Drag Start: face=${info.face} pos=[${x},${y},${z}] point=[${info.point.x.toFixed(2)},${info.point.y.toFixed(2)},${info.point.z.toFixed(2)}] normal=[${info.normal.x.toFixed(2)},${info.normal.y.toFixed(2)},${info.normal.z.toFixed(2)}]`
+      `🎯 Drag Start: worldFace=${info.face} pos=[${x},${y},${z}] ` +
+      `worldNormal=[${info.normal.x.toFixed(2)},${info.normal.y.toFixed(2)},${info.normal.z.toFixed(2)}] ` +
+      `localNormal=[${localNormal.x.toFixed(2)},${localNormal.y.toFixed(2)},${localNormal.z.toFixed(2)}]`
     );
+    
     setDragState({ 
       position: [x, y, z], 
       face: info.face,
@@ -105,96 +122,51 @@ export const Cube = ({ state, onStateChange, disableDrag = false }: CubeProps) =
 
   const handleDrag = (delta: { x: number; y: number; point?: THREE.Vector3 }) => {
     if (!dragState && !rotationState) return;
+    if (!cubeGroupRef?.current) return;
 
     const sensitivity = 0.01;
+    const screenDelta = { x: delta.x, y: delta.y };
 
-    // First drag movement - determine axis based on drag direction
+    // First drag movement - determine axis based on drag direction in cube-local space
     if (dragState && !rotationState) {
-      const absX = Math.abs(delta.x);
-      const absY = Math.abs(delta.y);
+      const absX = Math.abs(screenDelta.x);
+      const absY = Math.abs(screenDelta.y);
       
       // Threshold to avoid jitter
       if (absX < 5 && absY < 5) return;
 
-      const [x, y, z] = dragState.position;
-      const faceNormal = dragState.faceNormal;
+      const camera = dragState.camera;
+      if (!camera) return;
+
+      // Convert hit normal to cube-local space
+      const localNormal = worldToCubeLocal(dragState.faceNormal, cubeGroupRef.current);
       
-      // Determine rotation axis based on face and drag direction
-      // Each face allows rotation on TWO perpendicular axes (not the face normal)
-      let axis: Axis;
-      let layer: number;
+      // Convert screen drag to cube-local drag direction
+      const localDragDir = computeLocalDragDirection(screenDelta, camera, cubeGroupRef.current);
       
-      const isHorizontalDrag = absX > absY;
+      // Determine rotation using frame-invariant math
+      const rotationInfo = determineRotation(localNormal, localDragDir, dragState.position);
       
-      if (Math.abs(faceNormal.y) > 0.9) {
-        // Y face (up/down) - horizontal face
-        // Horizontal drag → Z axis, Vertical drag → X axis
-        if (isHorizontalDrag) {
-          axis = "z";
-          layer = z;
-        } else {
-          axis = "x";
-          layer = x;
-        }
-      } else if (Math.abs(faceNormal.x) > 0.9) {
-        // X face (right/left) - vertical face on side
-        // Horizontal drag → Y axis, Vertical drag → Z axis
-        if (isHorizontalDrag) {
-          axis = "y";
-          layer = y;
-        } else {
-          axis = "z";
-          layer = z;
-        }
-      } else {
-        // Z face (front/back) - vertical face front/back
-        // Horizontal drag → Y axis, Vertical drag → X axis
-        if (isHorizontalDrag) {
-          axis = "y";
-          layer = y;
-        } else {
-          axis = "x";
-          layer = x;
-        }
-      }
-      
-      // Calculate rotation sign
-      const dragMagnitude = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
-      let sign = 1;
-      
-      // Determine sign based on axis and drag direction
-      if (axis === "y") {
-        // Y-axis: horizontal drag controls it
-        sign = delta.x > 0 ? 1 : -1;
-        // Flip for negative layer
-        if (layer < 0) sign *= -1;
-      } else if (axis === "x") {
-        // X-axis: vertical drag controls it
-        sign = delta.y < 0 ? 1 : -1; // Y inverted
-        // Flip for negative layer
-        if (layer < 0) sign *= -1;
-      } else {
-        // Z-axis: depends on which type of drag triggered it
-        if (isHorizontalDrag) {
-          sign = delta.x > 0 ? 1 : -1;
-        } else {
-          sign = delta.y < 0 ? 1 : -1;
-        }
-        // Flip for negative layer
-        if (layer < 0) sign *= -1;
-      }
-      
-      const angle = dragMagnitude * sensitivity * sign;
+      // Compute initial angle
+      const dragMagnitude = Math.sqrt(screenDelta.x * screenDelta.x + screenDelta.y * screenDelta.y);
+      const angle = computeRotationAngle(dragMagnitude, rotationInfo.sign, sensitivity);
 
       console.log(
-        `🔄 Axis Determined: face=${dragState.face} normal=[${faceNormal.x.toFixed(2)},${faceNormal.y.toFixed(2)},${faceNormal.z.toFixed(2)}] pos=[${dragState.position.join(',')}] delta=(${delta.x.toFixed(1)},${delta.y.toFixed(1)}) dragDir=${isHorizontalDrag ? 'H' : 'V'} axis=${axis} layer=${layer} sign=${sign} angle=${angle.toFixed(4)} (${(angle * 180 / Math.PI).toFixed(1)}°)`
+        `🔄 Rotation Determined:`,
+        `\n  Face: ${rotationInfo.faceName} at cubie [${dragState.position.join(',')}]`,
+        `\n  LocalNormal: [${rotationInfo.localNormal.x.toFixed(2)}, ${rotationInfo.localNormal.y.toFixed(2)}, ${rotationInfo.localNormal.z.toFixed(2)}]`,
+        `\n  LocalDrag: [${rotationInfo.localDragDir.x.toFixed(2)}, ${rotationInfo.localDragDir.y.toFixed(2)}, ${rotationInfo.localDragDir.z.toFixed(2)}]`,
+        `\n  RawCross: [${rotationInfo.rawCross.x.toFixed(2)}, ${rotationInfo.rawCross.y.toFixed(2)}, ${rotationInfo.rawCross.z.toFixed(2)}]`,
+        `\n  Axis: ${rotationInfo.axis} | Layer: ${rotationInfo.layer} | Sign: ${rotationInfo.sign}`,
+        `\n  Angle: ${angle.toFixed(4)} rad (${(angle * 180 / Math.PI).toFixed(1)}°)`
       );
 
       setRotationState({
-        axis,
-        layer: layer as Coord,
+        axis: rotationInfo.axis,
+        layer: rotationInfo.layer,
         angle,
-        startFace: dragState.face,
+        startFace: rotationInfo.faceName,
+        sign: rotationInfo.sign,
       });
       setDragState(null);
       return;
@@ -202,32 +174,12 @@ export const Cube = ({ state, onStateChange, disableDrag = false }: CubeProps) =
 
     // Subsequent drags - update rotation angle
     if (rotationState) {
-      const absX = Math.abs(delta.x);
-      const absY = Math.abs(delta.y);
-      const isHorizontalDrag = absX > absY;
-      
-      const dragMagnitude = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
-      let sign = 1;
-      
-      if (rotationState.axis === "y") {
-        sign = delta.x > 0 ? 1 : -1;
-        if (rotationState.layer < 0) sign *= -1;
-      } else if (rotationState.axis === "x") {
-        sign = delta.y < 0 ? 1 : -1;
-        if (rotationState.layer < 0) sign *= -1;
-      } else {
-        if (isHorizontalDrag) {
-          sign = delta.x > 0 ? 1 : -1;
-        } else {
-          sign = delta.y < 0 ? 1 : -1;
-        }
-        if (rotationState.layer < 0) sign *= -1;
-      }
-      
-      const angle = dragMagnitude * sensitivity * sign;
+      const dragMagnitude = Math.sqrt(screenDelta.x * screenDelta.x + screenDelta.y * screenDelta.y);
+      const angle = computeRotationAngle(dragMagnitude, rotationState.sign, sensitivity);
 
       console.log(
-        `↔️ Dragging: axis=${rotationState.axis} layer=${rotationState.layer} delta=(${delta.x.toFixed(1)},${delta.y.toFixed(1)}) angle=${angle.toFixed(4)} (${(angle * 180 / Math.PI).toFixed(1)}°)`
+        `↔️ Dragging: axis=${rotationState.axis} layer=${rotationState.layer} ` +
+        `angle=${angle.toFixed(4)} (${(angle * 180 / Math.PI).toFixed(1)}°)`
       );
 
       setRotationState({
@@ -244,15 +196,17 @@ export const Cube = ({ state, onStateChange, disableDrag = false }: CubeProps) =
       return;
     }
 
-    const snapAngle =
-      Math.round(rotationState.angle / (Math.PI / 2)) * (Math.PI / 2);
-
-    const quarterTurns = Math.round(snapAngle / (Math.PI / 2));
-
+    const { snappedAngle, quarterTurns } = snapToQuarterTurn(rotationState.angle);
     const move = getMove(rotationState.axis, rotationState.layer, quarterTurns);
 
     console.log(
-      `✅ Drag End: axis=${rotationState.axis} layer=${rotationState.layer} raw=${rotationState.angle.toFixed(4)} (${(rotationState.angle * 180 / Math.PI).toFixed(1)}°) snap=${snapAngle.toFixed(4)} (${(snapAngle * 180 / Math.PI).toFixed(0)}°) turns=${quarterTurns} move=${move || "none"}`
+      `✅ Drag End:`,
+      `\n  Axis: ${rotationState.axis} | Layer: ${rotationState.layer}`,
+      `\n  Raw angle: ${rotationState.angle.toFixed(4)} rad (${(rotationState.angle * 180 / Math.PI).toFixed(1)}°)`,
+      `\n  Snapped: ${snappedAngle.toFixed(4)} rad (${(snappedAngle * 180 / Math.PI).toFixed(0)}°)`,
+      `\n  Quarter turns: ${quarterTurns}`,
+      `\n  Move: ${move || "none"}`,
+      `\n  ✓ Verification: ${rotationState.axis}${rotationState.layer > 0 ? '+' : ''}${rotationState.layer} × ${quarterTurns}qt = ${move || "none"}`
     );
 
     if (move) {
@@ -276,49 +230,76 @@ export const Cube = ({ state, onStateChange, disableDrag = false }: CubeProps) =
     // Handle middle layers (layer === 0)
     if (layer === 0) {
       if (axis === "x") {
-        // M slice (between L and R)
+        // M slice (between L and R), follows L direction
         if (normalized === 1) return "M";
         if (normalized === 3) return "M'";
       } else if (axis === "y") {
-        // E slice (between U and D)
+        // E slice (between U and D), follows D direction
         if (normalized === 1) return "E";
         if (normalized === 3) return "E'";
       } else if (axis === "z") {
-        // S slice (between F and B)
-        if (normalized === 1) return "S'";
-        if (normalized === 3) return "S";
+        // S slice (between F and B), follows F direction
+        if (normalized === 1) return "S";
+        if (normalized === 3) return "S'";
       }
       return null;
     }
 
-    // Standard Rubik's cube notation for outer layers
-    if (axis === "y") {
+    /**
+     * STANDARD RUBIK'S CUBE NOTATION vs RIGHT-HAND RULE:
+     * 
+     * Rubik's notation defines moves by looking AT each face from outside:
+     * - R = Right face clockwise (when looking at right face)
+     * - U = Top face clockwise (when looking at top face from above)
+     * - F = Front face clockwise (when looking at front face)
+     * 
+     * Right-hand rule with positive axis rotation:
+     * - Thumb points along +axis, fingers curl in positive rotation direction
+     * - +X rotation: thumb right, fingers curl from +Z to +Y
+     * - +Y rotation: thumb up, fingers curl from +X to +Z  
+     * - +Z rotation: thumb forward, fingers curl from +Y to +X
+     * 
+     * KEY INSIGHT: Looking AT a face from outside is OPPOSITE to axis direction!
+     * - R face: looking from +X at face means rotation around +X axis INVERTED
+     * - When qt=+1 (positive axis rotation), the face appears to turn COUNTER-clockwise
+     * - So qt=1 → R', qt=3 → R (all faces inverted)
+     * 
+     * INVERSION APPLIES TO ALL FACES because notation is always "looking at face from outside"
+     */
+    
+    if (axis === "x") {
       if (layer === 1) {
-        // Top face (U)
-        if (normalized === 1) return "U'";
-        if (normalized === 3) return "U";
-      } else if (layer === -1) {
-        // Bottom face (D)
-        if (normalized === 1) return "D";
-        if (normalized === 3) return "D'";
-      }
-    } else if (axis === "x") {
-      if (layer === 1) {
-        // Right face (R)
+        // Right face (R): looking at face from +X direction (outside cube)
+        // qt=1 (positive +X rotation) appears CCW from outside → R'
         if (normalized === 1) return "R'";
         if (normalized === 3) return "R";
       } else if (layer === -1) {
-        // Left face (L)
+        // Left face (L): looking at face from -X direction (outside cube)
+        // qt=1 (positive +X rotation) appears CW from outside → L
         if (normalized === 1) return "L";
         if (normalized === 3) return "L'";
       }
+    } else if (axis === "y") {
+      if (layer === 1) {
+        // Top face (U): looking down at face from +Y direction (outside cube)
+        // qt=1 (positive +Y rotation) appears CCW from outside → U'
+        if (normalized === 1) return "U'";
+        if (normalized === 3) return "U";
+      } else if (layer === -1) {
+        // Bottom face (D): looking up at face from -Y direction (outside cube)
+        // qt=1 (positive +Y rotation) appears CW from outside → D
+        if (normalized === 1) return "D";
+        if (normalized === 3) return "D'";
+      }
     } else if (axis === "z") {
       if (layer === 1) {
-        // Front face (F)
+        // Front face (F): looking at face from +Z direction (outside cube)
+        // qt=1 (positive +Z rotation) appears CCW from outside → F'
         if (normalized === 1) return "F'";
         if (normalized === 3) return "F";
       } else if (layer === -1) {
-        // Back face (B)
+        // Back face (B): looking at face from -Z direction (outside cube)
+        // qt=1 (positive +Z rotation) appears CW from outside → B
         if (normalized === 1) return "B";
         if (normalized === 3) return "B'";
       }
