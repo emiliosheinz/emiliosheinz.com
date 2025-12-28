@@ -55,7 +55,7 @@ function RotatableCubeWrapper({
 
 export function InteractiveCube() {
   const [cubeState, setCubeState] = useState(scramble(createSolvedState()).state);
-  const [isFocused, setIsFocused] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
   const isSpacePressed = useIsSpacePressed();
 
   const canvas = (
@@ -75,9 +75,9 @@ export function InteractiveCube() {
       <RotatableCubeWrapper 
         cubeState={cubeState} 
         onStateChange={setCubeState}
-        autoRotate={!isFocused && !isSpacePressed}
-        allowPieceRotation={!isSpacePressed}
-        allowManualRotation={isSpacePressed}
+        autoRotate={!isFocused}
+        allowPieceRotation={isFocused && !isSpacePressed}
+        allowManualRotation={!isFocused || isSpacePressed}
       />
       <ambientLight intensity={8} />
     </Canvas>
