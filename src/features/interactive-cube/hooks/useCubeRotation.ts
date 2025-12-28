@@ -70,6 +70,11 @@ export function useCubeRotation(): CubeRotationControls {
 
   const startSnapAnimation = useCallback(
     (config: Omit<SnapAnimation, "startTime">) => {
+      if (config.duration <= 0) {
+        config.onComplete();
+        return;
+      }
+      
       setSnapAnimation({
         ...config,
         startTime: performance.now(),

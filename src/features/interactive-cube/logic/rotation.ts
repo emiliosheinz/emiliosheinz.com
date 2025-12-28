@@ -11,6 +11,8 @@ import type { Coord } from "./coordinates";
 export type Axis = "x" | "y" | "z";
 export type FaceName = "right" | "left" | "up" | "down" | "front" | "back";
 
+const MIN_ROTATION_AXIS_LENGTH = 0.001;
+
 export interface RotationInfo {
   axis: Axis;
   layer: Coord;
@@ -77,6 +79,7 @@ export function worldToCubeLocal(
 
 /**
  * Projects a vector onto a plane perpendicular to a normal.
+ * Returns normalized projection, or zero vector if projection is too small.
  */
 export function projectToPlane(
   v: THREE.Vector3,
@@ -85,6 +88,11 @@ export function projectToPlane(
   const n = normal.clone().normalize();
   const projected = v.clone();
   projected.addScaledVector(n, -v.dot(n));
+  
+  if (projected.length() < MIN_ROTATION_AXIS_LENGTH) {
+    return new THREE.Vector3(0, 0, 0);
+  }
+  
   return projected.normalize();
 }
 
@@ -94,19 +102,19 @@ export function projectToPlane(
  * @param localNormal - Hit face normal in cube-local coordinates
  * @param localDragDir - Drag direction in cube-local coordinates
  * @param cubiePos - Position of dragged cubie
- * @returns Rotation information including axis, layer, and sign
+ * @returns Rotation information including axis, layer, and sign, or null if drag is too small
  */
 export function determineRotation(
   localNormal: THREE.Vector3,
   localDragDir: THREE.Vector3,
   cubiePos: [Coord, Coord, Coord],
-): RotationInfo {
+): RotationInfo | null {
   const n = localNormal.clone().normalize();
   const localDrag = projectToPlane(localDragDir, n);
   const localRotationAxis = new THREE.Vector3().crossVectors(n, localDrag);
   
-  if (localRotationAxis.length() < 0.001) {
-    return { axis: "x", layer: 0, sign: 1 };
+  if (localRotationAxis.length() < MIN_ROTATION_AXIS_LENGTH) {
+    return null;
   }
   
   localRotationAxis.normalize();

@@ -28,6 +28,10 @@ export interface CubieProps {
   onDragEnd?: () => void;
 }
 
+type MaterialProps = 
+  | { color: string }
+  | { map: THREE.Texture; metalness: number; roughness: number };
+
 const FACE_NORMALS: Record<FaceName, THREE.Vector3> = {
   right: new THREE.Vector3(1, 0, 0),
   left: new THREE.Vector3(-1, 0, 0),
@@ -62,8 +66,7 @@ export const Cubie = ({
     isDragging.current = true;
     dragStartPos.current = { x: event.clientX, y: event.clientY };
 
-    const target = event.target as EventTarget & { setPointerCapture: (id: number) => void };
-    target.setPointerCapture(event.pointerId);
+    (event.target as HTMLElement).setPointerCapture(event.pointerId);
 
     onDragStart({ position, face, event, normal: FACE_NORMALS[face] });
   };
@@ -84,17 +87,12 @@ export const Cubie = ({
     
     isDragging.current = false;
 
-    const target = event.target as EventTarget & { releasePointerCapture: (id: number) => void };
-    target.releasePointerCapture(event.pointerId);
+    (event.target as HTMLElement).releasePointerCapture(event.pointerId);
 
     onDragEnd?.();
   };
 
-  function getMaterialProps(
-    faceColor?: PegatineColor,
-  ):
-    | { color: string }
-    | { map: THREE.Texture; metalness: number; roughness: number } {
+  function getMaterialProps(faceColor?: PegatineColor): MaterialProps {
     if (!faceColor) {
       return { color: "black" };
     }

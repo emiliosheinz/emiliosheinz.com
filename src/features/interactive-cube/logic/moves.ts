@@ -13,11 +13,14 @@ export type Move =
   | "D'"
   | "B"
   | "B'"
-  | "M"   // Middle layer (between L and R, follows L direction)
+  /** Middle layer (between L and R, follows L direction) */
+  | "M"
   | "M'"
-  | "E"   // Equator layer (between U and D, follows D direction)
+  /** Equator layer (between U and D, follows D direction) */
+  | "E"
   | "E'"
-  | "S"   // Standing layer (between F and B, follows F direction)
+  /** Standing layer (between F and B, follows F direction) */
+  | "S"
   | "S'";
 
 type FaceKey = keyof CubeState;
@@ -123,6 +126,10 @@ function cycleStripsCCW(
   return cycleStripsCW(state, [strips[0], strips[3], strips[2], strips[1]]);
 }
 
+function assertNever(value: never): never {
+  throw new Error(`Unexpected move: ${value}`);
+}
+
 export function applyMove(state: CubeState, move: Move): CubeState {
   switch (move) {
     case "U":
@@ -162,7 +169,7 @@ export function applyMove(state: CubeState, move: Move): CubeState {
     case "S'":
       return applySCCW(state);
     default:
-      throw new Error(`Move not implemented: ${move}`);
+      return assertNever(move);
   }
 }
 
@@ -334,12 +341,13 @@ function applyDCCW(state: CubeState): CubeState {
   return nextState;
 }
 
-// Middle layer moves
-// M: Middle layer (between L and R), follows L direction
+/**
+ * M slice (Middle layer between L and R).
+ * Rotates the same way as L (clockwise when looking from the left).
+ */
 function applyMCW(state: CubeState): CubeState {
   let nextState = cloneState(state);
   
-  // M rotates the same way as L (clockwise when looking from the left)
   nextState = cycleStripsCW(nextState, [
     ["U", [1, 4, 7]],
     ["B", [7, 4, 1]],
@@ -363,11 +371,13 @@ function applyMCCW(state: CubeState): CubeState {
   return nextState;
 }
 
-// E: Equator layer (between U and D), follows D direction
+/**
+ * E slice (Equator layer between U and D).
+ * Rotates the same way as D (clockwise when looking from the bottom).
+ */
 function applyECW(state: CubeState): CubeState {
   let nextState = cloneState(state);
   
-  // E rotates the same way as D (clockwise when looking from the bottom)
   nextState = cycleStripsCW(nextState, [
     ["F", [3, 4, 5]],
     ["L", [3, 4, 5]],
@@ -391,11 +401,13 @@ function applyECCW(state: CubeState): CubeState {
   return nextState;
 }
 
-// S: Standing layer (between F and B), follows F direction
+/**
+ * S slice (Standing layer between F and B).
+ * Rotates the same way as F (clockwise when looking from the front).
+ */
 function applySCW(state: CubeState): CubeState {
   let nextState = cloneState(state);
   
-  // S rotates the same way as F (clockwise when looking from the front)
   nextState = cycleStripsCW(nextState, [
     ["U", [3, 4, 5]],
     ["R", [1, 4, 7]],

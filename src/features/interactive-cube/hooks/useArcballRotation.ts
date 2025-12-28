@@ -7,6 +7,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Group, Quaternion, Vector2, Vector3 } from "three";
+import type * as THREE from "three";
 
 export interface ArcballRotationProps {
   groupRef: React.RefObject<Group | null>;
@@ -17,6 +18,24 @@ export interface ArcballRotationProps {
 const DAMPING = 0.95;
 const AUTO_ROTATE_SPEED = 0.1;
 const ROTATION_SENSITIVITY = 0.001;
+const VELOCITY_THRESHOLD = 0.0001;
+
+function applyQuaternionRotation(
+  group: Group,
+  camera: THREE.Camera,
+  angleX: number,
+  angleY: number
+): void {
+  const cameraUp = new Vector3(0, 1, 0);
+  const cameraRight = new Vector3(1, 0, 0);
+  cameraRight.applyQuaternion(camera.quaternion);
+  
+  const qX = new Quaternion().setFromAxisAngle(cameraRight, angleX);
+  const qY = new Quaternion().setFromAxisAngle(cameraUp, angleY);
+  
+  group.quaternion.multiplyQuaternions(qY, group.quaternion);
+  group.quaternion.multiplyQuaternions(qX, group.quaternion);
+}
 
 /**
  * Manages arcball-style cube rotation with mouse drag and momentum.
@@ -39,27 +58,23 @@ export function useArcballRotation({
       groupRef.current.rotation.x -= delta * AUTO_ROTATE_SPEED;
     }
     
-    if (!isDragging && allowManualRotation && 
-        (Math.abs(velocityRef.current.x) > 0.0001 || Math.abs(velocityRef.current.y) > 0.0001)) {
-      const cameraUp = new Vector3(0, 1, 0);
-      const cameraRight = new Vector3(1, 0, 0);
-      cameraRight.applyQuaternion(camera.quaternion);
-      
-      const angleX = velocityRef.current.y * delta * 60;
-      const angleY = velocityRef.current.x * delta * 60;
-      
-      const qX = new Quaternion().setFromAxisAngle(cameraRight, angleX);
-      const qY = new Quaternion().setFromAxisAngle(cameraUp, angleY);
-      
-      groupRef.current.quaternion.multiplyQuaternions(qY, groupRef.current.quaternion);
-      groupRef.current.quaternion.multiplyQuaternions(qX, groupRef.current.quaternion);
-      
-      velocityRef.current.x *= DAMPING;
-      velocityRef.current.y *= DAMPING;
-      
-      if (Math.abs(velocityRef.current.x) < 0.0001) velocityRef.current.x = 0;
-      if (Math.abs(velocityRef.current.y) < 0.0001) velocityRef.current.y = 0;
-    }
+    if (isDragging || !allowManualRotation) return;
+    
+    const hasVelocity = Math.abs(velocityRef.current.x) > VELOCITY_THRESHOLD || 
+                        Math.abs(velocityRef.current.y) > VELOCITY_THRESHOLD;
+    
+    if (!hasVelocity) return;
+    
+    const angleX = velocityRef.current.y * delta * 60;
+    const angleY = velocityRef.current.x * delta * 60;
+    
+    applyQuaternionRotation(groupRef.current, camera, angleX, angleY);
+    
+    velocityRef.current.x *= DAMPING;
+    velocityRef.current.y *= DAMPING;
+    
+    if (Math.abs(velocityRef.current.x) < VELOCITY_THRESHOLD) velocityRef.current.x = 0;
+    if (Math.abs(velocityRef.current.y) < VELOCITY_THRESHOLD) velocityRef.current.y = 0;
   });
   
   useEffect(() => {
@@ -82,18 +97,10 @@ export function useArcballRotation({
         y: deltaY * ROTATION_SENSITIVITY 
       };
       
-      const cameraUp = new Vector3(0, 1, 0);
-      const cameraRight = new Vector3(1, 0, 0);
-      cameraRight.applyQuaternion(camera.quaternion);
-      
       const angleX = deltaY * ROTATION_SENSITIVITY;
-      const qX = new Quaternion().setFromAxisAngle(cameraRight, angleX);
-      
       const angleY = deltaX * ROTATION_SENSITIVITY;
-      const qY = new Quaternion().setFromAxisAngle(cameraUp, angleY);
       
-      groupRef.current.quaternion.multiplyQuaternions(qY, groupRef.current.quaternion);
-      groupRef.current.quaternion.multiplyQuaternions(qX, groupRef.current.quaternion);
+      applyQuaternionRotation(groupRef.current, camera, angleX, angleY);
       
       setLastPos(new Vector2(e.clientX, e.clientY));
     };

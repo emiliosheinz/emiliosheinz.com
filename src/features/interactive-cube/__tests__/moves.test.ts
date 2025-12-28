@@ -333,5 +333,94 @@ describe("moves", () => {
         expect([result.R[8], result.R[5], result.R[2]].every((color) => color === "yellow")).toBe(true);
       });
     });
+
+    describe("middle layer moves", () => {
+      it("M move should cycle middle vertical slice (follows L)", () => {
+        const state = createSolvedState();
+        const result = applyMove(state, "M");
+
+        expect([result.U[1], result.U[4], result.U[7]].every((color) => color === "blue")).toBe(true);
+        expect([result.B[7], result.B[4], result.B[1]].every((color) => color === "white")).toBe(true);
+        expect([result.D[1], result.D[4], result.D[7]].every((color) => color === "green")).toBe(true);
+        expect([result.F[1], result.F[4], result.F[7]].every((color) => color === "yellow")).toBe(true);
+      });
+
+      it("M' move should cycle middle vertical slice counter-clockwise", () => {
+        const state = createSolvedState();
+        const result = applyMove(state, "M'");
+
+        expect([result.U[1], result.U[4], result.U[7]].every((color) => color === "green")).toBe(true);
+        expect([result.F[1], result.F[4], result.F[7]].every((color) => color === "white")).toBe(true);
+        expect([result.D[1], result.D[4], result.D[7]].every((color) => color === "blue")).toBe(true);
+        expect([result.B[7], result.B[4], result.B[1]].every((color) => color === "yellow")).toBe(true);
+      });
+
+      it("E move should cycle middle horizontal slice (follows D)", () => {
+        const state = createSolvedState();
+        const result = applyMove(state, "E");
+
+        expect([result.F[3], result.F[4], result.F[5]].every((color) => color === "red")).toBe(true);
+        expect([result.L[3], result.L[4], result.L[5]].every((color) => color === "blue")).toBe(true);
+        expect([result.B[3], result.B[4], result.B[5]].every((color) => color === "orange")).toBe(true);
+        expect([result.R[3], result.R[4], result.R[5]].every((color) => color === "green")).toBe(true);
+      });
+
+      it("E' move should cycle middle horizontal slice counter-clockwise", () => {
+        const state = createSolvedState();
+        const result = applyMove(state, "E'");
+
+        expect([result.F[3], result.F[4], result.F[5]].every((color) => color === "orange")).toBe(true);
+        expect([result.R[3], result.R[4], result.R[5]].every((color) => color === "blue")).toBe(true);
+        expect([result.B[3], result.B[4], result.B[5]].every((color) => color === "red")).toBe(true);
+        expect([result.L[3], result.L[4], result.L[5]].every((color) => color === "green")).toBe(true);
+      });
+
+      it("S move should cycle middle standing slice (follows F)", () => {
+        const state = createSolvedState();
+        const result = applyMove(state, "S");
+
+        expect([result.U[3], result.U[4], result.U[5]].every((color) => color === "orange")).toBe(true);
+        expect([result.R[1], result.R[4], result.R[7]].every((color) => color === "white")).toBe(true);
+        expect([result.D[5], result.D[4], result.D[3]].every((color) => color === "red")).toBe(true);
+        expect([result.L[7], result.L[4], result.L[1]].every((color) => color === "yellow")).toBe(true);
+      });
+
+      it("S' move should cycle middle standing slice counter-clockwise", () => {
+        const state = createSolvedState();
+        const result = applyMove(state, "S'");
+
+        expect([result.U[3], result.U[4], result.U[5]].every((color) => color === "red")).toBe(true);
+        expect([result.L[7], result.L[4], result.L[1]].every((color) => color === "white")).toBe(true);
+        expect([result.D[5], result.D[4], result.D[3]].every((color) => color === "orange")).toBe(true);
+        expect([result.R[1], result.R[4], result.R[7]].every((color) => color === "yellow")).toBe(true);
+      });
+
+      it("should restore state after four M turns", () => {
+        const state = createSolvedState();
+        let currentState = state;
+        for (let i = 0; i < 4; i++) {
+          currentState = applyMove(currentState, "M");
+        }
+        expect(currentState).toEqual(state);
+      });
+
+      it("should restore state after four E turns", () => {
+        const state = createSolvedState();
+        let currentState = state;
+        for (let i = 0; i < 4; i++) {
+          currentState = applyMove(currentState, "E");
+        }
+        expect(currentState).toEqual(state);
+      });
+
+      it("should restore state after four S turns", () => {
+        const state = createSolvedState();
+        let currentState = state;
+        for (let i = 0; i < 4; i++) {
+          currentState = applyMove(currentState, "S");
+        }
+        expect(currentState).toEqual(state);
+      });
+    });
   });
 });

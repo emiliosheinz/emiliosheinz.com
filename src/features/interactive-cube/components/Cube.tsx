@@ -101,6 +101,9 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
       
       const localDrag = worldToCubeLocal(worldDrag, cubeGroupRef.current);
       const rotationInfo = determineRotation(dragState.faceNormal, localDrag, dragState.position);
+      
+      if (!rotationInfo) return;
+      
       const dragMagnitude = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
       const angle = computeRotationAngle(dragMagnitude, rotationInfo.sign, DRAG_SENSITIVITY);
 

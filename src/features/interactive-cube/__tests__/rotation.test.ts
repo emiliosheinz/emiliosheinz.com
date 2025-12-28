@@ -135,8 +135,9 @@ describe("rotation", () => {
       
       const result = determineRotation(normal, drag, position);
       
-      expect(result.axis).toBe("y");
-      expect(result.layer).toBe(1);
+      expect(result).not.toBeNull();
+      expect(result?.axis).toBe("y");
+      expect(result?.layer).toBe(1);
     });
 
     it("should determine X-axis rotation from top face horizontal drag", () => {
@@ -146,8 +147,19 @@ describe("rotation", () => {
       
       const result = determineRotation(normal, drag, position);
       
-      expect(result.axis).toBe("x");
-      expect(result.layer).toBe(1);
+      expect(result).not.toBeNull();
+      expect(result?.axis).toBe("x");
+      expect(result?.layer).toBe(1);
+    });
+
+    it("should return null for degenerate drag (too small)", () => {
+      const normal = new THREE.Vector3(0, 1, 0);
+      const drag = new THREE.Vector3(0, 0, 0.000001);
+      const position: [number, number, number] = [1, 1, 0];
+      
+      const result = determineRotation(normal, drag, position);
+      
+      expect(result).toBeNull();
     });
   });
 });
