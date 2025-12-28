@@ -41,6 +41,7 @@ type RotationState = {
   angle: number;
   startFace: FaceName;
   sign: number;
+  cumulativeAngle: number; // Total rotation accumulated from drag start
 } | null;
 
 // Animation state for smooth snap transition after drag ends
@@ -98,6 +99,13 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [rotationState, setRotationState] = useState<RotationState>(null);
   const [snapAnimation, setSnapAnimation] = useState<SnapAnimationState>(null);
+  
+  // Gesture lock: Prevents endless rotation by committing to a single move per drag gesture.
+  // Once cumulative rotation crosses 45°, the gesture is locked and the visual angle is clamped
+  // to a maximum of 90° (one quarter turn). The user can continue dragging but the rotation
+  // won't exceed this limit until they release and start a new gesture.
+  // This mimics the tactile "one move at a time" feel of a physical Rubik's Cube.
+  const [moveCommitted, setMoveCommitted] = useState(false);
 
   const cubiePositions = getCubiePositions();
 
@@ -124,6 +132,7 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
       angle: currentAngle,
       startFace: "front", // Not used during animation
       sign: 1, // Not used during animation
+      cumulativeAngle: currentAngle, // Not used during animation
     });
 
     // Animation complete
@@ -157,12 +166,15 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
       camera: info.event.camera,
     });
     setRotationState(null);
+    setMoveCommitted(false); // Reset gesture lock for new drag
   };
 
   const handleDrag = (delta: { x: number; y: number; point?: THREE.Vector3 }) => {
     if (!dragState && !rotationState) return;
     if (!cubeGroupRef?.current) return;
 
+    // Drag sensitivity: Controls how much rotation per pixel dragged.
+    // Lower value = less sensitive, user must drag further for same rotation angle.
     const sensitivity = 0.01;
     const screenDelta = { x: delta.x, y: delta.y };
 
@@ -226,24 +238,64 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
         angle,
         startFace: rotationInfo.faceName,
         sign: rotationInfo.sign,
+        cumulativeAngle: angle, // Initialize cumulative tracking
       });
       setDragState(null);
       return;
     }
 
-    // Subsequent drags - update rotation angle
+    // Subsequent drags - accumulate rotation and check gesture lock
     if (rotationState) {
       const dragMagnitude = Math.sqrt(screenDelta.x * screenDelta.x + screenDelta.y * screenDelta.y);
-      const angle = computeRotationAngle(dragMagnitude, rotationState.sign, sensitivity);
+      const deltaAngle = computeRotationAngle(dragMagnitude, rotationState.sign, sensitivity);
+      
+      // Smooth out rotation speed by capping maximum angle change per drag event.
+      // This prevents jarring, too-fast rotations when dragging quickly.
+      const MAX_ANGLE_PER_FRAME = Math.PI / 36; // ~5° max change per frame
+      const smoothedDeltaAngle = Math.sign(deltaAngle) * Math.min(Math.abs(deltaAngle), MAX_ANGLE_PER_FRAME);
+      
+      // Accumulate total rotation from gesture start
+      const newCumulativeAngle = rotationState.cumulativeAngle + smoothedDeltaAngle;
 
-      console.log(
-        `↔️ Dragging: axis=${rotationState.axis} layer=${rotationState.layer} ` +
-        `angle=${angle.toFixed(4)} (${(angle * 180 / Math.PI).toFixed(1)}°)`
-      );
+      // Gesture lock: Once cumulative rotation crosses the threshold, cap it at one quarter turn.
+      // This prevents endless spinning while still allowing the user to continue dragging.
+      // The visual angle continues to update but is clamped to prevent going beyond ±90°.
+      const MOVE_COMMIT_THRESHOLD = Math.PI / 4; // 45° - commit to discrete move
+      const MAX_ROTATION = Math.PI / 2; // 90° - max visual rotation per gesture
+
+      let finalAngle = smoothedDeltaAngle;
+      let justCommitted = false;
+
+      // Check if we've crossed the commitment threshold
+      if (Math.abs(newCumulativeAngle) >= MOVE_COMMIT_THRESHOLD && !moveCommitted) {
+        console.log(`🔒 Move committed at cumulative ${(newCumulativeAngle * 180 / Math.PI).toFixed(1)}° - locking to single quarter turn`);
+        setMoveCommitted(true);
+        justCommitted = true;
+      }
+
+      // If move is committed, clamp the displayed angle to max one quarter turn
+      if (moveCommitted || justCommitted) {
+        const sign = Math.sign(newCumulativeAngle) || 1;
+        const clampedCumulative = Math.sign(newCumulativeAngle) * Math.min(Math.abs(newCumulativeAngle), MAX_ROTATION);
+        finalAngle = clampedCumulative - rotationState.angle; // Delta to reach clamped value
+        
+        console.log(
+          `🔒 Gesture locked: cumulative=${(newCumulativeAngle * 180 / Math.PI).toFixed(1)}° ` +
+          `clamped=${(clampedCumulative * 180 / Math.PI).toFixed(1)}° ` +
+          `finalAngle=${(finalAngle * 180 / Math.PI).toFixed(1)}°`
+        );
+      } else {
+        console.log(
+          `↔️ Dragging: axis=${rotationState.axis} layer=${rotationState.layer} ` +
+          `deltaAngle=${(smoothedDeltaAngle * 180 / Math.PI).toFixed(1)}° ` +
+          `cumulative=${(newCumulativeAngle * 180 / Math.PI).toFixed(1)}°`
+        );
+      }
 
       setRotationState({
         ...rotationState,
-        angle,
+        angle: rotationState.angle + finalAngle,
+        cumulativeAngle: newCumulativeAngle,
       });
     }
   };
@@ -252,6 +304,21 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     if (!rotationState) {
       console.log("🛑 Drag End: No rotation (cancelled)");
       setDragState(null);
+      return;
+    }
+
+    // Minimum rotation threshold: Ignore tiny accidental movements.
+    // User must rotate at least 25° to commit to a move, preventing unintentional turns
+    // from small touches or jitters.
+    const MIN_ROTATION_THRESHOLD = (5 * Math.PI) / 36; // 25 degrees
+
+    if (Math.abs(rotationState.angle) < MIN_ROTATION_THRESHOLD) {
+      console.log(
+        `🚫 Rotation too small (${(rotationState.angle * 180 / Math.PI).toFixed(1)}° < ${(MIN_ROTATION_THRESHOLD * 180 / Math.PI).toFixed(0)}°) - cancelling move`
+      );
+      setDragState(null);
+      setRotationState(null);
+      setMoveCommitted(false);
       return;
     }
 
@@ -269,13 +336,14 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     );
 
     // Start snap animation: smoothly interpolate from current angle to snapped angle
+    // Longer duration for smoother, more deliberate feel
     setSnapAnimation({
       axis: rotationState.axis,
       layer: rotationState.layer,
       startAngle: rotationState.angle,
       targetAngle: snappedAngle,
       startTime: performance.now(),
-      duration: 150, // 150ms animation duration
+      duration: 250, // Increased from 150ms to 250ms for smoother snap
       onComplete: () => {
         // Apply the move and clear rotation state after animation completes
         if (move) {

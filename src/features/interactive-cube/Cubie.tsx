@@ -101,6 +101,9 @@ export const Cubie = ({
       const deltaX = event.clientX - dragStartPos.current.x;
       const deltaY = event.clientY - dragStartPos.current.y;
 
+      // Update drag start position for next move event (incremental deltas, not cumulative)
+      dragStartPos.current = { x: event.clientX, y: event.clientY };
+
       // Pass both screen delta and the current 3D point
       onDrag({ 
         x: deltaX, 
