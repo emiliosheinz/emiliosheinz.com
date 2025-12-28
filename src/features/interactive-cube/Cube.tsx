@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { ThreeEvent } from "@react-three/fiber";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Cubie } from "./Cubie";
 import { CubeState } from "./cubeState";
@@ -41,6 +41,17 @@ type RotationState = {
   angle: number;
   startFace: FaceName;
   sign: number;
+} | null;
+
+// Animation state for smooth snap transition after drag ends
+type SnapAnimationState = {
+  axis: Axis;
+  layer: Coord;
+  startAngle: number;
+  targetAngle: number;
+  startTime: number;
+  duration: number; // in milliseconds
+  onComplete: () => void;
 } | null;
 
 function getCubiePositions(): Array<[Coord, Coord, Coord]> {
@@ -86,8 +97,41 @@ function isCubieInRotationLayer(
 export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }: CubeProps) => {
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [rotationState, setRotationState] = useState<RotationState>(null);
+  const [snapAnimation, setSnapAnimation] = useState<SnapAnimationState>(null);
 
   const cubiePositions = getCubiePositions();
+
+  // Animation frame loop: interpolate rotation during snap animation
+  useFrame(() => {
+    if (!snapAnimation) return;
+
+    const now = performance.now();
+    const elapsed = now - snapAnimation.startTime;
+    const progress = Math.min(elapsed / snapAnimation.duration, 1);
+
+    // Smooth easing function (ease-out cubic for natural deceleration)
+    const eased = 1 - Math.pow(1 - progress, 3);
+
+    // Interpolate angle from start to target
+    const currentAngle =
+      snapAnimation.startAngle +
+      (snapAnimation.targetAngle - snapAnimation.startAngle) * eased;
+
+    // Update rotation state with interpolated angle
+    setRotationState({
+      axis: snapAnimation.axis,
+      layer: snapAnimation.layer,
+      angle: currentAngle,
+      startFace: "front", // Not used during animation
+      sign: 1, // Not used during animation
+    });
+
+    // Animation complete
+    if (progress >= 1) {
+      snapAnimation.onComplete();
+      setSnapAnimation(null);
+    }
+  });
 
   const handleDragStart = (info: {
     position: [number, number, number];
@@ -224,13 +268,25 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
       `\n  ✓ Verification: ${rotationState.axis}${rotationState.layer > 0 ? '+' : ''}${rotationState.layer} × ${quarterTurns}qt = ${move || "none"}`
     );
 
-    if (move) {
-      const newState = applyMove(state, move);
-      onStateChange(newState);
-    }
+    // Start snap animation: smoothly interpolate from current angle to snapped angle
+    setSnapAnimation({
+      axis: rotationState.axis,
+      layer: rotationState.layer,
+      startAngle: rotationState.angle,
+      targetAngle: snappedAngle,
+      startTime: performance.now(),
+      duration: 150, // 150ms animation duration
+      onComplete: () => {
+        // Apply the move and clear rotation state after animation completes
+        if (move) {
+          const newState = applyMove(state, move);
+          onStateChange(newState);
+        }
+        setRotationState(null);
+      },
+    });
 
     setDragState(null);
-    setRotationState(null);
   };
 
   function getMove(
