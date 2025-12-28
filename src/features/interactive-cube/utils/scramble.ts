@@ -7,10 +7,13 @@
 import { Move, applyMove } from "../logic/moves";
 import { CubeState } from "../logic/cube-state";
 
-const MOVES: Move[] = [
+/**
+ * Basic moves for scrambling (excludes middle layer moves M, E, S).
+ */
+const BASIC_MOVES = [
   "U", "U'", "R", "R'", "F", "F'",
   "L", "L'", "D", "D'", "B", "B'",
-];
+] as const satisfies readonly Move[];
 
 /**
  * Generates a random scramble sequence and applies it to the cube state.
@@ -24,7 +27,7 @@ export function scramble(state: CubeState, length = 20) {
   const seq: Move[] = [];
 
   for (let i = 0; i < length; i++) {
-    const m = MOVES[Math.floor(Math.random() * MOVES.length)];
+    const m = BASIC_MOVES[Math.floor(Math.random() * BASIC_MOVES.length)];
     seq.push(m);
     s = applyMove(s, m);
   }
