@@ -16,6 +16,7 @@ import { useArcballRotation } from "../hooks/useArcballRotation";
 import { createSolvedState } from "../logic/cube-state";
 
 import { CubeState } from "../logic/cube-state";
+import { scramble } from "../utils/scramble";
 
 interface RotatableCubeWrapperProps {
   cubeState: CubeState;
@@ -53,7 +54,7 @@ function RotatableCubeWrapper({
 }
 
 export function InteractiveCube() {
-  const [cubeState, setCubeState] = useState(createSolvedState());
+  const [cubeState, setCubeState] = useState(scramble(createSolvedState()).state);
   const [isFocused, setIsFocused] = useState(true);
   const isSpacePressed = useIsSpacePressed();
 
