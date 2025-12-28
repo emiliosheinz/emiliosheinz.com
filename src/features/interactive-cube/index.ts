@@ -1,1 +1,1 @@
-export { InteractiveCube } from "./InteractiveCube";
+export { InteractiveCube } from "./components/InteractiveCube";

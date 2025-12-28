@@ -1,11 +1,16 @@
+/**
+ * Individual cube piece (cubie) component with drag interaction.
+ * 
+ * @module components/Cubie
+ */
+
 import React, { useRef } from "react";
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
-import { PegatineColor } from "./types";
-import { usePegatineTextures } from "./usePegatineTexture";
-import { FaceName } from "./cubeInteraction";
+import { usePegatineTextures, PegatineColor } from "../hooks/usePegatineTextures";
+import { FaceName } from "../logic/rotation";
 
-export type CubieProps = {
+export interface CubieProps {
   position: [number, number, number];
   rightColor?: PegatineColor;
   leftColor?: PegatineColor;
@@ -13,7 +18,6 @@ export type CubieProps = {
   downColor?: PegatineColor;
   frontColor?: PegatineColor;
   backColor?: PegatineColor;
-  isDragging?: boolean;
   onDragStart?: (info: {
     position: [number, number, number];
     face: FaceName;
@@ -23,7 +27,7 @@ export type CubieProps = {
   }) => void;
   onDrag?: (delta: { x: number; y: number; point?: THREE.Vector3 }) => void;
   onDragEnd?: () => void;
-};
+}
 
 function getFaceFromNormal(normal: THREE.Vector3): FaceName {
   const n = normal.clone().normalize();
@@ -35,6 +39,17 @@ function getFaceFromNormal(normal: THREE.Vector3): FaceName {
   } else {
     return n.z > 0 ? "front" : "back";
   }
+}
+
+function getCubeFaceNormal(face: FaceName): THREE.Vector3 {
+  const normal = new THREE.Vector3();
+  if (face === "right") normal.set(1, 0, 0);
+  else if (face === "left") normal.set(-1, 0, 0);
+  else if (face === "up") normal.set(0, 1, 0);
+  else if (face === "down") normal.set(0, -1, 0);
+  else if (face === "front") normal.set(0, 0, 1);
+  else if (face === "back") normal.set(0, 0, -1);
+  return normal;
 }
 
 export const Cubie = ({
@@ -58,15 +73,7 @@ export const Cubie = ({
     event.stopPropagation();
 
     if (onDragStart && event.face) {
-      // The face normal from the raycast is in world space (already transformed by cube rotation)
-      // But we need the CUBE-LOCAL normal to determine which cube face was clicked
-      // We can derive this from the cubie's position and which face of the box was hit
-      
-      // Get the local face normal (which face of the cube: +X, -X, +Y, -Y, +Z, -Z)
       const faceNormal = event.face.normal.clone();
-      
-      // Determine face from the normal direction in the cubie's local space
-      // The cubie mesh normal is in its own local space (not affected by cube rotation yet)
       const face = getFaceFromNormal(faceNormal);
       
       clickedFace.current = face;
@@ -75,23 +82,14 @@ export const Cubie = ({
 
       (event.target as any).setPointerCapture(event.pointerId);
 
-      // Now we need to provide the cube-local normal based on the cubie position and face
-      // Each cubie face corresponds to a cube face direction
-      let cubeFaceNormal = new THREE.Vector3();
-      
-      if (face === "right") cubeFaceNormal.set(1, 0, 0);
-      else if (face === "left") cubeFaceNormal.set(-1, 0, 0);
-      else if (face === "up") cubeFaceNormal.set(0, 1, 0);
-      else if (face === "down") cubeFaceNormal.set(0, -1, 0);
-      else if (face === "front") cubeFaceNormal.set(0, 0, 1);
-      else if (face === "back") cubeFaceNormal.set(0, 0, -1);
+      const cubeFaceNormal = getCubeFaceNormal(face);
 
       onDragStart({ 
         position, 
         face, 
         event,
         point: event.point,
-        normal: cubeFaceNormal, // Pass cube-local normal, not world-transformed
+        normal: cubeFaceNormal,
       });
     }
   };
@@ -101,10 +99,8 @@ export const Cubie = ({
       const deltaX = event.clientX - dragStartPos.current.x;
       const deltaY = event.clientY - dragStartPos.current.y;
 
-      // Update drag start position for next move event (incremental deltas, not cumulative)
       dragStartPos.current = { x: event.clientX, y: event.clientY };
 
-      // Pass both screen delta and the current 3D point
       onDrag({ 
         x: deltaX, 
         y: deltaY,
@@ -148,30 +144,12 @@ export const Cubie = ({
       onPointerUp={handlePointerUp}
     >
       <boxGeometry attach="geometry" args={[1, 1, 1]} />
-      <meshStandardMaterial
-        attach="material-0"
-        {...getMaterialProps(rightColor)}
-      />
-      <meshStandardMaterial
-        attach="material-1"
-        {...getMaterialProps(leftColor)}
-      />
-      <meshStandardMaterial
-        attach="material-2"
-        {...getMaterialProps(upColor)}
-      />
-      <meshStandardMaterial
-        attach="material-3"
-        {...getMaterialProps(downColor)}
-      />
-      <meshStandardMaterial
-        attach="material-4"
-        {...getMaterialProps(frontColor)}
-      />
-      <meshStandardMaterial
-        attach="material-5"
-        {...getMaterialProps(backColor)}
-      />
+      <meshStandardMaterial attach="material-0" {...getMaterialProps(rightColor)} />
+      <meshStandardMaterial attach="material-1" {...getMaterialProps(leftColor)} />
+      <meshStandardMaterial attach="material-2" {...getMaterialProps(upColor)} />
+      <meshStandardMaterial attach="material-3" {...getMaterialProps(downColor)} />
+      <meshStandardMaterial attach="material-4" {...getMaterialProps(frontColor)} />
+      <meshStandardMaterial attach="material-5" {...getMaterialProps(backColor)} />
     </mesh>
   );
 };

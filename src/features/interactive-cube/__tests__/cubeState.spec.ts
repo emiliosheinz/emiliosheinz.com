@@ -1,4 +1,4 @@
-import { createSolvedState } from "../cubeState";
+import { createSolvedState } from "../logic/cube-state";
 
 describe("cubeState", () => {
   describe("createSolvedState", () => {

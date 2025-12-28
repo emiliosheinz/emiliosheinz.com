@@ -1,4 +1,4 @@
-import { CubeState, Sticker } from "./cubeState";
+import { CubeState, Sticker } from "./cube-state";
 
 export type Move =
   | "U"

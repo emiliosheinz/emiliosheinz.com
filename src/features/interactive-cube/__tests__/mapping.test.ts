@@ -1,5 +1,5 @@
-import { indexFromXY, indexFromXZ, indexFromZY, renderIndex, type Coord } from "../mapping";
-import type { Face } from "../cubeState";
+import { indexFromXY, indexFromXZ, indexFromZY, renderIndex, type Coord } from "../logic/coordinates";
+import type { Face } from "../logic/cube-state";
 
 describe("mapping", () => {
   describe("indexFromXY", () => {

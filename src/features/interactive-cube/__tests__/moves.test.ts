@@ -1,5 +1,5 @@
-import { createSolvedState, type Sticker } from "../cubeState";
-import { applyMove, type Move } from "../moves";
+import { createSolvedState, type Sticker } from "../logic/cube-state";
+import { applyMove, type Move } from "../logic/moves";
 
 const getInverseMove = (move: Move): Move => {
   return move.endsWith("'") ? (move.slice(0, -1) as Move) : ((move + "'") as Move);

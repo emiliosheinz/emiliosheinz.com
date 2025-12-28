@@ -1,7 +1,26 @@
+/**
+ * Hook for loading cube sticker textures.
+ * 
+ * @module hooks/usePegatineTextures
+ */
+
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
-import { PegatineTextures } from "./types";
 
+export interface PegatineTextures {
+  red: THREE.Texture;
+  orange: THREE.Texture;
+  blue: THREE.Texture;
+  green: THREE.Texture;
+  white: THREE.Texture;
+  yellow: THREE.Texture;
+}
+
+export type PegatineColor = keyof PegatineTextures;
+
+/**
+ * Loads all cube sticker textures.
+ */
 export function usePegatineTextures(): PegatineTextures {
   const [red, orange, blue, green, white, yellow] = useLoader(
     THREE.TextureLoader,
