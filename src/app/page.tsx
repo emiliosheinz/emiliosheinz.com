@@ -6,14 +6,19 @@ export default function HomePage() {
   return (
     <main className="flex flex-col space-y-16 mt-10 sm:space-y-24 sm:mt-0 self-center">
       <div className="flex items-center flex-col lg:flex-row" id="about">
-        <Image
-          priority
-          src="/images/profile.png"
-          width={280}
-          height={280}
-          className="rounded-full mb-10 lg:mb-0 lg:mr-16"
-          alt="Emilio Heinzmann's picture in black and white with a blue background"
-        />
+        <div className="relative">
+          <Image
+            priority
+            src="/images/profile.png"
+            width={280}
+            height={280}
+            className="rounded-full mb-10 lg:mb-0 lg:mr-16"
+            alt="Emilio Heinzmann's picture in black and white with a blue background"
+          />
+          <div className="absolute bottom-0 right-20 w-16 h-16">
+            <InteractiveCube />
+          </div>
+        </div>
         <div className="flex flex-col space-y-10 items-start">
           <h1 className="font-bold text-4xl sm:text-5xl">
             {"Hello "}
@@ -49,7 +54,6 @@ export default function HomePage() {
             </span>
           </p>
           <CommandBarTriggerFull className="-ml-4" />
-          <InteractiveCube />
         </div>
       </div>
     </main>

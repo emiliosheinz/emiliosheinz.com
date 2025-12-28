@@ -17,7 +17,7 @@ const urbanist = Urbanist({
   preload: true,
 });
 
-const title = "Emilio Heinzmann"
+const title = "Emilio Heinzmann";
 const ogDescription =
   "I'm an experienced Software Engineer with a B.Sc. in Computer Science. With over 7 years of experience, I build scalable applications that prioritize and enhance the end-user experience. I bring ideas to life. I turn coffee into code.";
 
@@ -72,17 +72,26 @@ function CustomToaster() {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html suppressHydrationWarning lang="en" className={cn(urbanist.className, 'h-full bg-background')}>
-      <body className="pb-10 pt-16 px-5 max-w-6xl m-auto min-h-full flex">
-        <ThemeProvider attribute={["class", "data-theme"]} defaultTheme="system">
-          <CommandBar>
-            <Header />
-            {children}
-            <CustomToaster />
-            <Analytics />
-            <SpeedInsights />
-          </CommandBar>
-        </ThemeProvider>
+    <html
+      suppressHydrationWarning
+      lang="en"
+      className={cn(urbanist.className, "h-full bg-background")}
+    >
+      <body className="min-h-full flex">
+        <div className="pb-10 pt-16 px-5 max-w-6xl m-auto">
+          <ThemeProvider
+            attribute={["class", "data-theme"]}
+            defaultTheme="system"
+          >
+            <CommandBar>
+              <Header />
+              {children}
+              <CustomToaster />
+              <Analytics />
+              <SpeedInsights />
+            </CommandBar>
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   );
