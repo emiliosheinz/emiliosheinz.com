@@ -41,9 +41,8 @@ type CubeProps = {
 type DragState = {
   position: [Coord, Coord, Coord];
   face: FaceName;
-  startPoint: THREE.Vector3;
   faceNormal: THREE.Vector3;
-  camera?: THREE.Camera;
+  camera: THREE.Camera;
 };
 
 const DRAG_SENSITIVITY = 0.01;
@@ -51,6 +50,9 @@ const MIN_ROTATION_THRESHOLD = (5 * Math.PI) / 36;
 const MOVE_COMMIT_THRESHOLD = Math.PI / 4;
 const MAX_ROTATION = Math.PI / 2;
 const MAX_ANGLE_PER_FRAME = Math.PI / 36;
+const DRAG_START_THRESHOLD = 5;
+
+const CUBIE_POSITIONS = getCubiePositions();
 
 function isCubieInRotationLayer(
   position: [Coord, Coord, Coord],
@@ -70,8 +72,6 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
   const [moveCommitted, setMoveCommitted] = useState(false);
   const { rotationState, setRotationState, startSnapAnimation, isAnimating } = useCubeRotation();
 
-  const cubiePositions = getCubiePositions();
-
   const handleDragStart = (info: {
     position: [number, number, number];
     face: FaceName;
@@ -81,13 +81,10 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
   }) => {
     if (disableDrag || !cubeGroupRef?.current || isAnimating) return;
     
-    const [x, y, z] = info.position as [Coord, Coord, Coord];
-    
     setDragState({ 
-      position: [x, y, z], 
+      position: info.position as [Coord, Coord, Coord], 
       face: info.face,
-      startPoint: info.point.clone(),
-      faceNormal: info.normal.clone().normalize(),
+      faceNormal: info.normal,
       camera: info.event.camera,
     });
     setRotationState(null);
@@ -98,41 +95,27 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     if (!dragState && !rotationState) return;
     if (!cubeGroupRef?.current || isAnimating) return;
 
-    const screenDelta = { x: delta.x, y: delta.y };
-
     if (dragState && !rotationState) {
-      const absX = Math.abs(screenDelta.x);
-      const absY = Math.abs(screenDelta.y);
-      
-      if (absX < 5 && absY < 5) return;
-
-      const camera = dragState.camera;
-      if (!camera) return;
+      if (Math.abs(delta.x) < DRAG_START_THRESHOLD && Math.abs(delta.y) < DRAG_START_THRESHOLD) return;
+      if (!dragState.camera) return;
 
       const cameraRight = new THREE.Vector3();
       const cameraUp = new THREE.Vector3();
-      camera.matrixWorld.extractBasis(cameraRight, cameraUp, new THREE.Vector3());
+      dragState.camera.matrixWorld.extractBasis(cameraRight, cameraUp, new THREE.Vector3());
       
       const worldDrag = new THREE.Vector3()
-        .addScaledVector(cameraRight, screenDelta.x)
-        .addScaledVector(cameraUp, -screenDelta.y);
+        .addScaledVector(cameraRight, delta.x)
+        .addScaledVector(cameraUp, -delta.y);
       
       const localDrag = worldToCubeLocal(worldDrag, cubeGroupRef.current);
-      
-      const rotationInfo = determineRotation(
-        dragState.faceNormal,
-        localDrag,
-        dragState.position,
-      );
-      
-      const dragMagnitude = Math.sqrt(screenDelta.x * screenDelta.x + screenDelta.y * screenDelta.y);
+      const rotationInfo = determineRotation(dragState.faceNormal, localDrag, dragState.position);
+      const dragMagnitude = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
       const angle = computeRotationAngle(dragMagnitude, rotationInfo.sign, DRAG_SENSITIVITY);
 
       setRotationState({
         axis: rotationInfo.axis,
         layer: rotationInfo.layer,
         angle,
-        startFace: rotationInfo.faceName,
         sign: rotationInfo.sign,
         cumulativeAngle: angle,
       });
@@ -141,21 +124,18 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     }
 
     if (rotationState) {
-      const dragMagnitude = Math.sqrt(screenDelta.x * screenDelta.x + screenDelta.y * screenDelta.y);
+      const dragMagnitude = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
       const deltaAngle = computeRotationAngle(dragMagnitude, rotationState.sign, DRAG_SENSITIVITY);
-      
       const smoothedDeltaAngle = Math.sign(deltaAngle) * Math.min(Math.abs(deltaAngle), MAX_ANGLE_PER_FRAME);
       const newCumulativeAngle = rotationState.cumulativeAngle + smoothedDeltaAngle;
 
       let finalAngle = smoothedDeltaAngle;
-      let justCommitted = false;
 
       if (Math.abs(newCumulativeAngle) >= MOVE_COMMIT_THRESHOLD && !moveCommitted) {
         setMoveCommitted(true);
-        justCommitted = true;
       }
 
-      if (moveCommitted || justCommitted) {
+      if (moveCommitted) {
         const clampedCumulative = Math.sign(newCumulativeAngle) * Math.min(Math.abs(newCumulativeAngle), MAX_ROTATION);
         finalAngle = clampedCumulative - rotationState.angle;
       }
@@ -256,7 +236,7 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
   return (
     <React.Suspense fallback={null}>
       <group rotation={getOuterRotation()}>
-        {cubiePositions.map((position) => {
+        {CUBIE_POSITIONS.map((position) => {
           const isInRotatingLayer = isCubieInRotationLayer(position, rotationState);
 
           return (

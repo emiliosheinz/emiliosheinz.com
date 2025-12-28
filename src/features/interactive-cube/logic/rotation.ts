@@ -63,12 +63,7 @@ export function getLayerFromPosition(
   cubiePos: [Coord, Coord, Coord],
   axis: Axis,
 ): Coord {
-  const [x, y, z] = cubiePos;
-  switch (axis) {
-    case "x": return x;
-    case "y": return y;
-    case "z": return z;
-  }
+  return cubiePos[axis === "x" ? 0 : axis === "y" ? 1 : 2];
 }
 
 /**
@@ -133,13 +128,13 @@ export function determineRotation(
   const { axis, sign: axisSign } = snapToAxis(localRotationAxis);
   const layer = getLayerFromPosition(cubiePos, axis);
   
-  const snappedAxisVec = new THREE.Vector3();
-  if (axis === "x") snappedAxisVec.set(axisSign, 0, 0);
-  else if (axis === "y") snappedAxisVec.set(0, axisSign, 0);
-  else snappedAxisVec.set(0, 0, axisSign);
+  const snappedAxisVec = new THREE.Vector3(
+    axis === "x" ? axisSign : 0,
+    axis === "y" ? axisSign : 0,
+    axis === "z" ? axisSign : 0
+  );
 
-  const dotProduct = localRotationAxis.dot(snappedAxisVec);
-  const rotationSign = dotProduct < 0 ? axisSign * -1 : axisSign;
+  const rotationSign = localRotationAxis.dot(snappedAxisVec) < 0 ? -axisSign : axisSign;
 
   return {
     axis,

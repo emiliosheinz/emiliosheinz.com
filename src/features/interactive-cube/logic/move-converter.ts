@@ -8,6 +8,25 @@ import type { Coord } from "./coordinates";
 import type { Axis } from "./rotation";
 import type { Move } from "./moves";
 
+type MoveKey = `${Axis}-${Coord | 0}-${1 | 3}`;
+
+const MOVE_MAP: Record<MoveKey, Move> = {
+  // X-axis (Right/Left)
+  "x-1-1": "R'", "x-1-3": "R",
+  "x--1-1": "L", "x--1-3": "L'",
+  "x-0-1": "M", "x-0-3": "M'",
+  
+  // Y-axis (Up/Down)
+  "y-1-1": "U'", "y-1-3": "U",
+  "y--1-1": "D", "y--1-3": "D'",
+  "y-0-1": "E", "y-0-3": "E'",
+  
+  // Z-axis (Front/Back)
+  "z-1-1": "F'", "z-1-3": "F",
+  "z--1-1": "B", "z--1-3": "B'",
+  "z-0-1": "S", "z-0-3": "S'",
+};
+
 /**
  * Converts rotation parameters to standard Rubik's Cube move notation.
  * 
@@ -26,60 +45,8 @@ export function convertToMove(
   quarterTurns: number,
 ): Move | null {
   const normalized = ((quarterTurns % 4) + 4) % 4;
-
-  if (normalized === 0) return null;
-
-  if (layer === 0) {
-    return getMiddleLayerMove(axis, normalized);
-  }
-
-  return getOuterLayerMove(axis, layer, normalized);
-}
-
-function getMiddleLayerMove(axis: Axis, normalized: number): Move | null {
-  if (axis === "x") {
-    if (normalized === 1) return "M";
-    if (normalized === 3) return "M'";
-  } else if (axis === "y") {
-    if (normalized === 1) return "E";
-    if (normalized === 3) return "E'";
-  } else if (axis === "z") {
-    if (normalized === 1) return "S";
-    if (normalized === 3) return "S'";
-  }
-  return null;
-}
-
-function getOuterLayerMove(
-  axis: Axis,
-  layer: Coord,
-  normalized: number,
-): Move | null {
-  if (axis === "x") {
-    if (layer === 1) {
-      if (normalized === 1) return "R'";
-      if (normalized === 3) return "R";
-    } else if (layer === -1) {
-      if (normalized === 1) return "L";
-      if (normalized === 3) return "L'";
-    }
-  } else if (axis === "y") {
-    if (layer === 1) {
-      if (normalized === 1) return "U'";
-      if (normalized === 3) return "U";
-    } else if (layer === -1) {
-      if (normalized === 1) return "D";
-      if (normalized === 3) return "D'";
-    }
-  } else if (axis === "z") {
-    if (layer === 1) {
-      if (normalized === 1) return "F'";
-      if (normalized === 3) return "F";
-    } else if (layer === -1) {
-      if (normalized === 1) return "B";
-      if (normalized === 3) return "B'";
-    }
-  }
-
-  return null;
+  if (normalized === 0 || normalized === 2) return null;
+  
+  const key: MoveKey = `${axis}-${layer}-${normalized as 1 | 3}`;
+  return MOVE_MAP[key] ?? null;
 }

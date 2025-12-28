@@ -8,7 +8,7 @@ import React, { useRef } from "react";
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import { usePegatineTextures, PegatineColor } from "../hooks/usePegatineTextures";
-import { FaceName } from "../logic/rotation";
+import { FaceName, getFaceFromLocalNormal } from "../logic/rotation";
 
 export interface CubieProps {
   position: [number, number, number];
@@ -29,28 +29,14 @@ export interface CubieProps {
   onDragEnd?: () => void;
 }
 
-function getFaceFromNormal(normal: THREE.Vector3): FaceName {
-  const n = normal.clone().normalize();
-
-  if (Math.abs(n.x) > Math.abs(n.y) && Math.abs(n.x) > Math.abs(n.z)) {
-    return n.x > 0 ? "right" : "left";
-  } else if (Math.abs(n.y) > Math.abs(n.z)) {
-    return n.y > 0 ? "up" : "down";
-  } else {
-    return n.z > 0 ? "front" : "back";
-  }
-}
-
-function getCubeFaceNormal(face: FaceName): THREE.Vector3 {
-  const normal = new THREE.Vector3();
-  if (face === "right") normal.set(1, 0, 0);
-  else if (face === "left") normal.set(-1, 0, 0);
-  else if (face === "up") normal.set(0, 1, 0);
-  else if (face === "down") normal.set(0, -1, 0);
-  else if (face === "front") normal.set(0, 0, 1);
-  else if (face === "back") normal.set(0, 0, -1);
-  return normal;
-}
+const FACE_NORMALS: Record<FaceName, THREE.Vector3> = {
+  right: new THREE.Vector3(1, 0, 0),
+  left: new THREE.Vector3(-1, 0, 0),
+  up: new THREE.Vector3(0, 1, 0),
+  down: new THREE.Vector3(0, -1, 0),
+  front: new THREE.Vector3(0, 0, 1),
+  back: new THREE.Vector3(0, 0, -1),
+};
 
 export const Cubie = ({
   position,
@@ -73,8 +59,7 @@ export const Cubie = ({
     event.stopPropagation();
 
     if (onDragStart && event.face) {
-      const faceNormal = event.face.normal.clone();
-      const face = getFaceFromNormal(faceNormal);
+      const face = getFaceFromLocalNormal(event.face.normal);
       
       clickedFace.current = face;
       isDragging.current = true;
@@ -82,14 +67,12 @@ export const Cubie = ({
 
       (event.target as any).setPointerCapture(event.pointerId);
 
-      const cubeFaceNormal = getCubeFaceNormal(face);
-
       onDragStart({ 
         position, 
         face, 
         event,
         point: event.point,
-        normal: cubeFaceNormal,
+        normal: FACE_NORMALS[face],
       });
     }
   };

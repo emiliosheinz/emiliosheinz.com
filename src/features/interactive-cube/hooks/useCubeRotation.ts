@@ -8,13 +8,11 @@ import { useState, useCallback } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Axis } from "../logic/rotation";
 import type { Coord } from "../logic/coordinates";
-import type { FaceName } from "../logic/rotation";
 
 export interface RotationState {
   axis: Axis;
   layer: Coord;
   angle: number;
-  startFace: FaceName;
   sign: number;
   cumulativeAngle: number;
 }
@@ -64,7 +62,6 @@ export function useCubeRotation(): CubeRotationControls {
       axis: snapAnimation.axis,
       layer: snapAnimation.layer,
       angle: currentAngle,
-      startFace: "front",
       sign: 1,
       cumulativeAngle: currentAngle,
     });
