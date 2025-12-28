@@ -4,7 +4,7 @@
  * @module hooks/useCubeRotation
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Axis } from "../logic/rotation";
 import type { Coord } from "../logic/coordinates";
@@ -40,8 +40,16 @@ export interface CubeRotationControls {
 export function useCubeRotation(): CubeRotationControls {
   const [rotationState, setRotationState] = useState<RotationState | null>(null);
   const [snapAnimation, setSnapAnimation] = useState<SnapAnimation | null>(null);
+  const pendingClearRef = useRef(false);
 
   useFrame(() => {
+    // Clear rotation state one frame after callback executes
+    if (pendingClearRef.current) {
+      setRotationState(null);
+      pendingClearRef.current = false;
+      return;
+    }
+
     if (!snapAnimation) return;
 
     const now = performance.now();
@@ -63,8 +71,20 @@ export function useCubeRotation(): CubeRotationControls {
     });
 
     if (progress >= 1) {
-      snapAnimation.onComplete();
+      // Keep rotation at target angle for one more frame
+      setRotationState({
+        axis: snapAnimation.axis,
+        layer: snapAnimation.layer,
+        angle: snapAnimation.targetAngle,
+        sign: 1,
+        cumulativeAngle: snapAnimation.targetAngle,
+      });
+      
       setSnapAnimation(null);
+      snapAnimation.onComplete();
+      
+      // Schedule rotation clear for next frame
+      pendingClearRef.current = true;
     }
   });
 

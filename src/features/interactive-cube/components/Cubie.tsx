@@ -4,7 +4,7 @@
  * @module components/Cubie
  */
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import {
@@ -31,10 +31,6 @@ export interface CubieProps {
   onDrag?: (delta: { x: number; y: number }) => void;
   onDragEnd?: () => void;
 }
-
-type MaterialProps =
-  | { color: string }
-  | { map: THREE.Texture; metalness: number; roughness: number };
 
 const FACE_NORMALS: Record<FaceName, THREE.Vector3> = {
   right: new THREE.Vector3(1, 0, 0),
@@ -96,19 +92,18 @@ export const Cubie = ({
     onDragEnd?.();
   };
 
-  function getMaterialProps(faceColor?: PegatineColor): MaterialProps {
-    if (!faceColor) {
-      return { color: "black" };
-    }
-
-    return {
-      map: textures[faceColor] as THREE.Texture,
-      metalness: 0.8,
-      roughness: 0.2,
-    };
-  }
-
   const geometry = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 8, 0.1), []);
+
+  const renderMaterial = (key: number, faceColor?: PegatineColor) => {
+    return (
+      <meshStandardMaterial
+        metalness={0.8}
+        roughness={0.2}
+        attach={`material-${key}`}
+        {...(faceColor ? { map: textures[faceColor] } : { color: "black" })}
+      />
+    );
+  };
 
   return (
     <mesh
@@ -118,32 +113,12 @@ export const Cubie = ({
       onPointerUp={handlePointerUp}
     >
       <primitive object={geometry} />
-      <meshStandardMaterial
-        attach="material-0"
-        {...getMaterialProps(rightColor)}
-      />
-      <meshStandardMaterial
-        attach="material-1"
-        {...getMaterialProps(leftColor)}
-      />
-      <meshStandardMaterial
-        attach="material-2"
-        {...getMaterialProps(upColor)}
-      />
-      <meshStandardMaterial
-        attach="material-3"
-        {...getMaterialProps(downColor)}
-      />
-      <meshStandardMaterial
-        attach="material-4"
-        {...getMaterialProps(frontColor)}
-      />
-      <meshStandardMaterial
-        attach="material-5"
-        {...getMaterialProps(backColor)}
-      />
+      {renderMaterial(0, rightColor)}
+      {renderMaterial(1, leftColor)}
+      {renderMaterial(2, upColor)}
+      {renderMaterial(3, downColor)}
+      {renderMaterial(4, frontColor)}
+      {renderMaterial(5, backColor)}
     </mesh>
   );
 };
-
-Cubie.displayName = "Cubie";
