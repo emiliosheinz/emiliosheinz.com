@@ -1,14 +1,18 @@
 /**
  * Individual cube piece (cubie) component with drag interaction.
- * 
+ *
  * @module components/Cubie
  */
 
-import React, { useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
-import { usePegatineTextures, PegatineColor } from "../hooks/usePegatineTextures";
+import {
+  usePegatineTextures,
+  PegatineColor,
+} from "../hooks/usePegatineTextures";
 import { FaceName, getFaceFromLocalNormal } from "../logic/rotation";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 
 export interface CubieProps {
   position: [number, number, number];
@@ -28,7 +32,7 @@ export interface CubieProps {
   onDragEnd?: () => void;
 }
 
-type MaterialProps = 
+type MaterialProps =
   | { color: string }
   | { map: THREE.Texture; metalness: number; roughness: number };
 
@@ -59,10 +63,10 @@ export const Cubie = ({
 
   const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
     if (!onDragStart || !event.face) return;
-    
+
     event.stopPropagation();
     const face = getFaceFromLocalNormal(event.face.normal);
-    
+
     isDragging.current = true;
     dragStartPos.current = { x: event.clientX, y: event.clientY };
 
@@ -73,7 +77,7 @@ export const Cubie = ({
 
   const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
     if (!isDragging.current || !onDrag) return;
-    
+
     const deltaX = event.clientX - dragStartPos.current.x;
     const deltaY = event.clientY - dragStartPos.current.y;
 
@@ -84,7 +88,7 @@ export const Cubie = ({
 
   const handlePointerUp = (event: ThreeEvent<PointerEvent>) => {
     if (!isDragging.current) return;
-    
+
     isDragging.current = false;
 
     (event.target as HTMLElement).releasePointerCapture(event.pointerId);
@@ -104,6 +108,8 @@ export const Cubie = ({
     };
   }
 
+  const geometry = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 8, 0.1), []);
+
   return (
     <mesh
       position={position}
@@ -111,13 +117,31 @@ export const Cubie = ({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      <boxGeometry attach="geometry" args={[1, 1, 1]} />
-      <meshStandardMaterial attach="material-0" {...getMaterialProps(rightColor)} />
-      <meshStandardMaterial attach="material-1" {...getMaterialProps(leftColor)} />
-      <meshStandardMaterial attach="material-2" {...getMaterialProps(upColor)} />
-      <meshStandardMaterial attach="material-3" {...getMaterialProps(downColor)} />
-      <meshStandardMaterial attach="material-4" {...getMaterialProps(frontColor)} />
-      <meshStandardMaterial attach="material-5" {...getMaterialProps(backColor)} />
+      <primitive object={geometry} />
+      <meshStandardMaterial
+        attach="material-0"
+        {...getMaterialProps(rightColor)}
+      />
+      <meshStandardMaterial
+        attach="material-1"
+        {...getMaterialProps(leftColor)}
+      />
+      <meshStandardMaterial
+        attach="material-2"
+        {...getMaterialProps(upColor)}
+      />
+      <meshStandardMaterial
+        attach="material-3"
+        {...getMaterialProps(downColor)}
+      />
+      <meshStandardMaterial
+        attach="material-4"
+        {...getMaterialProps(frontColor)}
+      />
+      <meshStandardMaterial
+        attach="material-5"
+        {...getMaterialProps(backColor)}
+      />
     </mesh>
   );
 };
