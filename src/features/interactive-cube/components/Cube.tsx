@@ -5,7 +5,7 @@
  * @module components/Cube
  */
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { Cubie } from "./Cubie";
@@ -40,7 +40,6 @@ type CubeProps = {
 
 type DragState = {
   position: [Coord, Coord, Coord];
-  face: FaceName;
   faceNormal: THREE.Vector3;
   camera: THREE.Camera;
 };
@@ -59,12 +58,7 @@ function isCubieInRotationLayer(
   rotation: RotationState | null,
 ): boolean {
   if (!rotation) return false;
-  const [x, y, z] = position;
-  switch (rotation.axis) {
-    case "x": return x === rotation.layer;
-    case "y": return y === rotation.layer;
-    case "z": return z === rotation.layer;
-  }
+  return position[rotation.axis === "x" ? 0 : rotation.axis === "y" ? 1 : 2] === rotation.layer;
 }
 
 export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }: CubeProps) => {
@@ -76,14 +70,12 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     position: [number, number, number];
     face: FaceName;
     event: ThreeEvent<PointerEvent>;
-    point: THREE.Vector3;
     normal: THREE.Vector3;
   }) => {
     if (disableDrag || !cubeGroupRef?.current || isAnimating) return;
     
     setDragState({ 
       position: info.position as [Coord, Coord, Coord], 
-      face: info.face,
       faceNormal: info.normal,
       camera: info.event.camera,
     });
@@ -91,7 +83,7 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     setMoveCommitted(false);
   };
 
-  const handleDrag = (delta: { x: number; y: number; point?: THREE.Vector3 }) => {
+  const handleDrag = (delta: { x: number; y: number }) => {
     if (!dragState && !rotationState) return;
     if (!cubeGroupRef?.current || isAnimating) return;
 
@@ -215,39 +207,29 @@ export const Cube = ({ state, onStateChange, disableDrag = false, cubeGroupRef }
     );
   };
 
-  const getOuterRotation = (): [number, number, number] => {
-    if (!rotationState) return [0, 0, 0];
+  const getRotation = (axis: Axis, angle: number, invert = false): [number, number, number] => {
+    const value = invert ? -angle : angle;
     return [
-      rotationState.axis === "x" ? rotationState.angle : 0,
-      rotationState.axis === "y" ? rotationState.angle : 0,
-      rotationState.axis === "z" ? rotationState.angle : 0,
+      axis === "x" ? value : 0,
+      axis === "y" ? value : 0,
+      axis === "z" ? value : 0,
     ];
   };
 
-  const getCounterRotation = (): [number, number, number] => {
-    if (!rotationState) return [0, 0, 0];
-    return [
-      rotationState.axis === "x" ? -rotationState.angle : 0,
-      rotationState.axis === "y" ? -rotationState.angle : 0,
-      rotationState.axis === "z" ? -rotationState.angle : 0,
-    ];
-  };
+  const outerRotation = rotationState ? getRotation(rotationState.axis, rotationState.angle) : [0, 0, 0] as [number, number, number];
+  const counterRotation = rotationState ? getRotation(rotationState.axis, rotationState.angle, true) : [0, 0, 0] as [number, number, number];
 
   return (
     <React.Suspense fallback={null}>
-      <group rotation={getOuterRotation()}>
-        {CUBIE_POSITIONS.map((position) => {
-          const isInRotatingLayer = isCubieInRotationLayer(position, rotationState);
-
-          return (
-            <group
-              key={`${position[0]},${position[1]},${position[2]}`}
-              rotation={isInRotatingLayer ? [0, 0, 0] : getCounterRotation()}
-            >
-              {renderCubie(position)}
-            </group>
-          );
-        })}
+      <group rotation={outerRotation}>
+        {CUBIE_POSITIONS.map((position) => (
+          <group
+            key={`${position[0]},${position[1]},${position[2]}`}
+            rotation={isCubieInRotationLayer(position, rotationState) ? [0, 0, 0] : counterRotation}
+          >
+            {renderCubie(position)}
+          </group>
+        ))}
       </group>
     </React.Suspense>
   );

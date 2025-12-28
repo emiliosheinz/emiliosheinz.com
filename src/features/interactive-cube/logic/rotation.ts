@@ -15,10 +15,6 @@ export interface RotationInfo {
   axis: Axis;
   layer: Coord;
   sign: number;
-  faceName: FaceName;
-  localNormal: THREE.Vector3;
-  localDragDir: THREE.Vector3;
-  rawCross: THREE.Vector3;
 }
 
 /**
@@ -106,25 +102,14 @@ export function determineRotation(
   cubiePos: [Coord, Coord, Coord],
 ): RotationInfo {
   const n = localNormal.clone().normalize();
-  const faceName = getFaceFromLocalNormal(n);
-  const localDrag = projectToPlane(localDragDir, n).normalize();
-  
+  const localDrag = projectToPlane(localDragDir, n);
   const localRotationAxis = new THREE.Vector3().crossVectors(n, localDrag);
   
   if (localRotationAxis.length() < 0.001) {
-    return {
-      axis: "x",
-      layer: 0,
-      sign: 1,
-      faceName,
-      localNormal: n,
-      localDragDir: localDrag,
-      rawCross: localRotationAxis,
-    };
+    return { axis: "x", layer: 0, sign: 1 };
   }
   
   localRotationAxis.normalize();
-  
   const { axis, sign: axisSign } = snapToAxis(localRotationAxis);
   const layer = getLayerFromPosition(cubiePos, axis);
   
@@ -136,15 +121,7 @@ export function determineRotation(
 
   const rotationSign = localRotationAxis.dot(snappedAxisVec) < 0 ? -axisSign : axisSign;
 
-  return {
-    axis,
-    layer,
-    sign: rotationSign,
-    faceName,
-    localNormal: n,
-    localDragDir: localDrag,
-    rawCross: localRotationAxis,
-  };
+  return { axis, layer, sign: rotationSign };
 }
 
 /**

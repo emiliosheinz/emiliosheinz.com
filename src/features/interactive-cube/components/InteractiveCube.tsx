@@ -15,19 +15,23 @@ import { useIsSpacePressed } from "../hooks/useIsSpacePressed";
 import { useArcballRotation } from "../hooks/useArcballRotation";
 import { createSolvedState } from "../logic/cube-state";
 
+import { CubeState } from "../logic/cube-state";
+
+interface RotatableCubeWrapperProps {
+  cubeState: CubeState;
+  onStateChange: (state: CubeState) => void;
+  autoRotate: boolean;
+  allowPieceRotation: boolean;
+  allowManualRotation: boolean;
+}
+
 function RotatableCubeWrapper({ 
   cubeState, 
   onStateChange,
   autoRotate,
   allowPieceRotation,
   allowManualRotation
-}: { 
-  cubeState: any;
-  onStateChange: (state: any) => void;
-  autoRotate: boolean;
-  allowPieceRotation: boolean;
-  allowManualRotation: boolean;
-}) {
+}: RotatableCubeWrapperProps) {
   const groupRef = useRef<Group>(null);
 
   useArcballRotation({

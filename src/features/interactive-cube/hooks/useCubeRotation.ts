@@ -34,12 +34,8 @@ export interface CubeRotationControls {
   isAnimating: boolean;
 }
 
-const SNAP_DURATION_MS = 250;
-
 /**
  * Manages cube layer rotation state and smooth snap animations.
- * 
- * @returns Rotation controls including state and animation functions
  */
 export function useCubeRotation(): CubeRotationControls {
   const [rotationState, setRotationState] = useState<RotationState | null>(null);

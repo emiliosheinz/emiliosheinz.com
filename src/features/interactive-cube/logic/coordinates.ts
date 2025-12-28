@@ -9,30 +9,24 @@ import type { Face } from "./cube-state";
 export type Coord = -1 | 0 | 1;
 
 /**
- * Converts (x, y) coordinates to a flat array index for XY-plane faces.
+ * Converts 2D coordinates to a flat array index (generic for any plane).
  */
+function coordToIndex(primary: Coord, secondary: Coord): number {
+  const row = primary === 1 ? 0 : primary === 0 ? 1 : 2;
+  const col = secondary === -1 ? 0 : secondary === 0 ? 1 : 2;
+  return row * 3 + col;
+}
+
 export function indexFromXY(x: Coord, y: Coord): number {
-  const row = y === 1 ? 0 : y === 0 ? 1 : 2;
-  const col = x === -1 ? 0 : x === 0 ? 1 : 2;
-  return row * 3 + col;
+  return coordToIndex(y, x);
 }
 
-/**
- * Converts (x, z) coordinates to a flat array index for XZ-plane faces.
- */
 export function indexFromXZ(x: Coord, z: Coord): number {
-  const row = z === 1 ? 0 : z === 0 ? 1 : 2;
-  const col = x === -1 ? 0 : x === 0 ? 1 : 2;
-  return row * 3 + col;
+  return coordToIndex(z, x);
 }
 
-/**
- * Converts (z, y) coordinates to a flat array index for ZY-plane faces.
- */
 export function indexFromZY(z: Coord, y: Coord): number {
-  const row = y === 1 ? 0 : y === 0 ? 1 : 2;
-  const col = z === -1 ? 0 : z === 0 ? 1 : 2;
-  return row * 3 + col;
+  return coordToIndex(y, z);
 }
 
 /**

@@ -22,10 +22,9 @@ export interface CubieProps {
     position: [number, number, number];
     face: FaceName;
     event: ThreeEvent<PointerEvent>;
-    point: THREE.Vector3;
     normal: THREE.Vector3;
   }) => void;
-  onDrag?: (delta: { x: number; y: number; point?: THREE.Vector3 }) => void;
+  onDrag?: (delta: { x: number; y: number }) => void;
   onDragEnd?: () => void;
 }
 
@@ -52,55 +51,43 @@ export const Cubie = ({
 }: CubieProps) => {
   const textures = usePegatineTextures();
   const isDragging = useRef(false);
-  const clickedFace = useRef<FaceName | null>(null);
   const dragStartPos = useRef({ x: 0, y: 0 });
 
   const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
+    if (!onDragStart || !event.face) return;
+    
     event.stopPropagation();
+    const face = getFaceFromLocalNormal(event.face.normal);
+    
+    isDragging.current = true;
+    dragStartPos.current = { x: event.clientX, y: event.clientY };
 
-    if (onDragStart && event.face) {
-      const face = getFaceFromLocalNormal(event.face.normal);
-      
-      clickedFace.current = face;
-      isDragging.current = true;
-      dragStartPos.current = { x: event.clientX, y: event.clientY };
+    const target = event.target as EventTarget & { setPointerCapture: (id: number) => void };
+    target.setPointerCapture(event.pointerId);
 
-      (event.target as any).setPointerCapture(event.pointerId);
-
-      onDragStart({ 
-        position, 
-        face, 
-        event,
-        point: event.point,
-        normal: FACE_NORMALS[face],
-      });
-    }
+    onDragStart({ position, face, event, normal: FACE_NORMALS[face] });
   };
 
   const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
-    if (isDragging.current && clickedFace.current && onDrag) {
-      const deltaX = event.clientX - dragStartPos.current.x;
-      const deltaY = event.clientY - dragStartPos.current.y;
+    if (!isDragging.current || !onDrag) return;
+    
+    const deltaX = event.clientX - dragStartPos.current.x;
+    const deltaY = event.clientY - dragStartPos.current.y;
 
-      dragStartPos.current = { x: event.clientX, y: event.clientY };
+    dragStartPos.current = { x: event.clientX, y: event.clientY };
 
-      onDrag({ 
-        x: deltaX, 
-        y: deltaY,
-        point: event.point,
-      });
-    }
+    onDrag({ x: deltaX, y: deltaY });
   };
 
   const handlePointerUp = (event: ThreeEvent<PointerEvent>) => {
-    if (isDragging.current) {
-      isDragging.current = false;
-      clickedFace.current = null;
+    if (!isDragging.current) return;
+    
+    isDragging.current = false;
 
-      (event.target as any).releasePointerCapture(event.pointerId);
+    const target = event.target as EventTarget & { releasePointerCapture: (id: number) => void };
+    target.releasePointerCapture(event.pointerId);
 
-      onDragEnd?.();
-    }
+    onDragEnd?.();
   };
 
   function getMaterialProps(

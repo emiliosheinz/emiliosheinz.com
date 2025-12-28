@@ -129,27 +129,25 @@ describe("rotation", () => {
 
   describe("determineRotation", () => {
     it("should determine Y-axis rotation from front face horizontal drag", () => {
-      const normal = new THREE.Vector3(0, 0, 1); // Front face
-      const drag = new THREE.Vector3(1, 0, 0); // Drag right
+      const normal = new THREE.Vector3(0, 0, 1);
+      const drag = new THREE.Vector3(1, 0, 0);
       const position: [number, number, number] = [0, 1, 1];
       
       const result = determineRotation(normal, drag, position);
       
       expect(result.axis).toBe("y");
       expect(result.layer).toBe(1);
-      expect(result.faceName).toBe("front");
     });
 
     it("should determine X-axis rotation from top face horizontal drag", () => {
-      const normal = new THREE.Vector3(0, 1, 0); // Top face
-      const drag = new THREE.Vector3(0, 0, 1); // Drag forward
+      const normal = new THREE.Vector3(0, 1, 0);
+      const drag = new THREE.Vector3(0, 0, 1);
       const position: [number, number, number] = [1, 1, 0];
       
       const result = determineRotation(normal, drag, position);
       
       expect(result.axis).toBe("x");
       expect(result.layer).toBe(1);
-      expect(result.faceName).toBe("up");
     });
   });
 });
