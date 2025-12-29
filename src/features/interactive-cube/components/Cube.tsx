@@ -42,13 +42,13 @@ type DragStart = {
   position: [Coord, Coord, Coord];
   faceNormal: THREE.Vector3;
   camera: THREE.Camera;
+  initialPointer: { x: number; y: number };
 };
 
+const SMOOTHING_FACTOR = 0.3;
 const DRAG_SENSITIVITY = 0.01;
 const DRAG_START_THRESHOLD = 5;
 const MAX_ROTATION = Math.PI / 2;
-const MAX_ANGLE_PER_FRAME = Math.PI / 16;
-const MOVE_COMMIT_THRESHOLD = Math.PI / 2;
 const MIN_ROTATION_THRESHOLD = (5 * Math.PI) / 36;
 const CUBIE_POSITIONS = getCubiePositions();
 const cameraRight = new THREE.Vector3();
@@ -87,17 +87,23 @@ export const Cube = ({
       faceNormal: info.normal,
       camera: info.event.camera,
       position: info.position as [Coord, Coord, Coord],
+      initialPointer: { x: info.event.clientX, y: info.event.clientY },
     };
     setRotationState(null);
   };
 
-  const handleDrag = (delta: { x: number; y: number }) => {
+  const handleDrag = (pointer: { x: number; y: number }) => {
     /** Checks preconditions to start handling drag action */
     if (!dragStartRef.current && !rotationState) return;
     if (!cubeGroupRef?.current || isAnimating) return;
+    if (!dragStartRef.current) return;
+    
+    const totalDeltaX = pointer.x - dragStartRef.current.initialPointer.x;
+    const totalDeltaY = pointer.y - dragStartRef.current.initialPointer.y;
+    
     if (
-      Math.abs(delta.x) < DRAG_START_THRESHOLD &&
-      Math.abs(delta.y) < DRAG_START_THRESHOLD
+      Math.abs(totalDeltaX) < DRAG_START_THRESHOLD &&
+      Math.abs(totalDeltaY) < DRAG_START_THRESHOLD
     )
       return;
 
@@ -110,8 +116,8 @@ export const Cube = ({
       );
 
       const worldDrag = new THREE.Vector3()
-        .addScaledVector(cameraRight, delta.x)
-        .addScaledVector(cameraUp, -delta.y);
+        .addScaledVector(cameraRight, totalDeltaX)
+        .addScaledVector(cameraUp, -totalDeltaY);
 
       const localDrag = worldToCubeLocal(worldDrag, cubeGroupRef.current);
       const rotationInfo = determineRotation(
@@ -122,7 +128,7 @@ export const Cube = ({
 
       if (!rotationInfo) return;
 
-      const dragMagnitude = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
+      const dragMagnitude = Math.sqrt(totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY);
       const angle = computeRotationAngle(
         dragMagnitude,
         rotationInfo.sign,
@@ -140,28 +146,21 @@ export const Cube = ({
 
     /** Continue the rotation */
     if (rotationState) {
-      const dragMagnitude = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
-      const deltaAngle = computeRotationAngle(
+      const dragMagnitude = Math.sqrt(totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY);
+      const targetAngle = computeRotationAngle(
         dragMagnitude,
         rotationState.sign,
         DRAG_SENSITIVITY,
       );
-      const smoothedDeltaAngle =
-        Math.sign(deltaAngle) *
-        Math.min(Math.abs(deltaAngle), MAX_ANGLE_PER_FRAME);
-      const newAngle = rotationState.angle + smoothedDeltaAngle;
 
-      let finalAngle = smoothedDeltaAngle;
-
-      if (Math.abs(newAngle) >= MOVE_COMMIT_THRESHOLD) {
-        const clampedCumulative =
-          Math.sign(newAngle) * Math.min(Math.abs(newAngle), MAX_ROTATION);
-        finalAngle = clampedCumulative - rotationState.angle;
-      }
+      const clampedTarget = Math.sign(targetAngle) * Math.min(Math.abs(targetAngle), MAX_ROTATION);
+      
+      const smoothedAngle = rotationState.angle + 
+        (clampedTarget - rotationState.angle) * SMOOTHING_FACTOR;
 
       setRotationState({
         ...rotationState,
-        angle: rotationState.angle + finalAngle,
+        angle: smoothedAngle,
       });
     }
   };

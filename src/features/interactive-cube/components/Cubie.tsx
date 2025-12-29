@@ -28,7 +28,7 @@ export interface CubieProps {
     event: ThreeEvent<PointerEvent>;
     normal: THREE.Vector3;
   }) => void;
-  onDrag?: (delta: { x: number; y: number }) => void;
+  onDrag?: (pointer: { x: number; y: number }) => void;
   onDragEnd?: () => void;
 }
 
@@ -74,12 +74,7 @@ export const Cubie = ({
   const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
     if (!isDragging.current || !onDrag) return;
 
-    const deltaX = event.clientX - dragStartPos.current.x;
-    const deltaY = event.clientY - dragStartPos.current.y;
-
-    dragStartPos.current = { x: event.clientX, y: event.clientY };
-
-    onDrag({ x: deltaX, y: deltaY });
+    onDrag({ x: event.clientX, y: event.clientY });
   };
 
   const handlePointerUp = (event: ThreeEvent<PointerEvent>) => {
