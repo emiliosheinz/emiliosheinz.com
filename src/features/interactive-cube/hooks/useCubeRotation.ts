@@ -39,48 +39,32 @@ export interface CubeRotationControls {
  */
 export function useCubeRotation(): CubeRotationControls {
   const [rotationState, setRotationState] = useState<RotationState | null>(null);
-  const [snapAnimation, setSnapAnimation] = useState<SnapAnimation | null>(null);
-  const pendingClearRef = useRef(false);
+  const snapAnimationRef = useRef<SnapAnimation | null>(null);
 
   useFrame(() => {
-    // Clear rotation state one frame after callback executes
-    if (pendingClearRef.current) {
-      setRotationState(null);
-      pendingClearRef.current = false;
-      return;
-    }
-
-    if (!snapAnimation) return;
+    if (!snapAnimationRef.current) return;
 
     const now = performance.now();
-    const elapsed = now - snapAnimation.startTime;
-    const progress = Math.min(elapsed / snapAnimation.duration, 1);
-
+    const elapsed = now - snapAnimationRef.current.startTime;
+    const progress = Math.min(elapsed / snapAnimationRef.current.duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
 
     const currentAngle =
-      snapAnimation.startAngle +
-      (snapAnimation.targetAngle - snapAnimation.startAngle) * eased;
+      snapAnimationRef.current.startAngle +
+      (snapAnimationRef.current.targetAngle - snapAnimationRef.current.startAngle) * eased;
 
     setRotationState({
-      axis: snapAnimation.axis,
-      layer: snapAnimation.layer,
+      axis: snapAnimationRef.current.axis,
+      layer: snapAnimationRef.current.layer,
       angle: currentAngle,
       sign: 1,
       cumulativeAngle: currentAngle,
     });
 
     if (progress >= 1) {
-      setRotationState({
-        axis: snapAnimation.axis,
-        layer: snapAnimation.layer,
-        angle: snapAnimation.targetAngle,
-        sign: 1,
-        cumulativeAngle: snapAnimation.targetAngle,
-      });
-      setSnapAnimation(null);
-      snapAnimation.onComplete();
-      pendingClearRef.current = true;
+      snapAnimationRef.current.onComplete();
+      snapAnimationRef.current = null;
+      setRotationState(null);
     }
   });
 
@@ -91,10 +75,10 @@ export function useCubeRotation(): CubeRotationControls {
         return;
       }
       
-      setSnapAnimation({
+      snapAnimationRef.current = {
         ...config,
         startTime: performance.now(),
-      });
+      }
     },
     [],
   );
@@ -103,6 +87,6 @@ export function useCubeRotation(): CubeRotationControls {
     rotationState,
     setRotationState,
     startSnapAnimation,
-    isAnimating: snapAnimation !== null,
+    isAnimating: snapAnimationRef.current !== null,
   };
 }
