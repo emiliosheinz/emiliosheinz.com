@@ -14,7 +14,6 @@ export interface RotationState {
   layer: Coord;
   angle: number;
   sign: number;
-  cumulativeAngle: number;
 }
 
 interface SnapAnimation {
@@ -57,28 +56,22 @@ export function useCubeRotation(): CubeRotationControls {
         snapAnimationRef.current.startAngle) *
         eased;
 
-    setRotationState({
-      sign: 1,
-      axis: snapAnimationRef.current.axis,
-      layer: snapAnimationRef.current.layer,
-      angle: currentAngle,
-      cumulativeAngle: currentAngle,
-    });
-
-    if (progress >= 1) {
-      setRotationState(null);
+    if (progress < 1) {
+      setRotationState({
+        sign: 1,
+        axis: snapAnimationRef.current.axis,
+        layer: snapAnimationRef.current.layer,
+        angle: currentAngle,
+      });
+    } else {
       snapAnimationRef.current.onComplete();
       snapAnimationRef.current = null;
+      setRotationState(null);
     }
   });
 
   const startSnapAnimation = useCallback(
     (config: Omit<SnapAnimation, "startTime">) => {
-      if (config.duration <= 0) {
-        config.onComplete();
-        return;
-      }
-
       snapAnimationRef.current = {
         ...config,
         startTime: performance.now(),

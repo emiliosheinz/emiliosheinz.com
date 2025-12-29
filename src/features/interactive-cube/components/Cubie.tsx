@@ -4,7 +4,7 @@
  * @module components/Cubie
  */
 
-import React, { useRef, useMemo, useCallback } from "react";
+import React, { useRef, useMemo } from "react";
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import {
