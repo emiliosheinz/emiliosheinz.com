@@ -1,6 +1,6 @@
 /**
  * Hook for managing cube layer rotation state and snap animations.
- * 
+ *
  * @module hooks/useCubeRotation
  */
 
@@ -38,7 +38,9 @@ export interface CubeRotationControls {
  * Manages cube layer rotation state and smooth snap animations.
  */
 export function useCubeRotation(): CubeRotationControls {
-  const [rotationState, setRotationState] = useState<RotationState | null>(null);
+  const [rotationState, setRotationState] = useState<RotationState | null>(
+    null,
+  );
   const snapAnimationRef = useRef<SnapAnimation | null>(null);
 
   useFrame(() => {
@@ -51,20 +53,22 @@ export function useCubeRotation(): CubeRotationControls {
 
     const currentAngle =
       snapAnimationRef.current.startAngle +
-      (snapAnimationRef.current.targetAngle - snapAnimationRef.current.startAngle) * eased;
+      (snapAnimationRef.current.targetAngle -
+        snapAnimationRef.current.startAngle) *
+        eased;
 
     setRotationState({
+      sign: 1,
       axis: snapAnimationRef.current.axis,
       layer: snapAnimationRef.current.layer,
       angle: currentAngle,
-      sign: 1,
       cumulativeAngle: currentAngle,
     });
 
     if (progress >= 1) {
+      setRotationState(null);
       snapAnimationRef.current.onComplete();
       snapAnimationRef.current = null;
-      setRotationState(null);
     }
   });
 
@@ -74,11 +78,11 @@ export function useCubeRotation(): CubeRotationControls {
         config.onComplete();
         return;
       }
-      
+
       snapAnimationRef.current = {
         ...config,
         startTime: performance.now(),
-      }
+      };
     },
     [],
   );
