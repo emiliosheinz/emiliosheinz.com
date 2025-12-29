@@ -54,7 +54,7 @@ function RotatableCubeWrapper({
 }
 
 export function InteractiveCube() {
-  const [cubeState, setCubeState] = useState(scramble(createSolvedState()).state);
+  const [cubeState, setCubeState] = useState(scramble(createSolvedState(), 0).state);
   const [isFocused, setIsFocused] = useState(false);
   const isSpacePressed = useIsSpacePressed();
 

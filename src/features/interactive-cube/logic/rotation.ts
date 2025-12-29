@@ -73,8 +73,7 @@ export function worldToCubeLocal(
 ): THREE.Vector3 {
   const local = worldVec.clone();
   const invQuat = cubeGroup.quaternion.clone().invert();
-  local.applyQuaternion(invQuat);
-  return local;
+  return local.applyQuaternion(invQuat);
 }
 
 /**

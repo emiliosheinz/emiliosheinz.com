@@ -5,7 +5,7 @@
  * @module components/Cube
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { Cubie } from "./Cubie";
@@ -45,11 +45,11 @@ type DragState = {
 };
 
 const DRAG_SENSITIVITY = 0.01;
-const MIN_ROTATION_THRESHOLD = (5 * Math.PI) / 36;
-const MOVE_COMMIT_THRESHOLD = Math.PI / 4;
+const DRAG_START_THRESHOLD = 10;
 const MAX_ROTATION = Math.PI / 2;
 const MAX_ANGLE_PER_FRAME = Math.PI / 36;
-const DRAG_START_THRESHOLD = 5;
+const MOVE_COMMIT_THRESHOLD = Math.PI / 4;
+const MIN_ROTATION_THRESHOLD = (5 * Math.PI) / 36;
 
 const CUBIE_POSITIONS = getCubiePositions();
 
@@ -70,8 +70,7 @@ export const Cube = ({
   disableDrag = false,
   cubeGroupRef,
 }: CubeProps) => {
-  const [dragState, setDragState] = useState<DragState | null>(null);
-  const [moveCommitted, setMoveCommitted] = useState(false);
+  const [dragStartState, setDragStartState] = useState<DragState | null>(null);
   const { rotationState, setRotationState, startSnapAnimation, isAnimating } =
     useCubeRotation();
 
@@ -82,31 +81,27 @@ export const Cube = ({
     normal: THREE.Vector3;
   }) => {
     if (disableDrag || !cubeGroupRef?.current || isAnimating) return;
-
-    setDragState({
+    setDragStartState({
       position: info.position as [Coord, Coord, Coord],
       faceNormal: info.normal,
       camera: info.event.camera,
     });
     setRotationState(null);
-    setMoveCommitted(false);
   };
 
   const handleDrag = (delta: { x: number; y: number }) => {
-    if (!dragState && !rotationState) return;
+    if (!dragStartState && !rotationState) return;
     if (!cubeGroupRef?.current || isAnimating) return;
+    if (
+      Math.abs(delta.x) < DRAG_START_THRESHOLD &&
+      Math.abs(delta.y) < DRAG_START_THRESHOLD
+    )
+      return;
 
-    if (dragState && !rotationState) {
-      if (
-        Math.abs(delta.x) < DRAG_START_THRESHOLD &&
-        Math.abs(delta.y) < DRAG_START_THRESHOLD
-      )
-        return;
-      if (!dragState.camera) return;
-
+    if (dragStartState && !rotationState) {
       const cameraRight = new THREE.Vector3();
       const cameraUp = new THREE.Vector3();
-      dragState.camera.matrixWorld.extractBasis(
+      dragStartState.camera.matrixWorld.extractBasis(
         cameraRight,
         cameraUp,
         new THREE.Vector3(),
@@ -118,9 +113,9 @@ export const Cube = ({
 
       const localDrag = worldToCubeLocal(worldDrag, cubeGroupRef.current);
       const rotationInfo = determineRotation(
-        dragState.faceNormal,
+        dragStartState.faceNormal,
         localDrag,
-        dragState.position,
+        dragStartState.position,
       );
 
       if (!rotationInfo) return;
@@ -139,7 +134,7 @@ export const Cube = ({
         sign: rotationInfo.sign,
         cumulativeAngle: angle,
       });
-      setDragState(null);
+      setDragStartState(null);
       return;
     }
 
@@ -158,14 +153,7 @@ export const Cube = ({
 
       let finalAngle = smoothedDeltaAngle;
 
-      if (
-        Math.abs(newCumulativeAngle) >= MOVE_COMMIT_THRESHOLD &&
-        !moveCommitted
-      ) {
-        setMoveCommitted(true);
-      }
-
-      if (moveCommitted) {
+      if (Math.abs(newCumulativeAngle) >= MOVE_COMMIT_THRESHOLD) {
         const clampedCumulative =
           Math.sign(newCumulativeAngle) *
           Math.min(Math.abs(newCumulativeAngle), MAX_ROTATION);
@@ -182,14 +170,13 @@ export const Cube = ({
 
   const handleDragEnd = () => {
     if (!rotationState) {
-      setDragState(null);
+      setDragStartState(null);
       return;
     }
 
     if (Math.abs(rotationState.angle) < MIN_ROTATION_THRESHOLD) {
-      setDragState(null);
+      setDragStartState(null);
       setRotationState(null);
-      setMoveCommitted(false);
       return;
     }
 
@@ -209,15 +196,10 @@ export const Cube = ({
       targetAngle: snappedAngle,
       duration: 250,
       onComplete: () => {
-        if (move) {
-          const newState = applyMove(state, move);
-          onStateChange(newState);
-        }
-        setMoveCommitted(false);
+        if (!move) return;
+        onStateChange(applyMove(state, move));
       },
     });
-
-    setDragState(null);
   };
 
   const renderCubie = ([x, y, z]: [Coord, Coord, Coord]) => {
@@ -245,9 +227,9 @@ export const Cube = ({
         backColor={
           isBack ? state.B[renderIndex("B", indexFromXY(x, y))] : undefined
         }
-        onDragStart={handleDragStart}
         onDrag={handleDrag}
         onDragEnd={handleDragEnd}
+        onDragStart={handleDragStart}
       />
     );
   };

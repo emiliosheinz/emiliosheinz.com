@@ -71,7 +71,6 @@ export function useCubeRotation(): CubeRotationControls {
     });
 
     if (progress >= 1) {
-      // Keep rotation at target angle for one more frame
       setRotationState({
         axis: snapAnimation.axis,
         layer: snapAnimation.layer,
@@ -79,11 +78,8 @@ export function useCubeRotation(): CubeRotationControls {
         sign: 1,
         cumulativeAngle: snapAnimation.targetAngle,
       });
-      
       setSnapAnimation(null);
       snapAnimation.onComplete();
-      
-      // Schedule rotation clear for next frame
       pendingClearRef.current = true;
     }
   });
