@@ -8,7 +8,7 @@ import { useCallback, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Axis, RotationState } from "../logic/rotation";
 import type { Coord } from "../logic/coordinates";
-import { useCube } from "./useCube";
+import { useCube } from "./use-cube";
 import { Move } from "../logic/moves";
 
 type SnapAnimation = {

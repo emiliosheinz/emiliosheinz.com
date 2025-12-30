@@ -8,7 +8,7 @@
 import React, { useRef } from "react";
 import { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
-import { Cubie } from "./Cubie";
+import { Cubie } from "./cubie";
 import {
   Coord,
   indexFromXY,
@@ -28,8 +28,8 @@ import {
   RotationState,
 } from "../logic/rotation";
 import { convertToMove } from "../logic/move-converter";
-import { useCubeRotation } from "../hooks/useCubeRotation";
-import { useCube } from "../hooks/useCube";
+import { useCubeRotation } from "../hooks/use-cube-rotation";
+import { useCube } from "../hooks/use-cube";
 
 type CubeProps = {
   disableDrag?: boolean;

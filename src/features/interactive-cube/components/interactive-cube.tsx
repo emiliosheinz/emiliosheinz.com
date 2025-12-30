@@ -10,9 +10,9 @@ import { Canvas } from "@react-three/fiber";
 import { PointLight, Group } from "three";
 import * as Dialog from "@radix-ui/react-dialog";
 import React, { useState, useRef } from "react";
-import { Cube } from "./Cube";
-import { useIsSpacePressed } from "../hooks/useIsSpacePressed";
-import { useArcballRotation } from "../hooks/useArcballRotation";
+import { Cube } from "./cube";
+import { useIsSpacePressed } from "../hooks/use-is-space-pressed";
+import { useArcballRotation } from "../hooks/use-arcball-rotation";
 
 interface RotatableCubeWrapperProps {
   autoRotate: boolean;
@@ -72,10 +72,12 @@ export function InteractiveCube() {
       {canvas}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/90" />
-        <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full ">
-          {canvas}
+        <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full flex justify-center items-center">
+          <div className="w-[90%] h-[90%]">
+            {canvas}
+          </div>
           <Dialog.Close />
-          <Dialog.Title>Interactive Rubiks Cube</Dialog.Title>
+          <Dialog.Title className="hidden">Interactive Rubiks Cube</Dialog.Title>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

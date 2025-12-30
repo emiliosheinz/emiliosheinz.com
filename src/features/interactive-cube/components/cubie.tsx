@@ -10,7 +10,7 @@ import { ThreeEvent } from "@react-three/fiber";
 import {
   usePegatineTextures,
   PegatineColor,
-} from "../hooks/usePegatineTextures";
+} from "../hooks/use-pegatine-textures";
 import { FaceName, getFaceFromLocalNormal } from "../logic/rotation";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 
