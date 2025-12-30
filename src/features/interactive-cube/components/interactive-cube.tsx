@@ -108,8 +108,8 @@ export function InteractiveCube() {
         </TooltipContent>
       </Tooltip>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/90" />
-        <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full flex justify-center items-center">
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/90 animate-in fade-in duration-300" />
+        <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full flex justify-center items-center animate-in fade-in duration-500">
           <div className="w-[90%] h-[90%]">{canvas}</div>
           <Dialog.Close asChild>
             <Button size="icon" variant="ghost" className="absolute top-5 right-5">
