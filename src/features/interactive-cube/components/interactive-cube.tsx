@@ -18,6 +18,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { Cross, CrossIcon, LucideCross, X } from "lucide-react";
+import { Button } from "~/components/ui/button";
 
 interface RotatableCubeWrapperProps {
   autoRotate: boolean;
@@ -109,7 +111,11 @@ export function InteractiveCube() {
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/90" />
         <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full flex justify-center items-center">
           <div className="w-[90%] h-[90%]">{canvas}</div>
-          <Dialog.Close />
+          <Dialog.Close asChild>
+            <Button size="icon" variant="ghost" className="absolute top-5 right-5">
+              <X className="size-5"/>
+            </Button>
+          </Dialog.Close>
           <Dialog.Title className="hidden">
             Interactive Rubiks Cube
           </Dialog.Title>
