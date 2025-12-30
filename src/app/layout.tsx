@@ -76,9 +76,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       suppressHydrationWarning
       lang="en"
-      className={cn(urbanist.className, "h-full bg-background")}
+      className={cn(urbanist.className, "h-full")}
     >
-      <body className="min-h-full flex">
+      <body className="flex min-h-full">
         <div className="pb-10 pt-16 px-5 max-w-6xl m-auto">
           <ThemeProvider
             attribute={["class", "data-theme"]}

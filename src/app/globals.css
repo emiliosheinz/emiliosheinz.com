@@ -5,7 +5,6 @@
 
 @theme {
   --color-dodger-blue: #38b6ff;
-
   --animate-waving-hand: wave 2.5s linear infinite;
 
   @keyframes wave {
