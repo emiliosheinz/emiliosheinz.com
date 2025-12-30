@@ -25,12 +25,9 @@ const serverTestConfig = {
   testMatch: ["**/__tests__/server/*.[jt]s?(x)"],
 };
 
-/** @type {import('jest').Config} */
-const config = {
+export default async () => ({
   projects: [
     await createJestConfig(clientTestConfig)(),
     await createJestConfig(serverTestConfig)(),
   ],
-};
-
-export default config;
+});
