@@ -1,1 +1,0 @@
-export { InteractiveCube } from "./InteractiveCube";
