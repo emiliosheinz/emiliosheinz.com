@@ -9,10 +9,15 @@
 import { Canvas } from "@react-three/fiber";
 import { PointLight, Group } from "three";
 import * as Dialog from "@radix-ui/react-dialog";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Cube } from "./cube";
 import { useIsSpacePressed } from "../hooks/use-is-space-pressed";
 import { useArcballRotation } from "../hooks/use-arcball-rotation";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 
 interface RotatableCubeWrapperProps {
   autoRotate: boolean;
@@ -42,7 +47,22 @@ function RotatableCubeWrapper({
 
 export function InteractiveCube() {
   const [isFocused, setIsFocused] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout>(null);
+
   const isSpacePressed = useIsSpacePressed();
+
+  useEffect(() => {
+    tooltipTimeoutRef.current = setTimeout(() => {
+      setIsTooltipOpen(true);
+    }, 3000);
+
+    return () => {
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const canvas = (
     <Canvas
@@ -56,7 +76,7 @@ export function InteractiveCube() {
         camera.add(light);
         scene.add(camera);
       }}
-      onDoubleClick={() => setIsFocused(true)}
+      onClick={() => setIsFocused(true)}
     >
       <RotatableCubeWrapper
         autoRotate={!isFocused}
@@ -69,15 +89,30 @@ export function InteractiveCube() {
 
   return (
     <Dialog.Root open={isFocused} onOpenChange={setIsFocused}>
-      {canvas}
+      <Tooltip
+        open={isTooltipOpen}
+        delayDuration={250}
+        onOpenChange={(isOpen) => {
+          setIsTooltipOpen(isOpen);
+          console.log(tooltipTimeoutRef.current);
+          if (tooltipTimeoutRef.current) {
+            clearTimeout(tooltipTimeoutRef.current);
+          }
+        }}
+      >
+        <TooltipTrigger asChild>{canvas}</TooltipTrigger>
+        <TooltipContent side="left">
+          <p>Click me to have some fun!</p>
+        </TooltipContent>
+      </Tooltip>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/90" />
         <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full flex justify-center items-center">
-          <div className="w-[90%] h-[90%]">
-            {canvas}
-          </div>
+          <div className="w-[90%] h-[90%]">{canvas}</div>
           <Dialog.Close />
-          <Dialog.Title className="hidden">Interactive Rubiks Cube</Dialog.Title>
+          <Dialog.Title className="hidden">
+            Interactive Rubiks Cube
+          </Dialog.Title>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

@@ -10,6 +10,7 @@ import { Header } from "~/components/header";
 import { CommandBar } from "~/components/command-bar";
 import { ThemeProvider } from "~/components/theme-provider";
 import { cn } from "~/lib/utils";
+import { InteractiveCube } from "~/features/interactive-cube";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -89,6 +90,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <CustomToaster />
               <Analytics />
               <SpeedInsights />
+              <div className="fixed right-5 bottom-5 w-20 h-20">
+                <InteractiveCube />
+              </div>
             </CommandBar>
           </ThemeProvider>
         </div>
