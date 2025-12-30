@@ -5,12 +5,10 @@
  * @module components/Cube
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { Cubie } from "./Cubie";
-import { CubeState } from "../logic/cube-state";
-import { applyMove } from "../logic/moves";
 import {
   Coord,
   indexFromXY,
@@ -27,13 +25,13 @@ import {
   snapToQuarterTurn,
   FaceName,
   Axis,
+  RotationState,
 } from "../logic/rotation";
 import { convertToMove } from "../logic/move-converter";
-import { useCubeRotation, RotationState } from "../hooks/useCubeRotation";
+import { useCubeRotation } from "../hooks/useCubeRotation";
+import { useCube } from "../hooks/useCube";
 
 type CubeProps = {
-  state: CubeState;
-  onStateChange: (newState: CubeState) => void;
   disableDrag?: boolean;
   cubeGroupRef?: React.RefObject<THREE.Group | null>;
 };
@@ -65,16 +63,12 @@ function isCubieInRotationLayer(
   );
 }
 
-export const Cube = ({
-  state,
-  onStateChange,
-  disableDrag = false,
-  cubeGroupRef,
-}: CubeProps) => {
+export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
   /** Stores information about where the drag action started */
   const dragStartRef = useRef<DragStart>(null);
-  const { rotationState, setRotationState, startSnapAnimation, isAnimating } =
+  const { rotation, rotate, startSnapAnimation, isAnimating } =
     useCubeRotation();
+  const state = useCube((state) => state.cube);
 
   const handleDragStart = (info: {
     position: [number, number, number];
@@ -89,18 +83,18 @@ export const Cube = ({
       position: info.position as [Coord, Coord, Coord],
       initialPointer: { x: info.event.clientX, y: info.event.clientY },
     };
-    setRotationState(null);
+    rotate(null);
   };
 
   const handleDrag = (pointer: { x: number; y: number }) => {
     /** Checks preconditions to start handling drag action */
-    if (!dragStartRef.current && !rotationState) return;
+    if (!dragStartRef.current && !rotation) return;
     if (!cubeGroupRef?.current || isAnimating) return;
     if (!dragStartRef.current) return;
-    
+
     const totalDeltaX = pointer.x - dragStartRef.current.initialPointer.x;
     const totalDeltaY = pointer.y - dragStartRef.current.initialPointer.y;
-    
+
     if (
       Math.abs(totalDeltaX) < DRAG_START_THRESHOLD &&
       Math.abs(totalDeltaY) < DRAG_START_THRESHOLD
@@ -108,7 +102,7 @@ export const Cube = ({
       return;
 
     /** Start the rotation */
-    if (dragStartRef.current && !rotationState) {
+    if (dragStartRef.current && !rotation) {
       dragStartRef.current.camera.matrixWorld.extractBasis(
         cameraRight,
         cameraUp,
@@ -128,75 +122,66 @@ export const Cube = ({
 
       if (!rotationInfo) return;
 
-      const dragMagnitude = Math.sqrt(totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY);
+      const dragMagnitude = Math.sqrt(
+        totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY,
+      );
       const angle = computeRotationAngle(
         dragMagnitude,
         rotationInfo.sign,
         DRAG_SENSITIVITY,
       );
-
-      setRotationState({
+      rotate({
         angle,
         axis: rotationInfo.axis,
         layer: rotationInfo.layer,
         sign: rotationInfo.sign,
       });
-      return;
-    }
-
-    /** Continue the rotation */
-    if (rotationState) {
-      const dragMagnitude = Math.sqrt(totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY);
+    } else if (rotation) {
+      const dragMagnitude = Math.sqrt(
+        totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY,
+      );
       const targetAngle = computeRotationAngle(
         dragMagnitude,
-        rotationState.sign,
+        rotation.sign,
         DRAG_SENSITIVITY,
       );
 
-      const clampedTarget = Math.sign(targetAngle) * Math.min(Math.abs(targetAngle), MAX_ROTATION);
-      
-      const smoothedAngle = rotationState.angle + 
-        (clampedTarget - rotationState.angle) * SMOOTHING_FACTOR;
+      const clampedTarget =
+        Math.sign(targetAngle) * Math.min(Math.abs(targetAngle), MAX_ROTATION);
 
-      setRotationState({
-        ...rotationState,
+      const smoothedAngle =
+        rotation.angle + (clampedTarget - rotation.angle) * SMOOTHING_FACTOR;
+
+      rotate({
+        ...rotation,
         angle: smoothedAngle,
       });
     }
   };
 
   const handleDragEnd = () => {
-    if (!rotationState) {
+    if (!rotation) {
       dragStartRef.current = null;
       return;
     }
 
-    if (Math.abs(rotationState.angle) < MIN_ROTATION_THRESHOLD) {
+    const { snappedAngle, quarterTurns } = snapToQuarterTurn(rotation.angle);
+    const move = convertToMove(rotation.axis, rotation.layer, quarterTurns);
+
+    if (Math.abs(rotation.angle) < MIN_ROTATION_THRESHOLD || !move) {
       dragStartRef.current = null;
-      setRotationState(null);
-      return;
+      rotate(null);
+    } else {
+      startSnapAnimation({
+        move,
+        duration: 250,
+        axis: rotation.axis,
+        layer: rotation.layer,
+        startAngle: rotation.angle,
+        targetAngle: snappedAngle,
+      });
+      dragStartRef.current = null;
     }
-
-    const { snappedAngle, quarterTurns } = snapToQuarterTurn(
-      rotationState.angle,
-    );
-    const move = convertToMove(
-      rotationState.axis,
-      rotationState.layer,
-      quarterTurns,
-    );
-
-    startSnapAnimation({
-      axis: rotationState.axis,
-      layer: rotationState.layer,
-      startAngle: rotationState.angle,
-      targetAngle: snappedAngle,
-      duration: 250,
-      onComplete: () => {
-        if (!move) return;
-        onStateChange(applyMove(state, move));
-      },
-    });
   };
 
   const renderCubie = ([x, y, z]: [Coord, Coord, Coord]) => {
@@ -244,11 +229,11 @@ export const Cube = ({
     ];
   };
 
-  const outerRotation = rotationState
-    ? getRotation(rotationState.axis, rotationState.angle)
+  const outerRotation = rotation
+    ? getRotation(rotation.axis, rotation.angle)
     : ([0, 0, 0] as [number, number, number]);
-  const counterRotation = rotationState
-    ? getRotation(rotationState.axis, rotationState.angle, true)
+  const counterRotation = rotation
+    ? getRotation(rotation.axis, rotation.angle, true)
     : ([0, 0, 0] as [number, number, number]);
 
   return (
@@ -258,7 +243,7 @@ export const Cube = ({
           <group
             key={`${position[0]},${position[1]},${position[2]}`}
             rotation={
-              isCubieInRotationLayer(position, rotationState)
+              isCubieInRotationLayer(position, rotation)
                 ? [0, 0, 0]
                 : counterRotation
             }

@@ -19,18 +19,16 @@ const BASIC_MOVES = [
  * Generates a random scramble sequence and applies it to the cube state.
  * 
  * @param state - Initial cube state
- * @param length - Number of random moves (default: 20)
- * @returns Scrambled state and the move sequence
+ * @param length - Number of random moves (default: 26)
+ * @returns Scrambled state
  */
-export function scramble(state: CubeState, length = 20) {
+export function scramble(state: CubeState, length = 26) {
   let s = state;
-  const seq: Move[] = [];
 
   for (let i = 0; i < length; i++) {
     const m = BASIC_MOVES[Math.floor(Math.random() * BASIC_MOVES.length)];
-    seq.push(m);
     s = applyMove(s, m);
   }
 
-  return { state: s, sequence: seq };
+  return s;
 }

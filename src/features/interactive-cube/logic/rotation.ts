@@ -13,9 +13,16 @@ export type FaceName = "right" | "left" | "up" | "down" | "front" | "back";
 
 const MIN_ROTATION_AXIS_LENGTH = 0.001;
 
-export interface RotationInfo {
+export type RotationInfo = {
   axis: Axis;
   layer: Coord;
+  sign: number;
+}
+
+export type RotationState = {
+  axis: Axis;
+  layer: Coord;
+  angle: number;
   sign: number;
 }
 

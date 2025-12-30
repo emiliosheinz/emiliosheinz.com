@@ -50,7 +50,7 @@ export function useArcballRotation({
   const velocityRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const { camera } = useThree();
   
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (!groupRef.current) return;
     
     if (autoRotate && !isDragging) {

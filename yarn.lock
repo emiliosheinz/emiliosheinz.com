@@ -5202,6 +5202,7 @@ __metadata:
     three: "npm:^0.182.0"
     tw-animate-css: "npm:^1.2.4"
     typescript: "npm:5.8.2"
+    zustand: "npm:^5.0.9"
   languageName: unknown
   linkType: soft
 
@@ -12115,7 +12116,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:^5.0.1, zustand@npm:^5.0.3":
+"zustand@npm:^5.0.1, zustand@npm:^5.0.3, zustand@npm:^5.0.9":
   version: 5.0.9
   resolution: "zustand@npm:5.0.9"
   peerDependencies:

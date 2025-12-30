@@ -1,6 +1,6 @@
 /**
  * Interactive Rubik's Cube with modal view and rotation controls.
- * 
+ *
  * @module components/InteractiveCube
  */
 
@@ -13,25 +13,17 @@ import React, { useState, useRef } from "react";
 import { Cube } from "./Cube";
 import { useIsSpacePressed } from "../hooks/useIsSpacePressed";
 import { useArcballRotation } from "../hooks/useArcballRotation";
-import { createSolvedState } from "../logic/cube-state";
-
-import { CubeState } from "../logic/cube-state";
-import { scramble } from "../utils/scramble";
 
 interface RotatableCubeWrapperProps {
-  cubeState: CubeState;
-  onStateChange: (state: CubeState) => void;
   autoRotate: boolean;
   allowPieceRotation: boolean;
   allowManualRotation: boolean;
 }
 
-function RotatableCubeWrapper({ 
-  cubeState, 
-  onStateChange,
+function RotatableCubeWrapper({
   autoRotate,
   allowPieceRotation,
-  allowManualRotation
+  allowManualRotation,
 }: RotatableCubeWrapperProps) {
   const groupRef = useRef<Group>(null);
 
@@ -40,21 +32,15 @@ function RotatableCubeWrapper({
     autoRotate,
     allowManualRotation,
   });
-  
+
   return (
     <group ref={groupRef} name="cube-group">
-      <Cube 
-        state={cubeState} 
-        onStateChange={onStateChange}
-        disableDrag={!allowPieceRotation}
-        cubeGroupRef={groupRef}
-      />
+      <Cube disableDrag={!allowPieceRotation} cubeGroupRef={groupRef} />
     </group>
   );
 }
 
 export function InteractiveCube() {
-  const [cubeState, setCubeState] = useState(scramble(createSolvedState(), 0).state);
   const [isFocused, setIsFocused] = useState(false);
   const isSpacePressed = useIsSpacePressed();
 
@@ -72,9 +58,7 @@ export function InteractiveCube() {
       }}
       onDoubleClick={() => setIsFocused(true)}
     >
-      <RotatableCubeWrapper 
-        cubeState={cubeState} 
-        onStateChange={setCubeState}
+      <RotatableCubeWrapper
         autoRotate={!isFocused}
         allowPieceRotation={isFocused && !isSpacePressed}
         allowManualRotation={!isFocused || isSpacePressed}

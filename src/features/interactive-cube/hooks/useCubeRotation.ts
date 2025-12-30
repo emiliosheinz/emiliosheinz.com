@@ -4,43 +4,39 @@
  * @module hooks/useCubeRotation
  */
 
-import { useState, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import type { Axis } from "../logic/rotation";
+import type { Axis, RotationState } from "../logic/rotation";
 import type { Coord } from "../logic/coordinates";
+import { useCube } from "./useCube";
+import { Move } from "../logic/moves";
 
-export interface RotationState {
-  axis: Axis;
-  layer: Coord;
-  angle: number;
-  sign: number;
-}
-
-interface SnapAnimation {
+type SnapAnimation = {
   axis: Axis;
   layer: Coord;
   startAngle: number;
   targetAngle: number;
   startTime: number;
   duration: number;
-  onComplete: () => void;
-}
+  move: Move;
+};
 
-export interface CubeRotationControls {
-  rotationState: RotationState | null;
-  setRotationState: (state: RotationState | null) => void;
-  startSnapAnimation: (config: Omit<SnapAnimation, "startTime">) => void;
+export type CubeRotationControls = {
   isAnimating: boolean;
-}
+  rotation: RotationState | null;
+  rotate: (rotation: RotationState | null) => void;
+  startSnapAnimation: (config: Omit<SnapAnimation, "startTime">) => void;
+};
 
 /**
  * Manages cube layer rotation state and smooth snap animations.
  */
 export function useCubeRotation(): CubeRotationControls {
-  const [rotationState, setRotationState] = useState<RotationState | null>(
-    null,
-  );
   const snapAnimationRef = useRef<SnapAnimation | null>(null);
+
+  const rotation = useCube((state) => state.rotation);
+  const rotate = useCube((state) => state.rotate);
+  const commitMove = useCube((state) => state.commitMove);
 
   useFrame(() => {
     if (!snapAnimationRef.current) return;
@@ -57,16 +53,15 @@ export function useCubeRotation(): CubeRotationControls {
         eased;
 
     if (progress < 1) {
-      setRotationState({
+      rotate({
         sign: 1,
         axis: snapAnimationRef.current.axis,
         layer: snapAnimationRef.current.layer,
         angle: currentAngle,
       });
     } else {
-      snapAnimationRef.current.onComplete();
+      commitMove(snapAnimationRef.current.move);
       snapAnimationRef.current = null;
-      setRotationState(null);
     }
   });
 
@@ -81,8 +76,8 @@ export function useCubeRotation(): CubeRotationControls {
   );
 
   return {
-    rotationState,
-    setRotationState,
+    rotation,
+    rotate,
     startSnapAnimation,
     isAnimating: snapAnimationRef.current !== null,
   };
