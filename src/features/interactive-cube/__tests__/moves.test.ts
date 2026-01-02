@@ -2,21 +2,49 @@ import { createSolvedState, type Sticker } from "../logic/cube-state";
 import { applyMove, type Move } from "../logic/moves";
 
 const getInverseMove = (move: Move): Move => {
-  return move.endsWith("'") ? (move.slice(0, -1) as Move) : ((move + "'") as Move);
+  return move.endsWith("'")
+    ? (move.slice(0, -1) as Move)
+    : (`${move}'` as Move);
 };
 
 const rotateFaceCW = (face: Sticker[]): Sticker[] => {
-  return [face[6], face[3], face[0], face[7], face[4], face[1], face[8], face[5], face[2]];
+  return [
+    face[6],
+    face[3],
+    face[0],
+    face[7],
+    face[4],
+    face[1],
+    face[8],
+    face[5],
+    face[2],
+  ];
 };
 
 const rotateFaceCCW = (face: Sticker[]): Sticker[] => {
-  return [face[2], face[5], face[8], face[1], face[4], face[7], face[0], face[3], face[6]];
+  return [
+    face[2],
+    face[5],
+    face[8],
+    face[1],
+    face[4],
+    face[7],
+    face[0],
+    face[3],
+    face[6],
+  ];
 };
 
 const testPattern: Sticker[] = [
-  "white", "yellow", "red",
-  "orange", "green", "blue",
-  "white", "yellow", "red",
+  "white",
+  "yellow",
+  "red",
+  "orange",
+  "green",
+  "blue",
+  "white",
+  "yellow",
+  "red",
 ];
 
 describe("moves", () => {
@@ -215,60 +243,148 @@ describe("moves", () => {
         const result = applyMove(state, "U");
 
         expect(result.U.every((color) => color === "yellow")).toBe(true);
-        expect(result.F.slice(0, 3).every((color) => color === "orange")).toBe(true);
-        expect(result.R.slice(0, 3).every((color) => color === "blue")).toBe(true);
-        expect(result.B.slice(0, 3).every((color) => color === "red")).toBe(true);
-        expect(result.L.slice(0, 3).every((color) => color === "green")).toBe(true);
+        expect(result.F.slice(0, 3).every((color) => color === "orange")).toBe(
+          true,
+        );
+        expect(result.R.slice(0, 3).every((color) => color === "blue")).toBe(
+          true,
+        );
+        expect(result.B.slice(0, 3).every((color) => color === "red")).toBe(
+          true,
+        );
+        expect(result.L.slice(0, 3).every((color) => color === "green")).toBe(
+          true,
+        );
       });
 
       it("R move should cycle right edge strips clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "R");
 
-        expect([result.U[2], result.U[5], result.U[8]].every((color) => color === "green")).toBe(true);
-        expect([result.F[2], result.F[5], result.F[8]].every((color) => color === "white")).toBe(true);
-        expect([result.D[2], result.D[5], result.D[8]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[6], result.B[3], result.B[0]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[2], result.U[5], result.U[8]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
+        expect(
+          [result.F[2], result.F[5], result.F[8]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[2], result.D[5], result.D[8]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[6], result.B[3], result.B[0]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("F move should cycle front edge strips clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "F");
 
-        expect([result.U[6], result.U[7], result.U[8]].every((color) => color === "red")).toBe(true);
-        expect([result.L[8], result.L[5], result.L[2]].every((color) => color === "white")).toBe(true);
-        expect([result.D[2], result.D[1], result.D[0]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[0], result.R[3], result.R[6]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[6], result.U[7], result.U[8]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[8], result.L[5], result.L[2]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[2], result.D[1], result.D[0]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[0], result.R[3], result.R[6]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("L move should cycle left edge strips clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "L");
 
-        expect([result.U[0], result.U[3], result.U[6]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[8], result.B[5], result.B[2]].every((color) => color === "white")).toBe(true);
-        expect([result.D[0], result.D[3], result.D[6]].every((color) => color === "green")).toBe(true);
-        expect([result.F[0], result.F[3], result.F[6]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[0], result.U[3], result.U[6]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[8], result.B[5], result.B[2]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[0], result.D[3], result.D[6]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
+        expect(
+          [result.F[0], result.F[3], result.F[6]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("D move should cycle bottom edge strips clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "D");
 
-        expect([result.F[6], result.F[7], result.F[8]].every((color) => color === "red")).toBe(true);
-        expect([result.L[6], result.L[7], result.L[8]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[6], result.B[7], result.B[8]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[6], result.R[7], result.R[8]].every((color) => color === "green")).toBe(true);
+        expect(
+          [result.F[6], result.F[7], result.F[8]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[6], result.L[7], result.L[8]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[6], result.B[7], result.B[8]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[6], result.R[7], result.R[8]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
       });
 
       it("B move should cycle back edge strips clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "B");
 
-        expect([result.U[2], result.U[1], result.U[0]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[8], result.R[5], result.R[2]].every((color) => color === "white")).toBe(true);
-        expect([result.D[6], result.D[7], result.D[8]].every((color) => color === "red")).toBe(true);
-        expect([result.L[0], result.L[3], result.L[6]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[2], result.U[1], result.U[0]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[8], result.R[5], result.R[2]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[6], result.D[7], result.D[8]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[0], result.L[3], result.L[6]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
     });
 
@@ -277,60 +393,148 @@ describe("moves", () => {
         const state = createSolvedState();
         const result = applyMove(state, "U'");
 
-        expect(result.F.slice(0, 3).every((color) => color === "red")).toBe(true);
-        expect(result.L.slice(0, 3).every((color) => color === "blue")).toBe(true);
-        expect(result.B.slice(0, 3).every((color) => color === "orange")).toBe(true);
-        expect(result.R.slice(0, 3).every((color) => color === "green")).toBe(true);
+        expect(result.F.slice(0, 3).every((color) => color === "red")).toBe(
+          true,
+        );
+        expect(result.L.slice(0, 3).every((color) => color === "blue")).toBe(
+          true,
+        );
+        expect(result.B.slice(0, 3).every((color) => color === "orange")).toBe(
+          true,
+        );
+        expect(result.R.slice(0, 3).every((color) => color === "green")).toBe(
+          true,
+        );
       });
 
       it("R' move should cycle right edge strips counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "R'");
 
-        expect([result.U[2], result.U[5], result.U[8]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[6], result.B[3], result.B[0]].every((color) => color === "white")).toBe(true);
-        expect([result.D[2], result.D[5], result.D[8]].every((color) => color === "green")).toBe(true);
-        expect([result.F[2], result.F[5], result.F[8]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[2], result.U[5], result.U[8]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[6], result.B[3], result.B[0]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[2], result.D[5], result.D[8]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
+        expect(
+          [result.F[2], result.F[5], result.F[8]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("F' move should cycle front edge strips counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "F'");
 
-        expect([result.U[6], result.U[7], result.U[8]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[0], result.R[3], result.R[6]].every((color) => color === "white")).toBe(true);
-        expect([result.D[2], result.D[1], result.D[0]].every((color) => color === "red")).toBe(true);
-        expect([result.L[8], result.L[5], result.L[2]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[6], result.U[7], result.U[8]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[0], result.R[3], result.R[6]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[2], result.D[1], result.D[0]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[8], result.L[5], result.L[2]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("L' move should cycle left edge strips counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "L'");
 
-        expect([result.U[0], result.U[3], result.U[6]].every((color) => color === "green")).toBe(true);
-        expect([result.F[0], result.F[3], result.F[6]].every((color) => color === "white")).toBe(true);
-        expect([result.D[0], result.D[3], result.D[6]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[8], result.B[5], result.B[2]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[0], result.U[3], result.U[6]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
+        expect(
+          [result.F[0], result.F[3], result.F[6]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[0], result.D[3], result.D[6]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[8], result.B[5], result.B[2]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("D' move should cycle bottom edge strips counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "D'");
 
-        expect([result.F[6], result.F[7], result.F[8]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[6], result.R[7], result.R[8]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[6], result.B[7], result.B[8]].every((color) => color === "red")).toBe(true);
-        expect([result.L[6], result.L[7], result.L[8]].every((color) => color === "green")).toBe(true);
+        expect(
+          [result.F[6], result.F[7], result.F[8]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[6], result.R[7], result.R[8]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[6], result.B[7], result.B[8]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[6], result.L[7], result.L[8]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
       });
 
       it("B' move should cycle back edge strips counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "B'");
 
-        expect([result.U[2], result.U[1], result.U[0]].every((color) => color === "red")).toBe(true);
-        expect([result.L[0], result.L[3], result.L[6]].every((color) => color === "white")).toBe(true);
-        expect([result.D[6], result.D[7], result.D[8]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[8], result.R[5], result.R[2]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[2], result.U[1], result.U[0]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[0], result.L[3], result.L[6]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[6], result.D[7], result.D[8]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[8], result.R[5], result.R[2]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
     });
 
@@ -339,60 +543,156 @@ describe("moves", () => {
         const state = createSolvedState();
         const result = applyMove(state, "M");
 
-        expect([result.U[1], result.U[4], result.U[7]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[7], result.B[4], result.B[1]].every((color) => color === "white")).toBe(true);
-        expect([result.D[1], result.D[4], result.D[7]].every((color) => color === "green")).toBe(true);
-        expect([result.F[1], result.F[4], result.F[7]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[1], result.U[4], result.U[7]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[7], result.B[4], result.B[1]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[1], result.D[4], result.D[7]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
+        expect(
+          [result.F[1], result.F[4], result.F[7]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("M' move should cycle middle vertical slice counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "M'");
 
-        expect([result.U[1], result.U[4], result.U[7]].every((color) => color === "green")).toBe(true);
-        expect([result.F[1], result.F[4], result.F[7]].every((color) => color === "white")).toBe(true);
-        expect([result.D[1], result.D[4], result.D[7]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[7], result.B[4], result.B[1]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[1], result.U[4], result.U[7]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
+        expect(
+          [result.F[1], result.F[4], result.F[7]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[1], result.D[4], result.D[7]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[7], result.B[4], result.B[1]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("E move should cycle middle horizontal slice (follows D)", () => {
         const state = createSolvedState();
         const result = applyMove(state, "E");
 
-        expect([result.F[3], result.F[4], result.F[5]].every((color) => color === "red")).toBe(true);
-        expect([result.L[3], result.L[4], result.L[5]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[3], result.B[4], result.B[5]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[3], result.R[4], result.R[5]].every((color) => color === "green")).toBe(true);
+        expect(
+          [result.F[3], result.F[4], result.F[5]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[3], result.L[4], result.L[5]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[3], result.B[4], result.B[5]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[3], result.R[4], result.R[5]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
       });
 
       it("E' move should cycle middle horizontal slice counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "E'");
 
-        expect([result.F[3], result.F[4], result.F[5]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[3], result.R[4], result.R[5]].every((color) => color === "blue")).toBe(true);
-        expect([result.B[3], result.B[4], result.B[5]].every((color) => color === "red")).toBe(true);
-        expect([result.L[3], result.L[4], result.L[5]].every((color) => color === "green")).toBe(true);
+        expect(
+          [result.F[3], result.F[4], result.F[5]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[3], result.R[4], result.R[5]].every(
+            (color) => color === "blue",
+          ),
+        ).toBe(true);
+        expect(
+          [result.B[3], result.B[4], result.B[5]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[3], result.L[4], result.L[5]].every(
+            (color) => color === "green",
+          ),
+        ).toBe(true);
       });
 
       it("S move should cycle middle standing slice (follows F)", () => {
         const state = createSolvedState();
         const result = applyMove(state, "S");
 
-        expect([result.U[3], result.U[4], result.U[5]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[1], result.R[4], result.R[7]].every((color) => color === "white")).toBe(true);
-        expect([result.D[5], result.D[4], result.D[3]].every((color) => color === "red")).toBe(true);
-        expect([result.L[7], result.L[4], result.L[1]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[3], result.U[4], result.U[5]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[1], result.R[4], result.R[7]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[5], result.D[4], result.D[3]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[7], result.L[4], result.L[1]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("S' move should cycle middle standing slice counter-clockwise", () => {
         const state = createSolvedState();
         const result = applyMove(state, "S'");
 
-        expect([result.U[3], result.U[4], result.U[5]].every((color) => color === "red")).toBe(true);
-        expect([result.L[7], result.L[4], result.L[1]].every((color) => color === "white")).toBe(true);
-        expect([result.D[5], result.D[4], result.D[3]].every((color) => color === "orange")).toBe(true);
-        expect([result.R[1], result.R[4], result.R[7]].every((color) => color === "yellow")).toBe(true);
+        expect(
+          [result.U[3], result.U[4], result.U[5]].every(
+            (color) => color === "red",
+          ),
+        ).toBe(true);
+        expect(
+          [result.L[7], result.L[4], result.L[1]].every(
+            (color) => color === "white",
+          ),
+        ).toBe(true);
+        expect(
+          [result.D[5], result.D[4], result.D[3]].every(
+            (color) => color === "orange",
+          ),
+        ).toBe(true);
+        expect(
+          [result.R[1], result.R[4], result.R[7]].every(
+            (color) => color === "yellow",
+          ),
+        ).toBe(true);
       });
 
       it("should restore state after four M turns", () => {

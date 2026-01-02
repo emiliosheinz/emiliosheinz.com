@@ -1,6 +1,6 @@
 /**
  * Cube state model and factory functions.
- * 
+ *
  * @module logic/cube-state
  */
 

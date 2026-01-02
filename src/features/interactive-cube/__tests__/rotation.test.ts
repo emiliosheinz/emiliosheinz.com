@@ -1,13 +1,13 @@
-import { 
-  getFaceFromLocalNormal, 
-  snapToAxis, 
+import * as THREE from "three";
+import {
+  computeRotationAngle,
+  determineRotation,
+  getFaceFromLocalNormal,
   getLayerFromPosition,
   projectToPlane,
-  computeRotationAngle,
+  snapToAxis,
   snapToQuarterTurn,
-  determineRotation,
 } from "../logic/rotation";
-import * as THREE from "three";
 
 describe("rotation", () => {
   describe("getFaceFromLocalNormal", () => {
@@ -75,7 +75,7 @@ describe("rotation", () => {
       const v = new THREE.Vector3(1, 1, 0);
       const normal = new THREE.Vector3(0, 1, 0);
       const projected = projectToPlane(v, normal);
-      
+
       expect(projected.y).toBeCloseTo(0);
       expect(projected.x).toBeCloseTo(1);
     });
@@ -84,7 +84,7 @@ describe("rotation", () => {
       const v = new THREE.Vector3(3, 2, 0);
       const normal = new THREE.Vector3(0, 1, 0);
       const projected = projectToPlane(v, normal);
-      
+
       expect(projected.length()).toBeCloseTo(1);
     });
   });
@@ -132,9 +132,9 @@ describe("rotation", () => {
       const normal = new THREE.Vector3(0, 0, 1);
       const drag = new THREE.Vector3(1, 0, 0);
       const position: [number, number, number] = [0, 1, 1];
-      
+
       const result = determineRotation(normal, drag, position);
-      
+
       expect(result).not.toBeNull();
       expect(result?.axis).toBe("y");
       expect(result?.layer).toBe(1);
@@ -144,9 +144,9 @@ describe("rotation", () => {
       const normal = new THREE.Vector3(0, 1, 0);
       const drag = new THREE.Vector3(0, 0, 1);
       const position: [number, number, number] = [1, 1, 0];
-      
+
       const result = determineRotation(normal, drag, position);
-      
+
       expect(result).not.toBeNull();
       expect(result?.axis).toBe("x");
       expect(result?.layer).toBe(1);
@@ -156,9 +156,9 @@ describe("rotation", () => {
       const normal = new THREE.Vector3(0, 1, 0);
       const drag = new THREE.Vector3(0, 0, 0.000001);
       const position: [number, number, number] = [1, 1, 0];
-      
+
       const result = determineRotation(normal, drag, position);
-      
+
       expect(result).toBeNull();
     });
   });

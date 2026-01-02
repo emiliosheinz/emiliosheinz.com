@@ -1,4 +1,4 @@
-import { Post, allPosts } from "contentlayer/generated";
+import { allPosts, type Post } from "contentlayer/generated";
 
 export const posts = allPosts.sort((a, b) =>
   b.publishedAt.localeCompare(a.publishedAt),

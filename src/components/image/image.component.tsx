@@ -1,8 +1,7 @@
-import { memo } from "react";
 import fs from "node:fs/promises";
+import NextImage, { type ImageProps } from "next/image";
 import { getPlaiceholder } from "plaiceholder";
-
-import NextImage, { ImageProps } from "next/image";
+import { memo } from "react";
 
 const MINIMUM_IMAGE_SIZE_WITH_BLUR = 40;
 
@@ -52,7 +51,7 @@ async function BaseImage(props: ImageProps) {
       width={width}
       height={height}
       style={customImageStyle}
-      {...await getBlurProps()}
+      {...(await getBlurProps())}
       {...otherProps}
     />
   );

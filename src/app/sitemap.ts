@@ -6,10 +6,12 @@ export default async function sitemap() {
     lastModified: post.publishedAt,
   }));
 
-  const routes = ["", "/posts", "/experiences", '/videos', '/links'].map((route) => ({
-    url: `https://emiliosheinz.com${route}`,
-    lastModified: new Date().toISOString().split("T")[0],
-  }));
+  const routes = ["", "/posts", "/experiences", "/videos", "/links"].map(
+    (route) => ({
+      url: `https://emiliosheinz.com${route}`,
+      lastModified: new Date().toISOString().split("T")[0],
+    }),
+  );
 
   return [...routes, ...blogs];
 }

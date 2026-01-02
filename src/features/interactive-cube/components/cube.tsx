@@ -5,31 +5,31 @@
  * @module components/Cube
  */
 
+import type { ThreeEvent } from "@react-three/fiber";
 import React, { useRef } from "react";
-import { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
-import { Cubie } from "./cubie";
+import { useCube } from "../hooks/use-cube";
+import { useCubeRotation } from "../hooks/use-cube-rotation";
 import {
-  Coord,
+  type Coord,
+  getCubieOrientation,
+  getCubiePositions,
   indexFromXY,
   indexFromXZ,
   indexFromZY,
   renderIndex,
-  getCubiePositions,
-  getCubieOrientation,
 } from "../logic/coordinates";
-import {
-  determineRotation,
-  worldToCubeLocal,
-  computeRotationAngle,
-  snapToQuarterTurn,
-  FaceName,
-  Axis,
-  RotationState,
-} from "../logic/rotation";
 import { convertToMove } from "../logic/move-converter";
-import { useCubeRotation } from "../hooks/use-cube-rotation";
-import { useCube } from "../hooks/use-cube";
+import {
+  type Axis,
+  computeRotationAngle,
+  determineRotation,
+  type FaceName,
+  type RotationState,
+  snapToQuarterTurn,
+  worldToCubeLocal,
+} from "../logic/rotation";
+import { Cubie } from "./cubie";
 
 type CubeProps = {
   disableDrag?: boolean;

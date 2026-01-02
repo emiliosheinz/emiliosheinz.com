@@ -1,4 +1,4 @@
-import { CubeState, Sticker } from "./cube-state";
+import type { CubeState, Sticker } from "./cube-state";
 
 export type Move =
   | "U"
@@ -347,27 +347,27 @@ function applyDCCW(state: CubeState): CubeState {
  */
 function applyMCW(state: CubeState): CubeState {
   let nextState = cloneState(state);
-  
+
   nextState = cycleStripsCW(nextState, [
     ["U", [1, 4, 7]],
     ["B", [7, 4, 1]],
     ["D", [1, 4, 7]],
     ["F", [1, 4, 7]],
   ]);
-  
+
   return nextState;
 }
 
 function applyMCCW(state: CubeState): CubeState {
   let nextState = cloneState(state);
-  
+
   nextState = cycleStripsCCW(nextState, [
     ["U", [1, 4, 7]],
     ["B", [7, 4, 1]],
     ["D", [1, 4, 7]],
     ["F", [1, 4, 7]],
   ]);
-  
+
   return nextState;
 }
 
@@ -377,27 +377,27 @@ function applyMCCW(state: CubeState): CubeState {
  */
 function applyECW(state: CubeState): CubeState {
   let nextState = cloneState(state);
-  
+
   nextState = cycleStripsCW(nextState, [
     ["F", [3, 4, 5]],
     ["L", [3, 4, 5]],
     ["B", [3, 4, 5]],
     ["R", [3, 4, 5]],
   ]);
-  
+
   return nextState;
 }
 
 function applyECCW(state: CubeState): CubeState {
   let nextState = cloneState(state);
-  
+
   nextState = cycleStripsCCW(nextState, [
     ["F", [3, 4, 5]],
     ["L", [3, 4, 5]],
     ["B", [3, 4, 5]],
     ["R", [3, 4, 5]],
   ]);
-  
+
   return nextState;
 }
 
@@ -407,26 +407,26 @@ function applyECCW(state: CubeState): CubeState {
  */
 function applySCW(state: CubeState): CubeState {
   let nextState = cloneState(state);
-  
+
   nextState = cycleStripsCW(nextState, [
     ["U", [3, 4, 5]],
     ["R", [1, 4, 7]],
     ["D", [5, 4, 3]],
     ["L", [7, 4, 1]],
   ]);
-  
+
   return nextState;
 }
 
 function applySCCW(state: CubeState): CubeState {
   let nextState = cloneState(state);
-  
+
   nextState = cycleStripsCCW(nextState, [
     ["U", [3, 4, 5]],
     ["R", [1, 4, 7]],
     ["D", [5, 4, 3]],
     ["L", [7, 4, 1]],
   ]);
-  
+
   return nextState;
 }

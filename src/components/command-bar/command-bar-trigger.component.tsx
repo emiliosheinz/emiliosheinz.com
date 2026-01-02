@@ -1,10 +1,10 @@
 "use client";
 
 import { useKBar } from "kbar";
-import { Command, ArrowRight } from "lucide-react"
+import { ArrowRight, Command } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
+import { Button } from "../ui/button";
 
 type CommandBarTriggerProps = {
   className?: string;

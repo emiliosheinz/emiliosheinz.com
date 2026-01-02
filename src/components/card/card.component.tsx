@@ -1,7 +1,7 @@
-import { CardProps } from "./card.types";
-import { Image } from "../image";
 import Link from "next/link";
 import { cn } from "~/lib/utils";
+import { Image } from "../image";
+import type { CardProps } from "./card.types";
 
 export function Card({
   title,

@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Card } from "~/components/card";
 import { posts } from "~/content/posts";
 

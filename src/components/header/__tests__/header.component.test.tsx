@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
+import { usePathname } from "next/navigation";
 import { Header } from "../header.component";
 import { headerLinks } from "../header.constants";
-import { usePathname } from "next/navigation";
 
 const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>;
 

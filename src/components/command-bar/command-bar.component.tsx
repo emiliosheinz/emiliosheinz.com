@@ -1,15 +1,14 @@
 "use client";
 
 import {
-  KBarProvider,
+  KBarAnimator,
   KBarPortal,
   KBarPositioner,
-  KBarAnimator,
+  KBarProvider,
   KBarSearch,
 } from "kbar";
-
-import { useActions } from "./use-actions.hook";
 import { Results } from "./results.component";
+import { useActions } from "./use-actions.hook";
 
 type CommandBarProps = {
   children: React.ReactNode;

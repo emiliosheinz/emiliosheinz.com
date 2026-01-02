@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { headerLinks } from "./header.constants";
-import { CommandBarTriggerLite } from "../command-bar";
-import { NavigationMenu, NavigationMenuList } from "../ui/navigation-menu";
 import { NavigationMenuItem } from "@radix-ui/react-navigation-menu";
+import Link from "next/link";
+import { CommandBarTriggerLite } from "../command-bar";
 import { ThemeToggle } from "../theme-provider";
 import { Button } from "../ui/button";
+import { NavigationMenu, NavigationMenuList } from "../ui/navigation-menu";
+import { headerLinks } from "./header.constants";
 
 export function Header() {
   return (

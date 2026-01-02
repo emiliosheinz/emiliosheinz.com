@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
-import rehypePrettyCode, { Options } from "rehype-pretty-code";
+import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 
 const GENERATED_FILE_PATHS = [
   path.resolve(".contentlayer/generated/Experience/_index.mjs"),

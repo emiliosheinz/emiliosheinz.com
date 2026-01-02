@@ -4,12 +4,12 @@
  * @module hooks/useCubeRotation
  */
 
-import { useCallback, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import type { Axis, RotationState } from "../logic/rotation";
+import { useCallback, useRef } from "react";
 import type { Coord } from "../logic/coordinates";
+import type { Move } from "../logic/moves";
+import type { Axis, RotationState } from "../logic/rotation";
 import { useCube } from "./use-cube";
-import { Move } from "../logic/moves";
 
 type SnapAnimation = {
   axis: Axis;
@@ -44,7 +44,7 @@ export function useCubeRotation(): CubeRotationControls {
     const now = performance.now();
     const elapsed = now - snapAnimationRef.current.startTime;
     const progress = Math.min(elapsed / snapAnimationRef.current.duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
+    const eased = 1 - (1 - progress) ** 3;
 
     const currentAngle =
       snapAnimationRef.current.startAngle +

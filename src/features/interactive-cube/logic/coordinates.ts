@@ -1,6 +1,6 @@
 /**
  * Coordinate system utilities for the Rubik's Cube.
- * 
+ *
  * @module logic/coordinates
  */
 
@@ -19,11 +19,11 @@ function coordToIndex(primary: Coord, secondary: Coord): number {
 
 /**
  * Converts 2D coordinates to a flat array index for horizontal plane (XY).
- * 
+ *
  * @example
  * // Top-left corner of a face viewed from outside
  * indexFromXY(-1, 1) // => 0
- * 
+ *
  * // Center sticker
  * indexFromXY(0, 0) // => 4
  */
@@ -33,7 +33,7 @@ export function indexFromXY(x: Coord, y: Coord): number {
 
 /**
  * Converts 2D coordinates to a flat array index for horizontal plane (XZ).
- * 
+ *
  * @example
  * // Top face, front-left corner
  * indexFromXZ(-1, 1) // => 6
@@ -44,7 +44,7 @@ export function indexFromXZ(x: Coord, z: Coord): number {
 
 /**
  * Converts 2D coordinates to a flat array index for vertical plane (ZY).
- * 
+ *
  * @example
  * // Right face, top-back corner
  * indexFromZY(-1, 1) // => 0

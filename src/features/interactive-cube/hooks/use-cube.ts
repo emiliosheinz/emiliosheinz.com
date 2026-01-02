@@ -1,8 +1,8 @@
 import { create } from "zustand";
+import { type CubeState, createSolvedState } from "../logic/cube-state";
+import { applyMove, type Move } from "../logic/moves";
+import type { RotationState } from "../logic/rotation";
 import { scramble } from "../utils/scramble";
-import { createSolvedState, CubeState } from "../logic/cube-state";
-import { RotationState } from "../logic/rotation";
-import { applyMove, Move } from "../logic/moves";
 
 export type CubeStore = {
   cube: CubeState;

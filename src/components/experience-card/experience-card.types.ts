@@ -1,4 +1,4 @@
-import { MDX } from "contentlayer2/core";
+import type { MDX } from "contentlayer2/core";
 
 export type ExperienceCardProps = {
   title: string;

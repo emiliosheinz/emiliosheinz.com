@@ -1,16 +1,15 @@
 import "./globals.css";
 
-import type { Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
-import { Toaster } from "react-hot-toast";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
-import { Header } from "~/components/header";
+import { Toaster } from "react-hot-toast";
 import { CommandBar } from "~/components/command-bar";
+import { Header } from "~/components/header";
 import { ThemeProvider } from "~/components/theme-provider";
-import { cn } from "~/lib/utils";
 import { InteractiveCube } from "~/features/interactive-cube";
+import { cn } from "~/lib/utils";
 
 const urbanist = Urbanist({
   subsets: ["latin"],

@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Card } from "~/components/card";
 import { getYouTubeVideos } from "~/utils/youtube.utils";
 
@@ -25,7 +25,7 @@ export default async function YouTubeVideosPage() {
             description={video.description}
             image={video.thumbnail}
             priority={index === 0}
-            target='_blank'
+            target="_blank"
             className="w-full sm:w-full"
             url={`https://www.youtube.com/watch?v=${video.id}`}
           />

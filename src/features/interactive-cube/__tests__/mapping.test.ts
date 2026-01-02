@@ -1,4 +1,10 @@
-import { indexFromXY, indexFromXZ, indexFromZY, renderIndex, type Coord } from "../logic/coordinates";
+import {
+  type Coord,
+  indexFromXY,
+  indexFromXZ,
+  indexFromZY,
+  renderIndex,
+} from "../logic/coordinates";
 import type { Face } from "../logic/cube-state";
 
 describe("mapping", () => {
@@ -17,9 +23,15 @@ describe("mapping", () => {
 
     it("should map all nine positions correctly", () => {
       const positions: Array<[Coord, Coord, number]> = [
-        [-1, 1, 0], [0, 1, 1], [1, 1, 2],
-        [-1, 0, 3], [0, 0, 4], [1, 0, 5],
-        [-1, -1, 6], [0, -1, 7], [1, -1, 8],
+        [-1, 1, 0],
+        [0, 1, 1],
+        [1, 1, 2],
+        [-1, 0, 3],
+        [0, 0, 4],
+        [1, 0, 5],
+        [-1, -1, 6],
+        [0, -1, 7],
+        [1, -1, 8],
       ];
 
       positions.forEach(([x, y, expectedIndex]) => {
@@ -43,9 +55,15 @@ describe("mapping", () => {
 
     it("should map all nine positions correctly", () => {
       const positions: Array<[Coord, Coord, number]> = [
-        [-1, 1, 0], [0, 1, 1], [1, 1, 2],
-        [-1, 0, 3], [0, 0, 4], [1, 0, 5],
-        [-1, -1, 6], [0, -1, 7], [1, -1, 8],
+        [-1, 1, 0],
+        [0, 1, 1],
+        [1, 1, 2],
+        [-1, 0, 3],
+        [0, 0, 4],
+        [1, 0, 5],
+        [-1, -1, 6],
+        [0, -1, 7],
+        [1, -1, 8],
       ];
 
       positions.forEach(([x, z, expectedIndex]) => {
@@ -69,9 +87,15 @@ describe("mapping", () => {
 
     it("should map all nine positions correctly", () => {
       const positions: Array<[Coord, Coord, number]> = [
-        [-1, 1, 0], [0, 1, 1], [1, 1, 2],
-        [-1, 0, 3], [0, 0, 4], [1, 0, 5],
-        [-1, -1, 6], [0, -1, 7], [1, -1, 8],
+        [-1, 1, 0],
+        [0, 1, 1],
+        [1, 1, 2],
+        [-1, 0, 3],
+        [0, 0, 4],
+        [1, 0, 5],
+        [-1, -1, 6],
+        [0, -1, 7],
+        [1, -1, 8],
       ];
 
       positions.forEach(([z, y, expectedIndex]) => {

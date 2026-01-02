@@ -1,11 +1,11 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Card } from "~/components/card";
 import { Image } from "~/components/image";
 import { MDXContent } from "~/components/mdx-content";
-import { Card } from "~/components/card";
+import { Section } from "~/components/section";
 import { Slider } from "~/components/slider";
 import { getPostBySlug, getRandomPosts, posts } from "~/content/posts";
-import { Section } from "~/components/section";
 
 type PostPageProps = {
   params: Promise<{
@@ -68,7 +68,7 @@ export default async function PostPage(props: PostPageProps) {
             (min-width: 1024px) 1024px,
             100vw
           `}
-          className='rounded-lg'
+          className="rounded-lg"
         />
       </div>
       <MDXContent code={post.body.code} />

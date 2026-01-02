@@ -1,5 +1,5 @@
-import { Image } from "~/components/image";
 import { CommandBarTriggerFull } from "~/components/command-bar";
+import { Image } from "~/components/image";
 
 export default function HomePage() {
   return (

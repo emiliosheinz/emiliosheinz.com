@@ -1,7 +1,7 @@
 /**
  * Pure rotation math utilities for Rubik's Cube interactions.
  * Frame-invariant calculations using cube-local coordinate space.
- * 
+ *
  * @module logic/rotation
  */
 
@@ -17,14 +17,14 @@ export type RotationInfo = {
   axis: Axis;
   layer: Coord;
   sign: number;
-}
+};
 
 export type RotationState = {
   axis: Axis;
   layer: Coord;
   angle: number;
   sign: number;
-}
+};
 
 /**
  * Identifies which face was hit based on a cube-local normal vector.
@@ -94,17 +94,17 @@ export function projectToPlane(
   const n = normal.clone().normalize();
   const projected = v.clone();
   projected.addScaledVector(n, -v.dot(n));
-  
+
   if (projected.length() < MIN_ROTATION_AXIS_LENGTH) {
     return new THREE.Vector3(0, 0, 0);
   }
-  
+
   return projected.normalize();
 }
 
 /**
  * Determines rotation axis, layer, and direction from a drag gesture in cube-local space.
- * 
+ *
  * @param localNormal - Hit face normal in cube-local coordinates
  * @param localDragDir - Drag direction in cube-local coordinates
  * @param cubiePos - Position of dragged cubie
@@ -118,22 +118,23 @@ export function determineRotation(
   const n = localNormal.clone().normalize();
   const localDrag = projectToPlane(localDragDir, n);
   const localRotationAxis = new THREE.Vector3().crossVectors(n, localDrag);
-  
+
   if (localRotationAxis.length() < MIN_ROTATION_AXIS_LENGTH) {
     return null;
   }
-  
+
   localRotationAxis.normalize();
   const { axis, sign: axisSign } = snapToAxis(localRotationAxis);
   const layer = getLayerFromPosition(cubiePos, axis);
-  
+
   const snappedAxisVec = new THREE.Vector3(
     axis === "x" ? axisSign : 0,
     axis === "y" ? axisSign : 0,
-    axis === "z" ? axisSign : 0
+    axis === "z" ? axisSign : 0,
   );
 
-  const rotationSign = localRotationAxis.dot(snappedAxisVec) < 0 ? -axisSign : axisSign;
+  const rotationSign =
+    localRotationAxis.dot(snappedAxisVec) < 0 ? -axisSign : axisSign;
 
   return { axis, layer, sign: rotationSign };
 }
@@ -151,7 +152,7 @@ export function computeRotationAngle(
 
 /**
  * Snaps an angle to the nearest quarter turn (90°).
- * 
+ *
  * @returns Snapped angle in radians and number of quarter turns
  */
 export function snapToQuarterTurn(angle: number): {

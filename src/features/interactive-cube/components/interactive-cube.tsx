@@ -6,20 +6,20 @@
 
 "use client";
 
-import { Canvas } from "@react-three/fiber";
-import { PointLight, Group } from "three";
 import * as Dialog from "@radix-ui/react-dialog";
-import React, { useState, useRef, useEffect } from "react";
-import { Cube } from "./cube";
-import { useIsSpacePressed } from "../hooks/use-is-space-pressed";
-import { useArcballRotation } from "../hooks/use-arcball-rotation";
+import { Canvas } from "@react-three/fiber";
+import { X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { type Group, PointLight } from "three";
+import { Button } from "~/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { Cross, CrossIcon, LucideCross, X } from "lucide-react";
-import { Button } from "~/components/ui/button";
+import { useArcballRotation } from "../hooks/use-arcball-rotation";
+import { useIsSpacePressed } from "../hooks/use-is-space-pressed";
+import { Cube } from "./cube";
 
 interface RotatableCubeWrapperProps {
   autoRotate: boolean;
@@ -112,8 +112,12 @@ export function InteractiveCube() {
         <Dialog.Content className="fixed z-40 top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-full h-full flex justify-center items-center animate-in fade-in duration-500">
           <div className="w-[90%] h-[90%]">{canvas}</div>
           <Dialog.Close asChild>
-            <Button size="icon" variant="ghost" className="absolute top-5 right-5">
-              <X className="size-5"/>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="absolute top-5 right-5"
+            >
+              <X className="size-5" />
             </Button>
           </Dialog.Close>
           <Dialog.Title className="hidden">

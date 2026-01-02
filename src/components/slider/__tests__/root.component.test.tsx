@@ -1,6 +1,5 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
-import exp from "constants";
+import React from "react";
 
 async function renderSliderRoot() {
   const { Root } = await import("../root.component");
@@ -41,10 +40,10 @@ describe("Slider.Root", () => {
 
     jest
       .spyOn(HTMLElement.prototype, "scrollWidth", "get")
-      .mockReturnValueOnce(undefined!);
+      .mockReturnValueOnce(undefined as unknown as number);
     jest
       .spyOn(HTMLElement.prototype, "offsetWidth", "get")
-      .mockReturnValueOnce(undefined!);
+      .mockReturnValueOnce(undefined as unknown as number);
     jest.spyOn(React, "useState").mockReturnValueOnce([0, mockSetState]);
 
     await renderSliderRoot();

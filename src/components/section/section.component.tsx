@@ -1,4 +1,4 @@
-import { SectionProps } from "./section.typs";
+import type { SectionProps } from "./section.typs";
 
 export function Section({ id, title, children }: SectionProps) {
   return (

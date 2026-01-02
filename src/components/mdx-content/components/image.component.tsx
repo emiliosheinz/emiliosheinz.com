@@ -1,5 +1,5 @@
-import NextImage, { ImageProps } from "next/image";
-import { CSSProperties, memo } from "react";
+import NextImage, { type ImageProps } from "next/image";
+import { type CSSProperties, memo } from "react";
 
 const removeUndefinedKeys = (object: Record<string, unknown>) =>
   Object.fromEntries(Object.entries(object).filter(([, v]) => v !== undefined));

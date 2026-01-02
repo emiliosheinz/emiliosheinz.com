@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 
 import { MDXContent } from "../mdx-content";
-import { ExperienceCardProps } from "./experience-card.types";
 import { Badge } from "../ui/badge";
+import type { ExperienceCardProps } from "./experience-card.types";
 
 export function ExperienceCard({
   title,

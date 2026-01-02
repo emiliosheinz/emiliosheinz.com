@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { SliderProps } from "./slider.types";
+import type { SliderProps } from "./slider.types";
 
 export function Root({ children }: SliderProps) {
   const [leftDragConstraint, setLeftDragConstraint] = useState(0);

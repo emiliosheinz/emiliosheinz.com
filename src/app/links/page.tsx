@@ -32,13 +32,13 @@ export default async function LinksPage() {
             </p>
           </div>
         </div>
-        <a href="mailto:emiliosheinz@gmail.com" target="_blank">
+        <a href="mailto:emiliosheinz@gmail.com" target="_blank" rel="noopener">
           <div className="flex flex-row items-center gap-5 border bg-accent/75 px-5 py-3 rounded-lg mt-4 transition-transform hover:scale-105">
             <MailIcon className="w-5 h-5" />
             <p className="text-base">Send me an email</p>
           </div>
         </a>
-        <a href="/resume.pdf" target="_blank">
+        <a href="/resume.pdf" target="_blank" rel="noopener">
           <div className="flex flex-row items-center gap-5 border bg-accent/75 px-5 py-3 rounded-lg mt-4 transition-transform hover:scale-105">
             <PaperclipIcon className="w-5 h-5" />
             <p className="text-base">Check out my resume</p>

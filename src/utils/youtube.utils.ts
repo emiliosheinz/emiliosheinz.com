@@ -65,7 +65,7 @@ async function fetchSearchResults(
     order: "date",
     part: "snippet,id",
     channelId: MY_YOUTUBE_CHANNEL_ID,
-    key: process.env.YOUTUBE_DATA_API_KEY!,
+    key: process.env.YOUTUBE_DATA_API_KEY ?? "",
     maxResults: String(maxResults),
   });
 
@@ -95,7 +95,7 @@ async function fetchVideoDetails(
   const params = new URLSearchParams({
     part: "contentDetails",
     id: videoIds.join(","),
-    key: process.env.YOUTUBE_DATA_API_KEY!,
+    key: process.env.YOUTUBE_DATA_API_KEY ?? "",
   });
 
   const res = await fetch(

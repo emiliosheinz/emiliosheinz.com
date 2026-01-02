@@ -1,11 +1,11 @@
 /**
  * Hook for loading cube sticker textures.
- * 
+ *
  * @module hooks/usePegatineTextures
  */
 
-import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
+import * as THREE from "three";
 
 export interface PegatineTextures {
   red: THREE.Texture;

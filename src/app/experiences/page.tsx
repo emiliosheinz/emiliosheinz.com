@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { ExperienceCard } from "~/components/experience-card";
 
 import { experiences } from "~/content/experiences";

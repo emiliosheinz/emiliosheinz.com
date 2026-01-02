@@ -4,15 +4,15 @@
  * @module components/Cubie
  */
 
-import React, { useRef, useMemo } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { ThreeEvent } from "@react-three/fiber";
-import {
-  usePegatineTextures,
-  PegatineColor,
-} from "../hooks/use-pegatine-textures";
-import { FaceName, getFaceFromLocalNormal } from "../logic/rotation";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import {
+  type PegatineColor,
+  usePegatineTextures,
+} from "../hooks/use-pegatine-textures";
+import { type FaceName, getFaceFromLocalNormal } from "../logic/rotation";
 
 export interface CubieProps {
   position: [number, number, number];

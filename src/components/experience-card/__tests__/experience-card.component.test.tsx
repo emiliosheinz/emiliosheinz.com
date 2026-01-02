@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { render, screen } from "@testing-library/react";
 import { ExperienceCard } from "../experience-card.component";
-import { ExperienceCardProps } from "../experience-card.types";
+import type { ExperienceCardProps } from "../experience-card.types";
 
 jest.mock("~/components/mdx-content", () => ({
   MDXContent: ({ code }: { code: string }) => <div>MDXContent: {code}</div>,
@@ -87,6 +87,6 @@ describe("ExperienceCard", () => {
     props.skills.forEach((skill) => {
       const skillEl = screen.getByText(skill);
       expect(skillEl).toBeVisible();
-    })
+    });
   });
 });

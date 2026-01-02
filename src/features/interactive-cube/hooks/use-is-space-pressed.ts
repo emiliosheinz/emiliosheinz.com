@@ -1,6 +1,6 @@
 /**
  * Hook for tracking space key press state.
- * 
+ *
  * @module hooks/useIsSpacePressed
  */
 

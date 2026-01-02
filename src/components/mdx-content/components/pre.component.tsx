@@ -1,5 +1,5 @@
 import { CopyIcon } from "lucide-react";
-import { ReactElement, cloneElement, useRef, type JSX } from "react";
+import { cloneElement, type JSX, type ReactElement, useRef } from "react";
 import { Button } from "~/components/ui/button";
 import { notify } from "~/utils/toast.utils";
 
