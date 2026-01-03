@@ -45,7 +45,6 @@
     "react-hot-toast": "^2.5.2",
     "rehype-pretty-code": "^0.14.1",
     "server-only": "^0.0.1",
-    "shadcn": "^3.6.2",
     "sharp": "^0.34.5",
     "shiki": "^3.2.1",
     "tailwind-merge": "^3.0.2",
