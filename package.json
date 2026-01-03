@@ -52,7 +52,7 @@
     "tailwindcss": "^4.0.15",
     "three": "^0.182.0",
     "tw-animate-css": "^1.2.4",
-    "typescript": "5.8.2",
+    "typescript": "5.9.3",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

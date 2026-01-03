@@ -8,7 +8,10 @@ import { Toaster } from "react-hot-toast";
 import { CommandBar } from "~/components/command-bar";
 import { Header } from "~/components/header";
 import { ThemeProvider } from "~/components/theme-provider";
-import { InteractiveCube, InteractiveCubeErrorBoundary } from "~/features/interactive-cube";
+import {
+  InteractiveCube,
+  InteractiveCubeErrorBoundary,
+} from "~/features/interactive-cube";
 import { cn } from "~/lib/utils";
 
 const urbanist = Urbanist({
