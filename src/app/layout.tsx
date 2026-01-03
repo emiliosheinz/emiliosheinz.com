@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { CommandBar } from "~/components/command-bar";
 import { Header } from "~/components/header";
 import { ThemeProvider } from "~/components/theme-provider";
-import { InteractiveCube } from "~/features/interactive-cube";
+import { InteractiveCube, InteractiveCubeErrorBoundary } from "~/features/interactive-cube";
 import { cn } from "~/lib/utils";
 
 const urbanist = Urbanist({
@@ -90,7 +90,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <Analytics />
               <SpeedInsights />
               <div className="fixed right-5 bottom-5 w-20 h-20">
-                <InteractiveCube />
+                <InteractiveCubeErrorBoundary>
+                  <InteractiveCube />
+                </InteractiveCubeErrorBoundary>
               </div>
             </CommandBar>
           </ThemeProvider>
