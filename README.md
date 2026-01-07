@@ -1,4 +1,4 @@
-[![Unit tests](https://github.com/emiliosheinz/emiliosheinz.com/actions/workflows/unit-test.yaml/badge.svg)](https://github.com/emiliosheinz/emiliosheinz.com/actions/workflows/unit-test.yaml)
+[![Quality checks](https://github.com/emiliosheinz/emiliosheinz.com/actions/workflows/quality-checks.yaml/badge.svg)](https://github.com/emiliosheinz/emiliosheinz.com/actions/workflows/quality-checks.yaml)
 
 # 🧙🏼‍♂️ emiliosheinz.com
 
