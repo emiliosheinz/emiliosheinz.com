@@ -5,7 +5,7 @@ import { ThemeToggle } from "../features/theme";
 import { Button } from "./ui/button";
 import { NavigationMenu, NavigationMenuList } from "./ui/navigation-menu";
 
-const HEADER_LINKS = [
+export const HEADER_LINKS = [
   { label: "Home", href: "/" },
   { label: "Experience", href: "/experiences" },
   { label: "Blog", href: "/posts" },

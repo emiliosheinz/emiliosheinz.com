@@ -1,11 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { usePathname } from "next/navigation";
-import { Header } from "../header";
-import { headerLinks } from "../header.constants";
+import { HEADER_LINKS, Header } from "../header";
 
 const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>;
 
-jest.mock("~/components/command-bar", () => ({
+jest.mock("~/features/command-bar", () => ({
   CommandBarTriggerLite: () => <div>CommandBarTriggerLite</div>,
 }));
 
@@ -18,7 +17,7 @@ describe("Header", () => {
   it("should render all header links when on home page", () => {
     mockUsePathname.mockReturnValue("/");
     render(<Header />);
-    headerLinks.forEach(({ label }) => {
+    HEADER_LINKS.forEach(({ label }) => {
       expect(screen.getByText(label)).toBeVisible();
       expect(screen.getByText(label).tagName).toBe("A");
     });
@@ -27,7 +26,7 @@ describe("Header", () => {
   it("should should always render the header links", () => {
     mockUsePathname.mockReturnValue("/not-home");
     render(<Header />);
-    headerLinks.forEach(({ label }) => {
+    HEADER_LINKS.forEach(({ label }) => {
       expect(screen.queryByText(label)).toBeVisible();
     });
   });
