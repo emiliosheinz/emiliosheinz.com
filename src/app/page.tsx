@@ -1,4 +1,4 @@
-import { CommandBarTriggerFull } from "~/components/command-bar";
+import { CommandBarTriggerFull } from "~/features/command-bar";
 import { Image } from "~/components/image";
 
 export default function HomePage() {

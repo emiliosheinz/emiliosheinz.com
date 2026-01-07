@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Card } from "~/components/card";
-import { getYouTubeVideos } from "~/utils/youtube.utils";
+import { getYouTubeVideos } from "~/utils/youtube";
 
 /** Revalidate the page once per week */
 export const revalidate = 604800;
