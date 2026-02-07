@@ -16,10 +16,31 @@ This repository is the home of all the code for my personal portfolio website. H
 - TypeScript
 - Contentlayer
 
-## :wrench: Running locally
+## :wrench: Development
 
+### Prerequisites
+
+- Node.js 24.x
+- pnpm 10.27.0
+
+### Getting Started
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm dev
 ```
-cd emiliosheinz.com
-yarn
-yarn dev
+
+### Available Commands
+
+```bash
+pnpm dev        # Start development server
+pnpm build      # Build for production
+pnpm start      # Start production server
+pnpm lint       # Check code quality
+pnpm lint:fix   # Fix linting issues
+pnpm test       # Run tests
+pnpm test:watch # Run tests in watch mode
 ```
