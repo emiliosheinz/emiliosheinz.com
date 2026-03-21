@@ -6,7 +6,7 @@
  */
 
 import type { ThreeEvent } from "@react-three/fiber";
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import * as THREE from "three";
 import { useCube } from "../hooks/use-cube";
 import { useCubeRotation } from "../hooks/use-cube-rotation";
@@ -51,6 +51,8 @@ const MIN_ROTATION_THRESHOLD = (5 * Math.PI) / 36;
 const CUBIE_POSITIONS = getCubiePositions();
 const cameraRight = new THREE.Vector3();
 const cameraUp = new THREE.Vector3();
+const discard = new THREE.Vector3();
+const worldDrag = new THREE.Vector3();
 
 function isCubieInRotationLayer(
   position: [Coord, Coord, Coord],
@@ -70,7 +72,7 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
     useCubeRotation();
   const state = useCube((state) => state.cube);
 
-  const handleDragStart = (info: {
+  const handleDragStart = useCallback((info: {
     position: [number, number, number];
     face: FaceName;
     event: ThreeEvent<PointerEvent>;
@@ -84,9 +86,9 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
       initialPointer: { x: info.event.clientX, y: info.event.clientY },
     };
     rotate(null);
-  };
+  }, [disableDrag, isAnimating, rotate]);
 
-  const handleDrag = (pointer: { x: number; y: number }) => {
+  const handleDrag = useCallback((pointer: { x: number; y: number }) => {
     /** Checks preconditions to start handling drag action */
     if (!dragStartRef.current && !rotation) return;
     if (!cubeGroupRef?.current || isAnimating) return;
@@ -106,10 +108,11 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
       dragStartRef.current.camera.matrixWorld.extractBasis(
         cameraRight,
         cameraUp,
-        new THREE.Vector3(),
+        discard,
       );
 
-      const worldDrag = new THREE.Vector3()
+      worldDrag
+        .set(0, 0, 0)
         .addScaledVector(cameraRight, totalDeltaX)
         .addScaledVector(cameraUp, -totalDeltaY);
 
@@ -157,9 +160,9 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
         angle: smoothedAngle,
       });
     }
-  };
+  }, [rotation, rotate, isAnimating, cubeGroupRef]);
 
-  const handleDragEnd = () => {
+  const handleDragEnd = useCallback(() => {
     if (!rotation) {
       dragStartRef.current = null;
       return;
@@ -188,7 +191,7 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
       });
       dragStartRef.current = null;
     }
-  };
+  }, [rotation, startSnapAnimation]);
 
   const renderCubie = ([x, y, z]: [Coord, Coord, Coord]) => {
     const { isTop, isBottom, isLeft, isRight, isFront, isBack } =

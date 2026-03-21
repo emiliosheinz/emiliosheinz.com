@@ -4,23 +4,26 @@
  * @module hooks/useIsSpacePressed
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Tracks whether the space key is currently pressed.
  */
 export function useIsSpacePressed(): boolean {
   const [isSpacePressed, setIsSpacePressed] = useState(false);
+  const isSpacePressedRef = useRef(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space" && !isSpacePressed) {
+      if (e.code === "Space" && !e.repeat && !isSpacePressedRef.current) {
+        isSpacePressedRef.current = true;
         setIsSpacePressed(true);
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space" && isSpacePressed) {
+      if (e.code === "Space") {
+        isSpacePressedRef.current = false;
         setIsSpacePressed(false);
       }
     };
@@ -32,7 +35,7 @@ export function useIsSpacePressed(): boolean {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [isSpacePressed]);
+  }, []);
 
   return isSpacePressed;
 }

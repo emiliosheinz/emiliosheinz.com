@@ -5,7 +5,7 @@
  */
 
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type * as THREE from "three";
 import { type Group, Quaternion, Vector2, Vector3 } from "three";
 
@@ -20,18 +20,20 @@ const AUTO_ROTATE_SPEED = 0.1;
 const ROTATION_SENSITIVITY = 0.001;
 const VELOCITY_THRESHOLD = 0.0001;
 
+const cameraUp = new Vector3(0, 1, 0);
+const cameraRight = new Vector3();
+const qX = new Quaternion();
+const qY = new Quaternion();
+
 function applyQuaternionRotation(
   group: Group,
   camera: THREE.Camera,
   angleX: number,
   angleY: number,
 ): void {
-  const cameraUp = new Vector3(0, 1, 0);
-  const cameraRight = new Vector3(1, 0, 0);
-  cameraRight.applyQuaternion(camera.quaternion);
-
-  const qX = new Quaternion().setFromAxisAngle(cameraRight, angleX);
-  const qY = new Quaternion().setFromAxisAngle(cameraUp, angleY);
+  cameraRight.set(1, 0, 0).applyQuaternion(camera.quaternion);
+  qX.setFromAxisAngle(cameraRight, angleX);
+  qY.setFromAxisAngle(cameraUp, angleY);
 
   group.quaternion.multiplyQuaternions(qY, group.quaternion);
   group.quaternion.multiplyQuaternions(qX, group.quaternion);
@@ -45,20 +47,20 @@ export function useArcballRotation({
   autoRotate,
   allowManualRotation,
 }: ArcballRotationProps) {
-  const [isDragging, setIsDragging] = useState(false);
-  const [lastPos, setLastPos] = useState<Vector2 | null>(null);
+  const isDraggingRef = useRef(false);
+  const lastPosRef = useRef<Vector2 | null>(null);
   const velocityRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const { camera } = useThree();
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
-    if (autoRotate && !isDragging) {
+    if (autoRotate && !isDraggingRef.current) {
       groupRef.current.rotation.y += delta * AUTO_ROTATE_SPEED;
       groupRef.current.rotation.x -= delta * AUTO_ROTATE_SPEED;
     }
 
-    if (isDragging || !allowManualRotation) return;
+    if (isDraggingRef.current || !allowManualRotation) return;
 
     const hasVelocity =
       Math.abs(velocityRef.current.x) > VELOCITY_THRESHOLD ||
@@ -84,16 +86,16 @@ export function useArcballRotation({
     if (!allowManualRotation) return;
 
     const handleMouseDown = (e: MouseEvent) => {
-      setIsDragging(true);
-      setLastPos(new Vector2(e.clientX, e.clientY));
+      isDraggingRef.current = true;
+      lastPosRef.current = new Vector2(e.clientX, e.clientY);
       velocityRef.current = { x: 0, y: 0 };
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging || !groupRef.current || !lastPos) return;
+      if (!isDraggingRef.current || !groupRef.current || !lastPosRef.current) return;
 
-      const deltaX = e.clientX - lastPos.x;
-      const deltaY = e.clientY - lastPos.y;
+      const deltaX = e.clientX - lastPosRef.current.x;
+      const deltaY = e.clientY - lastPosRef.current.y;
 
       velocityRef.current = {
         x: deltaX * ROTATION_SENSITIVITY,
@@ -105,12 +107,12 @@ export function useArcballRotation({
 
       applyQuaternionRotation(groupRef.current, camera, angleX, angleY);
 
-      setLastPos(new Vector2(e.clientX, e.clientY));
+      lastPosRef.current.set(e.clientX, e.clientY);
     };
 
     const handleMouseUp = () => {
-      setIsDragging(false);
-      setLastPos(null);
+      isDraggingRef.current = false;
+      lastPosRef.current = null;
     };
 
     window.addEventListener("mousedown", handleMouseDown);
@@ -122,5 +124,5 @@ export function useArcballRotation({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [allowManualRotation, isDragging, lastPos, camera, groupRef]);
+  }, [allowManualRotation, camera, groupRef]);
 }
