@@ -170,7 +170,13 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
 
     if (Math.abs(rotation.angle) < MIN_ROTATION_THRESHOLD || !move) {
       dragStartRef.current = null;
-      rotate(null);
+      startSnapAnimation({
+        axis: rotation.axis,
+        layer: rotation.layer,
+        startAngle: rotation.angle,
+        targetAngle: 0,
+        duration: 250,
+      });
     } else {
       startSnapAnimation({
         move,

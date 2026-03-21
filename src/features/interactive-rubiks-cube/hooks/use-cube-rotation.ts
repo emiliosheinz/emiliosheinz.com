@@ -18,7 +18,7 @@ type SnapAnimation = {
   targetAngle: number;
   startTime: number;
   duration: number;
-  move: Move;
+  move?: Move;
 };
 
 export type CubeRotationControls = {
@@ -60,7 +60,11 @@ export function useCubeRotation(): CubeRotationControls {
         angle: currentAngle,
       });
     } else {
-      commitMove(snapAnimationRef.current.move);
+      if (snapAnimationRef.current.move) {
+        commitMove(snapAnimationRef.current.move);
+      } else {
+        rotate(null);
+      }
       snapAnimationRef.current = null;
     }
   });
