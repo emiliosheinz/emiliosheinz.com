@@ -1,5 +1,6 @@
 import { useMDXComponent } from "next-contentlayer2/hooks";
 
+import { ImageCarousel } from "~/components/image-carousel";
 import { cn } from "~/lib/utils";
 import { MDXContentImage } from "./mdx-content-image";
 import { MDXContentPre } from "./mdx-content-pre";
@@ -20,6 +21,7 @@ export function MDXContent({ code, className = "" }: MDXContentProps) {
         components={{
           pre: MDXContentPre,
           Image: MDXContentImage,
+          ImageCarousel,
         }}
       />
     </article>
