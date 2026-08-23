@@ -9,12 +9,12 @@ I was in Curitiba again this year for [Codecon Summit](https://codecon.dev/), my
 
 ## Curitiba
 
-Curitiba is a great city, with a lot of stuff to do and good restaurants to visit, and it works surprisingly well as a tech conference destination.
+Curitiba is a great city with plenty to do and good restaurants, and it works surprisingly well as a tech conference destination.
 
 If you ever end up there, a few personal recommendations:
 
-- [**Brains Coworking**](https://brainscoworking.com.br/), in the Batel neighborhood, it is a great spot if you need somewhere to work from.
-- [**OIDE**](https://oide.ninja/) is a must if you love Japanese food. Get there early, especially on weekends, because it gets pretty crowded.
+- [**Brains Coworking**](https://brainscoworking.com.br/), in the Batel neighborhood, is a great spot if you need somewhere to work from.
+- [**OIDE**](https://oide.ninja/) is a must if you love Japanese food. Get there early, especially on weekends, because it gets crowded.
 - [**Jardim Botânico**](https://maps.app.goo.gl/Q4Xo97jjkADxbtix8) and [**Parque Barigui**](https://maps.app.goo.gl/fUXkLsAUqw1M4wZT8) are both worth a visit if you enjoy nature and the outdoors.
 
 <ImageCarousel
@@ -52,13 +52,13 @@ Out of the whole schedule, the talk I keep coming back to is “Claude Says: The
 
 It resonated deeply with my day-to-day, and I could draw several parallels with what I do as a Product Engineer at [Spoke](https://spoke.com).
 
-The idea that software has gotten worse over time and that we are living through a crisis are almost as old as the industry itself. Which means AI is not the problem; the way we use it to build things is.
+The idea that software has gotten worse over time, and that we are living through a crisis, is almost as old as the industry itself. AI is not the problem; the way we use it to build things is.
 
-And this is where things get interesting. AI now writes code faster, and often better, than we do, but the system as a whole no longer fits inside our heads. If we keep trying to manually review every single line, code review becomes the bottleneck pretty quickly.
+This is where things get interesting. AI now writes code faster, and often better, than we do, but the system as a whole no longer fits inside our heads. If we keep trying to manually review every single line, code review quickly becomes the bottleneck.
 
-To break that bottleneck, engineers need to review code faster. But speed alone is not enough. Doing it the wrong way, without the right tools, breaks the shared theory of how the system works, and that disrupts the entire development lifecycle, slowly, day by day.
+To break that bottleneck, engineers need to review code faster. Speed alone is not enough. Doing it the wrong way, without the right tools, breaks the shared theory of how the system works, and that disrupts the entire development lifecycle, day by day.
 
-The talk introduced me to **explainer artifacts**, a Claude Code feature that generates short write-ups with diagrams, hosted as a static website, so you can understand what a PR is really doing before going through it line by line. It's a low-effort habit that attacks a common problem in teams: PRs being approved without the reviewer actually understanding what they're approving.
+The talk introduced me to **explainer artifacts**, a Claude Code feature that generates short write-ups with diagrams, hosted as a static website, so you can understand what a PR is doing before going through it line by line. It's a low-effort habit that attacks a common problem in teams: reviewers approving PRs without understanding what they're approving.
 
 <ImageCarousel
   images={[
@@ -94,13 +94,15 @@ My understanding is that there are always two versions of the system we are buil
 1. **The system in our heads**: our mental model of how it works. Each engineer has their own version of it.
 2. **Reality**: what the code actually does.
 
-Bugs live in the gap between the two. We build something assuming X, but production is running Y. AI can make that gap grow faster and larger, because we ship more code with less time spent reading it. So anything that helps us close it, like explainer artifacts, better code reviews, and using AI to learn the codebase and not only to write code, matters a lot more than it used to.
+Bugs live in the gap between the two. We build something assuming X, but production is running Y.
 
-Other talks worth mentioning:
+AI can make that gap grow faster and larger, because we ship more code and spend less time reading it. Anything that helps us close it, like explainer artifacts, better code reviews, and using AI to learn the codebase and not only to write code, matters more than it used to.
 
-- **The Laws of Frugal Architecture** by [Elton Mineto](https://www.linkedin.com/in/eminetto/) was a good reminder that “how much does this cost?” is a first-class engineering question and that we should never small improvements in systems running at scale.
-- **Beyond Box-and-Arrow Diagrams: Designing Systems You Can Actually Investigate** by [Alex Rios](https://www.linkedin.com/in/the-alex-rios/) made me rethink who alerts are actually for and when it makes sense to trigger them. If someone can't take action on an allert, it is actually useless, and should probably be deleted.
-- **You Don’t Need an AI Team: Architectural Patterns for Engineers Building with GenAI** by [Victor Kazuyuki Shinya](https://www.linkedin.com/in/victorshinya/) from AWS brought some solid architectural patterns for building with GenAI, especially treating the model as an external dependency and always accounting for latency, non-determinism, pricing, and fallbacks. 
+Lucas's talk stood out, but a few others stayed with me as well:
+
+- **The Laws of Frugal Architecture** by [Elton Mineto](https://www.linkedin.com/in/eminetto/) was a good reminder that “how much does this cost?” is a first-class engineering question, and that we should never underestimate small improvements in systems running at scale.
+- **Beyond Box-and-Arrow Diagrams: Designing Systems You Can Actually Investigate** by [Alex Rios](https://www.linkedin.com/in/the-alex-rios/) made me rethink who alerts are for and when it makes sense to trigger them. If no one can act on an alert, it is useless and should be deleted.
+- **You Don’t Need an AI Team: Architectural Patterns for Engineers Building with GenAI** by [Victor Kazuyuki Shinya](https://www.linkedin.com/in/victorshinya/) from AWS offered practical guidance, especially treating the model as an external dependency and always accounting for latency, non-determinism, pricing, and fallbacks.
 
 <details>
   <summary>Expand to see all my raw notes from the event</summary>
@@ -142,14 +144,14 @@ Other talks worth mentioning:
   - Domain Driven Design
   - [Deep Modules by Matt Pocock](https://www.aihero.dev/how-to-make-codebases-ai-agents-love)
   - [Enterprise Angular Monorepo Patterns](https://nx.dev/blog/enterprise-angular-book)
-  - Key takeaway: Modularizing the codebase by domain, with each module having a clear contract with the outside world, seems to be key to Agents’ success in delivering cost-efficient sessions.
+  - Takeaway: Modularizing the codebase by domain, with each module exposing a clear contract to the outside world, seems central to Agents’ success in delivering cost-efficient sessions.
 
   **Beyond Box-and-Arrow Diagrams: Designing Systems You Can Actually Investigate**
 
   - MELT: Metrics, Events, Logs, and Traces
   - Alerts should be triggered based on who actually uses or owns the system.
   - We need to protect human attention
-  - Can someone actually take action on this alert? If not, there is no reason to trigger it.
+  - Can someone take action on this alert? If not, don't trigger it.
   - LGTM framework
 
   ### Day 2
@@ -162,7 +164,7 @@ Other talks worth mentioning:
   - Use explainer artifacts and diagrams.
   - Good code reviews create a shared theory of the software being built.
   - [Make impossible states impossible](http://youtube.com/watch?v=IcgmSRJHu_8)
-  - Tests are cheaper than ever, using them in our favor, mocking the least as possible, and putting them into the agent loops is key to success.
+  - Tests are cheaper than ever; using them, mocking as little as possible, and putting them into the agent loops is key to success.
   - Think of the test pyramid as a spectrum rather than a clear classification; some integration tests are closer to E2E than others.
 
   **The Laws of Frugal Architecture**
@@ -174,13 +176,13 @@ Other talks worth mentioning:
   - Strategic problem-solving
   - Specialized knowledge
 
-  The Three Pillars:
+  Three pillars:
 
   1. Design
   2. Measure
   3. Optimize
 
-  Key Takeaways:
+  Key takeaways:
 
   - Always consider the cost of what is being implemented.
   - Ask yourself: How much does the system I work on cost?
@@ -205,7 +207,7 @@ I got to take my fiancée to her first big tech event, and she loved it.
 
 I also reconnected with a few people I had met last year, and it was interesting to see how much everyone’s day-to-day had changed in twelve months.
 
-And I got to spend time with the folks from the [Tech Leads Club](https://comece.techleads.club/) community. That was easily one of the best parts of the trip. Interacting with people online through a chat or on a call is one thing. Sitting next to them at lunch, sharing stories and ideas, is different.
+Spending time with the folks from the [Tech Leads Club](https://comece.techleads.club/) community was easily one of the best parts of the trip. Interacting with people online through chat or on a call is one thing. Sitting next to them at lunch, sharing stories and ideas, is different.
 
 <ImageCarousel
   images={[
@@ -236,12 +238,14 @@ And I got to spend time with the folks from the [Tech Leads Club](https://comece
   ]}
 />
 
-One thing that caught my attention is that almost every conversation had a version of the same story. We’re all using AI heavily, and because of that we’re rethinking how we design, review, and operate our systems. Some are worried, others are excited, but everyone agrees this shift is unlike anything we’ve been through before, and it’s here to stay.
+One thing that caught my attention is that almost every conversation had a version of the same story. We’re all using AI heavily, and because of that we’re rethinking how we design, review, and operate our systems.
+
+Some are worried, others are excited, but everyone agrees this shift is unlike anything we’ve been through before, and it’s here to stay.
 
 ## Closing thoughts
 
 I could have watched most of these talks on YouTube in a couple of weeks, but the part that actually made the trip worth it was the conversations. The questions after the talk, the follow-up over coffee, the random “wait, how are you actually doing that?” between sessions.
 
-That is also a reminder of something I’ve been thinking about a lot lately. The role of a software engineer has been changing for a while, and events like Codecon make it obvious. Writing code is becoming the smaller part of the job. The bigger part is now everything around it, like architecture, system design, observability, cost, and being able to reason about a system end to end even when an agent wrote 80% of it. 
+That is also a reminder of something I’ve been thinking about a lot lately. The role of a software engineer has been changing for a while, and events like Codecon make it obvious. Writing code is becoming the smaller part of the job. The bigger part is now everything around it: architecture, system design, observability, cost, and being able to reason about a system end to end even when an agent wrote 80% of it.
 
-So go out there, meet people, make friends, and never stop learning the basics. The fundamentals are still the foundation for everything else we build as software engineers.
+So go out there, meet people, make friends, and never stop studying the fundamentals. They are still the foundation of everything we build as software engineers.
