@@ -78,7 +78,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       className={cn(urbanist.className, "h-full")}
     >
       <body className="flex min-h-full">
-        <div className="pb-10 pt-16 px-5 max-w-6xl m-auto">
+        <div className="pb-10 pt-16 px-5 max-w-6xl w-full mx-auto">
           <ThemeProvider
             attribute={["class", "data-theme"]}
             defaultTheme="system"
