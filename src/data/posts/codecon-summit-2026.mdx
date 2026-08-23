@@ -1,0 +1,247 @@
+---
+type: Post
+title: Codecon Summit 2026, notes and takeaways
+description: "I was in Curitiba again this year for Codecon Summit, my second time attending, and it somehow felt bigger and better than last year. Same event, similar format, but the focus was clearly different: almost every conversation and a big chunk of the talks pointed back to AI in one way or another."
+publishedAt: 2026-08-22
+---
+
+I was in Curitiba again this year for [Codecon Summit](https://codecon.dev/), my second time attending, and it felt bigger and better than last year. Same event, similar format, but the focus was clearly different: almost every conversation and a big chunk of the talks pointed back to AI in one way or another. That shift is what I want to write about, alongside a couple of things I picked up and the people I bumped into.
+
+## About Curitiba
+
+Curitiba is a great city, with a lot of stuff to do and good restaurants to visit, and it works surprisingly well as a tech conference destination.
+
+If you ever end up there, a few personal recommendations:
+
+- [**Brains Coworking**](https://brainscoworking.com.br/), in the Batel neighborhood, it is a great spot if you need somewhere to work from.
+- [**OIDE**](https://oide.ninja/) is a must if you love Japanese food. Get there early, especially on weekends, because it gets pretty crowded.
+- [**Jardim Botânico**](https://maps.app.goo.gl/Q4Xo97jjkADxbtix8) and [**Parque Barigui**](https://maps.app.goo.gl/fUXkLsAUqw1M4wZT8) are both worth a visit if you enjoy nature and the outdoors.
+
+<ImageCarousel
+  images={[
+    {
+      src: "/images/posts/codecon-summit-2026/brains-coworking.webp",
+      alt: "Brains Coworking in Batel",
+      width: 3024,
+      height: 4032,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/oide-restaurant.webp",
+      alt: "OIDE restaurant",
+      width: 3024,
+      height: 4032,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/oide-food.webp",
+      alt: "Japanese food at OIDE",
+      width: 3024,
+      height: 4032,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/jardim-botanico.webp",
+      alt: "Jardim Botânico",
+      width: 3024,
+      height: 4032,
+    },
+  ]}
+/>
+
+## The talk that stuck with me the most
+
+Out of the whole schedule, the talk I keep coming back to is “Claude Says: The Tests Passed, Good Luck”, by [Lucas](https://www.linkedin.com/in/lucasfdacosta/), Software Engineer at [Resend](https://resend.com/).
+
+It resonated deeply with my day-to-day, and I could draw several parallels with what I do as a Product Engineer at [Spoke](https://spoke.com).
+
+The idea that software has gotten worse over time and that we are living through a crisis are almost as old as the industry itself. Which means AI is not the problem; the way we use it to build things is.
+
+And this is where things get interesting. AI now writes code faster, and often better, than we do, but the system as a whole no longer fits inside our heads. If we keep trying to manually review every single line, code review becomes the bottleneck pretty quickly.
+
+To break that bottleneck, engineers need to review code faster. But speed alone is not enough. Doing it the wrong way, without the right tools, breaks the shared theory of how the system works, and that disrupts the entire development lifecycle, slowly, day by day.
+
+The talk introduced me to **explainer artifacts**, a Claude Code feature that generates short write-ups with diagrams, hosted as a static website, so you can understand what a PR is really doing before going through it line by line. It's a low-effort habit that attacks a common problem in teams: PRs being approved without the reviewer actually understanding what they're approving.
+
+<ImageCarousel
+  images={[
+    {
+      src: "/images/posts/codecon-summit-2026/talk-badge.webp",
+      alt: "Event badge",
+      width: 3024,
+      height: 4032,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/talk-stage.webp",
+      alt: "Talk stage",
+      width: 3024,
+      height: 4032,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/talk-lucas.webp",
+      alt: "Lucas on stage",
+      width: 3024,
+      height: 4032,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/talk-resend-cap.webp",
+      alt: "Resend cap",
+      width: 3024,
+      height: 4032,
+    },
+  ]}
+/>
+
+My understanding is that there are always two versions of the system we are building:
+
+1. **The system in our heads**: our mental model of how it works. Each engineer has their own version of it.
+2. **Reality**: what the code actually does.
+
+Bugs live in the gap between the two. We build something assuming X, but production is running Y. AI can make that gap grow faster and larger, because we ship more code with less time spent reading it. So anything that helps us close it, like explainer artifacts, better code reviews, and using AI to learn the codebase and not only to write code, matters a lot more than it used to.
+
+Other talks worth mentioning:
+
+- **The Laws of Frugal Architecture** by [Elton Mineto](https://www.linkedin.com/in/eminetto/) was a good reminder that “how much does this cost?” is a first-class engineering question and that we should never small improvements in systems running at scale.
+- **Beyond Box-and-Arrow Diagrams: Designing Systems You Can Actually Investigate** by [Alex Rios](https://www.linkedin.com/in/the-alex-rios/) made me rethink who alerts are actually for and when it makes sense to trigger them. If someone can't take action on an allert, it is actually useless, and should probably be deleted.
+- **You Don’t Need an AI Team: Architectural Patterns for Engineers Building with GenAI** by [Victor Kazuyuki Shinya](https://www.linkedin.com/in/victorshinya/) from AWS brought some solid architectural patterns for building with GenAI, especially treating the model as an external dependency and always accounting for latency, non-determinism, pricing, and fallbacks. 
+
+<details>
+  <summary>Expand to see all my raw notes from the event</summary>
+
+  <div className="flex flex-col gap-3 sm:gap-4 mt-4">
+
+  ### Day 1
+
+  **Do You Really Know Anything About Security?**
+
+  - Don’t limit yourself to the OWASP Top 10
+  - Creativity is key to protecting systems
+  - There are 13 OWASP Top 10 lists, which means 130 items in total
+  - Zero trust by default
+  - There is no such thing as a 100% secure system
+
+  **You Don’t Need an AI Team: Architecture Patterns for Developers Building with GenAI**
+
+  Things to watch out for:
+
+  - Cost
+  - Latency
+  - Hallucinations
+
+  What makes a GenAI project different?
+
+  - High latency
+  - Non-determinism
+  - Complex pricing
+
+  Architecture takeaways:
+
+  - RAG is a data pipeline.
+  - Treat the model as an external dependency.
+  - What happens if the model is unavailable? What is the fallback?
+
+  **How to Think About Efficient Architectures in the Age of AI-Generated Code**
+
+  - Domain Driven Design
+  - [Deep Modules by Matt Pocock](https://www.aihero.dev/how-to-make-codebases-ai-agents-love)
+  - [Enterprise Angular Monorepo Patterns](https://nx.dev/blog/enterprise-angular-book)
+  - Key takeaway: Modularizing the codebase by domain, with each module having a clear contract with the outside world, seems to be key to Agents’ success in delivering cost-efficient sessions.
+
+  **Beyond Box-and-Arrow Diagrams: Designing Systems You Can Actually Investigate**
+
+  - MELT: Metrics, Events, Logs, and Traces
+  - Alerts should be triggered based on who actually uses or owns the system.
+  - We need to protect human attention
+  - Can someone actually take action on this alert? If not, there is no reason to trigger it.
+  - LGTM framework
+
+  ### Day 2
+
+  **Claude Says: “The Tests Passed, Good Luck”**
+
+  - AI writes code faster and better than we do.
+  - The problem is that the system as a whole can no longer fit inside our heads.
+  - Therefore, use AI not only to write code, but also to understand the codebase.
+  - Use explainer artifacts and diagrams.
+  - Good code reviews create a shared theory of the software being built.
+  - [Make impossible states impossible](http://youtube.com/watch?v=IcgmSRJHu_8)
+  - Tests are cheaper than ever, using them in our favor, mocking the least as possible, and putting them into the agent loops is key to success.
+  - Think of the test pyramid as a spectrum rather than a clear classification; some integration tests are closer to E2E than others.
+
+  **The Laws of Frugal Architecture**
+
+  Important skills:
+
+  - Systems thinking and architecture design
+  - Good communication with the business
+  - Strategic problem-solving
+  - Specialized knowledge
+
+  The Three Pillars:
+
+  1. Design
+  2. Measure
+  3. Optimize
+
+  Key Takeaways:
+
+  - Always consider the cost of what is being implemented.
+  - Ask yourself: How much does the system I work on cost?
+  - The harder it is to understand how much something costs, the greater its potential impact may be.
+  - Don’t underestimate small improvements, especially in systems operating at scale.
+
+  ### Other cool references
+
+  - [Software Should Work](https://www.youtube.com/@softwareshouldwork)
+  - [No Slop Grenade](https://noslopgrenade.com/)
+  - [The cost of caring about software](https://alexriosme.substack.com/p/the-cost-of-caring-about-software)
+
+  </div>
+
+</details>
+
+## The people
+
+The talks are only half of what makes an event like this worth the effort. The other half is the people you get to meet, reconnect with, and spend time with.
+
+I got to take my fiancée to her first big tech event, and she loved it.
+
+I also reconnected with a few people I had met last year, and it was interesting to see how much everyone’s day-to-day had changed in twelve months.
+
+And I got to spend time with the folks from the [Tech Leads Club](https://comece.techleads.club/) community. That was easily one of the best parts of the trip. Interacting with people online through a chat or on a call is one thing. Sitting next to them at lunch, sharing stories and ideas, is different.
+
+<ImageCarousel
+  images={[
+    {
+      src: "/images/posts/codecon-summit-2026/people-tlc.webp",
+      alt: "Tech Leads Club group",
+      width: 2340,
+      height: 3057,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/people-talk.webp",
+      alt: "Hallway conversation",
+      width: 3600,
+      height: 2400,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/people-duda.webp",
+      alt: "With Duda",
+      width: 3600,
+      height: 2400,
+    },
+    {
+      src: "/images/posts/codecon-summit-2026/people-andrey.webp",
+      alt: "With Andrey",
+      width: 2575,
+      height: 3313,
+    },
+  ]}
+/>
+
+One thing that caught my attention is that almost every conversation had a version of the same story. We’re all using AI heavily, and because of that we’re rethinking how we design, review, and operate our systems. Some are worried, others are excited, but everyone agrees this shift is unlike anything we’ve been through before, and it’s here to stay.
+
+## Closing thoughts
+
+I could have watched most of these talks on YouTube in a couple of weeks, but the part that actually made the trip worth it was the conversations. The questions after the talk, the follow-up over coffee, the random “wait, how are you actually doing that?” between sessions.
+
+That is also a reminder of something I’ve been thinking about a lot lately. The role of a software engineer has been changing for a while, and events like Codecon make it obvious. Writing code is becoming the smaller part of the job. The bigger part is now everything around it, like architecture, system design, observability, cost, and being able to reason about a system end to end even when an agent wrote 80% of it. 
+
+So go out there, meet people, make friends, and never stop learning the basics. The fundamentals are still the foundation for everything else we build as software engineers.
