@@ -82,7 +82,7 @@ export function ImageCarousel({ images }: ImageCarouselProps) {
               alt={image.alt}
               fill
               sizes="(min-width: 768px) 672px, 100vw"
-              className="object-cover"
+              className="object-contain"
             />
           </button>
         ))}
