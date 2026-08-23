@@ -20,12 +20,12 @@ export function SliderRoot({ children }: SliderProps) {
   return (
     <motion.div
       ref={carouselRef}
-      className="cursor-grab overflow-hidden"
+      className="cursor-grab overflow-hidden overscroll-contain"
       whileTap={{ cursor: "grabbing" }}
     >
       <motion.div
         drag="x"
-        className="flex gap-5"
+        className="flex gap-5 touch-pan-y"
         dragConstraints={{ right: 0, left: -leftDragConstraint }}
       >
         {children}
