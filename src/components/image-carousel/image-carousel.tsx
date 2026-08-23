@@ -66,23 +66,23 @@ export function ImageCarousel({ images }: ImageCarouselProps) {
     <div className="flex flex-col gap-3">
       <div
         ref={scrollerRef}
-        className="flex gap-3 aspect-video w-full overflow-x-auto touch-pan-x overscroll-x-contain p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-3 w-full overflow-x-auto touch-pan-x overscroll-x-contain p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {images.map((image, index) => (
           <button
             key={image.src}
             type="button"
             onClick={() => setFocusedIndex(index)}
-            className="relative shrink-0 h-full rounded-lg overflow-hidden cursor-zoom-in focus-visible:outline-2 focus-visible:outline-offset-2"
-            style={{ aspectRatio: `${image.width} / ${image.height}` }}
+            className="shrink-0 rounded-lg overflow-hidden cursor-zoom-in focus-visible:outline-2 focus-visible:outline-offset-2"
             aria-label={`Open image ${index + 1}: ${image.alt}`}
           >
             <NextImage
               src={image.src}
               alt={image.alt}
-              fill
-              sizes="(min-width: 768px) 672px, 100vw"
-              className="object-cover"
+              width={image.width}
+              height={image.height}
+              sizes="(min-width: 768px) 500px, 300px"
+              className="h-72 sm:h-96 w-auto max-w-none object-cover"
             />
           </button>
         ))}
