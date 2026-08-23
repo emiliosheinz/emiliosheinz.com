@@ -66,7 +66,7 @@ export function ImageCarousel({ images }: ImageCarouselProps) {
     <div className="flex flex-col gap-3">
       <div
         ref={scrollerRef}
-        className="flex gap-3 aspect-video w-full overflow-x-auto touch-pan-x overscroll-x-contain p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-3 aspect-square sm:aspect-video w-full overflow-x-auto touch-pan-x overscroll-x-contain p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {images.map((image, index) => (
           <button
