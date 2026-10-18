@@ -14,7 +14,7 @@ export type PegatineTextures = {
   green: THREE.Texture;
   white: THREE.Texture;
   yellow: THREE.Texture;
-}
+};
 
 export type PegatineColor = keyof PegatineTextures;
 

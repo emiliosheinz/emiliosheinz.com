@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useKBar } from "kbar";
 import { Command } from "lucide-react";

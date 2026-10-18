@@ -5,10 +5,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { CommandBar } from "~/features/command-bar";
 import { Header } from "~/components/header";
+import { CommandBar } from "~/features/command-bar";
+import {
+  InteractiveRubiksCube,
+  InteractiveRubiksCubeErrorBoundary,
+} from "~/features/interactive-rubiks-cube";
 import { ThemeProvider } from "~/features/theme";
-import { InteractiveRubiksCube, InteractiveRubiksCubeErrorBoundary } from "~/features/interactive-rubiks-cube";
 import { cn } from "~/lib/utils";
 
 const urbanist = Urbanist({
