@@ -13,7 +13,7 @@ export type ArcballRotationProps = {
   groupRef: React.RefObject<Group | null>;
   autoRotate: boolean;
   allowManualRotation: boolean;
-}
+};
 
 const DAMPING = 0.95;
 const AUTO_ROTATE_SPEED = 0.1;
@@ -92,7 +92,8 @@ export function useArcballRotation({
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDraggingRef.current || !groupRef.current || !lastPosRef.current) return;
+      if (!isDraggingRef.current || !groupRef.current || !lastPosRef.current)
+        return;
 
       const deltaX = e.clientX - lastPosRef.current.x;
       const deltaY = e.clientY - lastPosRef.current.y;

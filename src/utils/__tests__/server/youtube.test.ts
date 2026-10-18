@@ -12,7 +12,12 @@ function makeFetchResponse(data: unknown, ok = true) {
   });
 }
 
-function makeSearchItem(videoId: string, title = "Title", description = "Desc", thumbnailUrl = "http://thumb.jpg") {
+function makeSearchItem(
+  videoId: string,
+  title = "Title",
+  description = "Desc",
+  thumbnailUrl = "http://thumb.jpg",
+) {
   return {
     id: { kind: "youtube#video", videoId },
     snippet: {
@@ -31,7 +36,8 @@ describe("getYouTubeVideos", () => {
   beforeEach(() => {
     mockFetch.mockReset();
     process.env.YOUTUBE_DATA_API_KEY = "test-key";
-    process.env.YOUTUBE_DATA_API_BASE_URL = "https://www.googleapis.com/youtube/v3";
+    process.env.YOUTUBE_DATA_API_BASE_URL =
+      "https://www.googleapis.com/youtube/v3";
   });
 
   it("should return videos that are longer than 3 minutes", async () => {
@@ -83,9 +89,7 @@ describe("getYouTubeVideos", () => {
 
   it("should return empty array when all videos are shorts", async () => {
     mockFetch
-      .mockReturnValueOnce(
-        makeFetchResponse({ items: [makeSearchItem("s1")] }),
-      )
+      .mockReturnValueOnce(makeFetchResponse({ items: [makeSearchItem("s1")] }))
       .mockReturnValueOnce(
         makeFetchResponse({ items: [makeDetailsItem("s1", "PT1M0S")] }),
       );
@@ -152,7 +156,9 @@ describe("getYouTubeVideos", () => {
     mockFetch
       .mockReturnValueOnce(
         makeFetchResponse({
-          items: [makeSearchItem("vid1", "My Video", "My Description", thumbnailUrl)],
+          items: [
+            makeSearchItem("vid1", "My Video", "My Description", thumbnailUrl),
+          ],
         }),
       )
       .mockReturnValueOnce(

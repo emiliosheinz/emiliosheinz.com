@@ -72,95 +72,102 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
     useCubeRotation();
   const state = useCube((state) => state.cube);
 
-  const handleDragStart = useCallback((info: {
-    position: [number, number, number];
-    face: FaceName;
-    event: ThreeEvent<PointerEvent>;
-    normal: THREE.Vector3;
-  }) => {
-    if (disableDrag || isAnimating) return;
-    dragStartRef.current = {
-      faceNormal: info.normal,
-      camera: info.event.camera,
-      position: info.position as [Coord, Coord, Coord],
-      initialPointer: { x: info.event.clientX, y: info.event.clientY },
-    };
-    rotate(null);
-  }, [disableDrag, isAnimating, rotate]);
+  const handleDragStart = useCallback(
+    (info: {
+      position: [number, number, number];
+      face: FaceName;
+      event: ThreeEvent<PointerEvent>;
+      normal: THREE.Vector3;
+    }) => {
+      if (disableDrag || isAnimating) return;
+      dragStartRef.current = {
+        faceNormal: info.normal,
+        camera: info.event.camera,
+        position: info.position as [Coord, Coord, Coord],
+        initialPointer: { x: info.event.clientX, y: info.event.clientY },
+      };
+      rotate(null);
+    },
+    [disableDrag, isAnimating, rotate],
+  );
 
-  const handleDrag = useCallback((pointer: { x: number; y: number }) => {
-    /** Checks preconditions to start handling drag action */
-    if (!dragStartRef.current && !rotation) return;
-    if (!cubeGroupRef?.current || isAnimating) return;
-    if (!dragStartRef.current) return;
+  const handleDrag = useCallback(
+    (pointer: { x: number; y: number }) => {
+      /** Checks preconditions to start handling drag action */
+      if (!dragStartRef.current && !rotation) return;
+      if (!cubeGroupRef?.current || isAnimating) return;
+      if (!dragStartRef.current) return;
 
-    const totalDeltaX = pointer.x - dragStartRef.current.initialPointer.x;
-    const totalDeltaY = pointer.y - dragStartRef.current.initialPointer.y;
+      const totalDeltaX = pointer.x - dragStartRef.current.initialPointer.x;
+      const totalDeltaY = pointer.y - dragStartRef.current.initialPointer.y;
 
-    if (
-      Math.abs(totalDeltaX) < DRAG_START_THRESHOLD &&
-      Math.abs(totalDeltaY) < DRAG_START_THRESHOLD
-    )
-      return;
+      if (
+        Math.abs(totalDeltaX) < DRAG_START_THRESHOLD &&
+        Math.abs(totalDeltaY) < DRAG_START_THRESHOLD
+      )
+        return;
 
-    /** Start the rotation */
-    if (dragStartRef.current && !rotation) {
-      dragStartRef.current.camera.matrixWorld.extractBasis(
-        cameraRight,
-        cameraUp,
-        discard,
-      );
+      /** Start the rotation */
+      if (dragStartRef.current && !rotation) {
+        dragStartRef.current.camera.matrixWorld.extractBasis(
+          cameraRight,
+          cameraUp,
+          discard,
+        );
 
-      worldDrag
-        .set(0, 0, 0)
-        .addScaledVector(cameraRight, totalDeltaX)
-        .addScaledVector(cameraUp, -totalDeltaY);
+        worldDrag
+          .set(0, 0, 0)
+          .addScaledVector(cameraRight, totalDeltaX)
+          .addScaledVector(cameraUp, -totalDeltaY);
 
-      const localDrag = worldToCubeLocal(worldDrag, cubeGroupRef.current);
-      const rotationInfo = determineRotation(
-        dragStartRef.current.faceNormal,
-        localDrag,
-        dragStartRef.current.position,
-      );
+        const localDrag = worldToCubeLocal(worldDrag, cubeGroupRef.current);
+        const rotationInfo = determineRotation(
+          dragStartRef.current.faceNormal,
+          localDrag,
+          dragStartRef.current.position,
+        );
 
-      if (!rotationInfo) return;
+        if (!rotationInfo) return;
 
-      const dragMagnitude = Math.sqrt(
-        totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY,
-      );
-      const angle = computeRotationAngle(
-        dragMagnitude,
-        rotationInfo.sign,
-        DRAG_SENSITIVITY,
-      );
-      rotate({
-        angle,
-        axis: rotationInfo.axis,
-        layer: rotationInfo.layer,
-        sign: rotationInfo.sign,
-      });
-    } else if (rotation) {
-      const dragMagnitude = Math.sqrt(
-        totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY,
-      );
-      const targetAngle = computeRotationAngle(
-        dragMagnitude,
-        rotation.sign,
-        DRAG_SENSITIVITY,
-      );
+        const dragMagnitude = Math.sqrt(
+          totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY,
+        );
+        const angle = computeRotationAngle(
+          dragMagnitude,
+          rotationInfo.sign,
+          DRAG_SENSITIVITY,
+        );
+        rotate({
+          angle,
+          axis: rotationInfo.axis,
+          layer: rotationInfo.layer,
+          sign: rotationInfo.sign,
+        });
+      } else if (rotation) {
+        const dragMagnitude = Math.sqrt(
+          totalDeltaX * totalDeltaX + totalDeltaY * totalDeltaY,
+        );
+        const targetAngle = computeRotationAngle(
+          dragMagnitude,
+          rotation.sign,
+          DRAG_SENSITIVITY,
+        );
 
-      const clampedTarget =
-        Math.sign(targetAngle) * Math.min(Math.abs(targetAngle), MAX_ROTATION);
+        const clampedTarget =
+          Math.sign(targetAngle) *
+          Math.min(Math.abs(targetAngle), MAX_ROTATION);
 
-      const smoothedAngle =
-        rotation.angle + (clampedTarget - rotation.angle) * SMOOTHING_FACTOR;
+        const smoothedAngle =
+          rotation.angle + (clampedTarget - rotation.angle) * SMOOTHING_FACTOR;
 
-      rotate({
-        ...rotation,
-        angle: smoothedAngle,
-      });
-    }
-  }, [rotation, rotate, isAnimating, cubeGroupRef]);
+        rotate({
+          ...rotation,
+          angle: smoothedAngle,
+        });
+      }
+    },
+    [rotation, rotate, isAnimating, cubeGroupRef],
+  );
 
   const handleDragEnd = useCallback(() => {
     if (!rotation) {
@@ -264,4 +271,3 @@ export const Cube = ({ disableDrag = false, cubeGroupRef }: CubeProps) => {
     </React.Suspense>
   );
 };
-

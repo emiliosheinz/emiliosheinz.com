@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useKBar } from "kbar";
 import { ArrowRight } from "lucide-react";
@@ -10,7 +10,9 @@ type CommandBarTriggerFullProps = {
   className?: string;
 };
 
-export function CommandBarTriggerFull({ className }: CommandBarTriggerFullProps) {
+export function CommandBarTriggerFull({
+  className,
+}: CommandBarTriggerFullProps) {
   const { query } = useKBar();
   const [isMounted, setIsMounted] = useState(false);
 
